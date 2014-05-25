@@ -10,30 +10,24 @@ if (!String.prototype.startsWith) {
 }
 
 
-var Block = function() {
-  this.lines = [];
-}
-
-
-function breakIntoBlocks(content) {
-  var block = new Block();
+function chunkLines(content, categorizer) {
+  var block = {lines: []};
   var blocks = [];
 
   for (i in lines = content.split("\n")) {
     var line = lines[i];
-    var kind = line.startsWith('    ') ? 'code' : 'comment';
+    var kind = categorizer(line);
 
     if (block.kind != kind) {
       if (block.writing) {
         blocks.push(block);
       }
 
-      block = new Block();
+      block = {lines: []};
       block.writing = true;
-      block.kind = kind
+      block.kind = kind;
     }
 
-    line = line.replace(/^    /,'');
     block.lines.push(line);
   }
 
@@ -41,18 +35,31 @@ function breakIntoBlocks(content) {
     blocks.push(block);
   }
 
+  blocks.eachBlock = function(callback) {
+    _(this).each(function(block) {
+      callback(block.lines.join("\n"), block.kind);
+    })
+  }
+
   return blocks;
 }
 
 
 fs.readFile('README.md', 'utf-8', function(err, content) {
-  var blocks = breakIntoBlocks(content);
+  byCodeOrComment = function(line) {
+    return line.startsWith('    ') ? 'code' : 'comment';    
+  }
 
-  _(blocks).each(function(block) {
-    console.log("\n-----------------------------------------------------------------");
-    console.log(block.kind + " block:")
-    _(block.lines).each(function(line) {
-      console.log(line);
-    });
+  filename = null;
+
+  chunkLines(content, byCodeOrComment).eachBlock(function(block, kind) {
+    if (matches = block.match(/`([^`]+)`/)) {
+      filename = matches[1]
+    }
+    if ((kind == 'code') && filename) {
+      console.log("\n// " + filename + ":");
+      block = block.replace(/(^|\n)    /g, "$1");
+      console.log(block);
+    }
   });
 });
