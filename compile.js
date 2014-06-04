@@ -1,5 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
+var sys = require('sys')
+var exec = require('child_process').exec;
 
 
 if (!String.prototype.startsWith) {
@@ -44,22 +46,28 @@ function chunkLines(content, categorizer) {
   return blocks;
 }
 
+function* writeFile(filename, content) {
+  yield exec("ls -la", function(error, stdout, sterr) {
+    sys.puts(stdout)     
+  });
+}
+
+function* handleBlock(block, kind, file) {
+  if (matches = block.match(/`([^`]+)`/)) {
+    file.name = matches[1]
+  }
+  if ((kind == 'code') && file.name) {
+    block = block.replace(/(^|\n)    /g, "$1");
+    yield writeFile(filename, block).then(function() {
+      filename = null;        
+    });
+  }
+}
 
 fs.readFile('README.md', 'utf-8', function(err, content) {
   byCodeOrComment = function(line) {
     return line.startsWith('    ') ? 'code' : 'comment';    
   }
-
-  filename = null;
-
-  chunkLines(content, byCodeOrComment).eachBlock(function(block, kind) {
-    if (matches = block.match(/`([^`]+)`/)) {
-      filename = matches[1]
-    }
-    if ((kind == 'code') && filename) {
-      console.log("\n// " + filename + ":");
-      block = block.replace(/(^|\n)    /g, "$1");
-      console.log(block);
-    }
-  });
+  
+  chunkLines(content, byCodeOrComment).eachBlock(handleBlock);
 });

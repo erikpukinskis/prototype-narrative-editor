@@ -13,11 +13,11 @@ In order for your web browser to be able to read that file, we need to start a w
 
     var express = require("express");
     var app = express();
-
+    
     app.use('/', express.static('.'));
-
+    
     var port = Number(process.env.PORT || 5000);
-
+    
     app.listen(port, function() {
       console.log("Listening on " + port);
     }); 
@@ -46,7 +46,7 @@ So that's what the server needs to know, but how do we get this all started? You
 Now we need to compile this narrative. We'll put the code for that in `compile.js`:
 
     var fs = require('fs');
-
+    
     fs.readFile('README.md', 'utf-8', function(err, content) {
         console.log(content);
     });
