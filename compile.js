@@ -1,14 +1,21 @@
 var fs = require('fs');
 var exec = require('child_process').exec;
 
-if (!String.prototype.startsWith) {
-  String.prototype.startsWith = function(pattern) {
-    pattern = new RegExp("^" + pattern);
-    return !!pattern.exec(this);
+handleReadme = function(error, content) {
+  byCodeOrComment = function(line) {
+    return startsWith(line, '    ') ? 'code' : 'comment';    
   }
+  
+  chunkLines(content, byCodeOrComment).eachBlock(handleBlock);
+  console.log("Look in build/ for your stuff!");
 }
 
-function chunkLines(content, categorizer) {
+startsWith = function(string, pattern) {
+  pattern = new RegExp("^" + pattern);
+  return !!pattern.exec(string);
+}
+
+chunkLines = function(content, categorizer) {
   var block = {lines: []};
   var blocks = [];
 
@@ -33,24 +40,20 @@ function chunkLines(content, categorizer) {
     blocks.push(block);
   }
 
-  blocks.eachBlock = function(process) {
-    var memo = {}
-    for(i=0; i<this.length; i++) {
-      block = this[i];
-      process(block.lines.join("\n"), block.kind, memo);
-    }
-  }
+  blocks.eachBlock = eachBlock;
 
   return blocks;
 }
 
-function writeFile(filename, content, callback) {
-  exec("mkdir -p build", function() {
-    fs.writeFile('build/' + filename, content, callback);
-  });
+eachBlock = function(process) {
+  var memo = {}
+  for(i=0; i<this.length; i++) {
+    block = this[i];
+    process(block.lines.join("\n"), block.kind, memo);
+  }
 }
 
-function handleBlock(block, kind, memo) {
+handleBlock = function(block, kind, memo) {
   if (matches = block.match(/`([^`]+)`/)) {
     memo.filename = matches[1]
   }
@@ -61,11 +64,10 @@ function handleBlock(block, kind, memo) {
   }
 }
 
-fs.readFile('README.md', 'utf-8', function(err, content) {
-  byCodeOrComment = function(line) {
-    return line.startsWith('    ') ? 'code' : 'comment';    
-  }
-  
-  chunkLines(content, byCodeOrComment).eachBlock(handleBlock)
-  console.log("Look in build/ for your stuff!");
-});
+writeFile = function(filename, content, callback) {
+  exec("mkdir -p build", function() {
+    fs.writeFile('build/' + filename, content, callback);
+  });
+}
+
+fs.readFile('README.md', 'utf-8', handleReadme);
