@@ -54,8 +54,10 @@ eachBlock = function(process) {
 }
 
 handleBlock = function(block, kind, memo) {
-  if (matches = block.match(/`([^`]+)`/)) {
-    memo.filename = matches[1]
+  var inAComment = kind == 'comment'
+  var foundCodeSnippets = block.match(/`([^`]+)`/)
+  if (inAComment && foundCodeSnippets) {
+    memo.filename = foundCodeSnippets[1]
   }
 
   if ((kind == 'code') && memo.filename) {
