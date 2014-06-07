@@ -3,14 +3,12 @@ var _ = require('underscore');
 var sys = require('sys')
 var exec = require('child_process').exec;
 
-
 if (!String.prototype.startsWith) {
   String.prototype.startsWith = function(pattern) {
     pattern = new RegExp("^" + pattern);
     return !!pattern.exec(this);
   }
 }
-
 
 function chunkLines(content, categorizer) {
   var block = {lines: []};
@@ -37,18 +35,10 @@ function chunkLines(content, categorizer) {
     blocks.push(block);
   }
 
-  blocks.eachBlock = function(process, callback) {
-    var mutex = 0;
+  blocks.eachBlock = function(process) {
     var memo = {}
-    _(this).each(function(block) {
-      process(block.lines.join("\n"), block.kind, memo, function() {
-        console.log("came back!")
-        mutex -= 1;
-        if (mutex == 0) {
-          callback();
-        }
-      });
-      mutex += 1;
+    _(this).each(function(block, i) {
+      process(block.lines.join("\n"), block.kind, memo);
     })
   }
 
@@ -61,14 +51,14 @@ function writeFile(filename, content, callback) {
   });
 }
 
-function handleBlock(block, kind, memo, callback) {
+function handleBlock(block, kind, memo) {
   if (matches = block.match(/`([^`]+)`/)) {
     memo.filename = matches[1]
   }
+
   if ((kind == 'code') && memo.filename) {
     block = block.replace(/(^|\n)    /g, "$1");
-    writeFile(memo.filename, block, callback);
-    memo.filename = null;
+    writeFile(memo.filename, block);
   }
 }
 
@@ -77,7 +67,6 @@ fs.readFile('README.md', 'utf-8', function(err, content) {
     return line.startsWith('    ') ? 'code' : 'comment';    
   }
   
-  chunkLines(content, byCodeOrComment).eachBlock(handleBlock, function() {
-    console.log("and we're done!");
-  });
+  chunkLines(content, byCodeOrComment).eachBlock(handleBlock)
+  console.log("Look in build/ for your stuff!");
 });
