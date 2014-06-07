@@ -2,26 +2,30 @@ var fs = require('fs');
 var exec = require('child_process').exec;
 
 handleReadme = function(error, content) {
-  byCodeOrComment = function(line) {
-    return startsWith(line, '    ') ? 'code' : 'comment';    
-  }
-  
-  chunkLines(content, byCodeOrComment).eachBlock(handleBlock);
+  chunkLines(content).eachBlock(handleBlock);
   console.log("Look in build/ for your stuff!");
 }
 
 startsWith = function(string, pattern) {
   pattern = new RegExp("^" + pattern);
-  return !!pattern.exec(string);
+  return !!string.match(pattern);
 }
 
-chunkLines = function(content, categorizer) {
+chunkLines = function(content) {
   var block = {lines: []};
   var blocks = [];
+  var kind;
 
   for (i in lines = content.split("\n")) {
     var line = lines[i];
-    var kind = categorizer(line);
+
+    if (startsWith(line, '    ')) { 
+      kind = 'code';
+    } else if (line.match(/$\s?^/)) {
+      // keep kind as whatever it was
+    } else {
+      kind = 'comment';
+    }
 
     if (block.kind != kind) {
       if (block.writing) {
@@ -63,6 +67,7 @@ handleBlock = function(block, kind, memo) {
   if ((kind == 'code') && memo.filename) {
     block = block.replace(/(^|\n)    /g, "$1");
     writeFile(memo.filename, block);
+    memo.filename = null;
   }
 }
 

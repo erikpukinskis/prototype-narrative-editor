@@ -29,6 +29,9 @@ In order to make that work, we need to start a server with Node on it and the pa
     {
       "name": "narrative",
       "version": "0.0.1",
+      "dependencies": {
+        "express": "*"
+      },
       "engines": {
         "node": "*"
       }
@@ -49,26 +52,30 @@ Now we need to compile this narrative. We'll put the code for that in `compile.j
     var exec = require('child_process').exec;
 
     handleReadme = function(error, content) {
-      byCodeOrComment = function(line) {
-        return startsWith(line, '    ') ? 'code' : 'comment';    
-      }
-      
-      chunkLines(content, byCodeOrComment).eachBlock(handleBlock);
+      chunkLines(content).eachBlock(handleBlock);
       console.log("Look in build/ for your stuff!");
     }
 
     startsWith = function(string, pattern) {
       pattern = new RegExp("^" + pattern);
-      return !!pattern.exec(string);
+      return !!string.match(pattern);
     }
 
-    chunkLines = function(content, categorizer) {
+    chunkLines = function(content) {
       var block = {lines: []};
       var blocks = [];
+      var kind;
 
       for (i in lines = content.split("\n")) {
         var line = lines[i];
-        var kind = categorizer(line);
+
+        if (startsWith(line, '    ')) { 
+          kind = 'code';
+        } else if (line.match(/$\s?^/)) {
+          // keep kind as whatever it was
+        } else {
+          kind = 'comment';
+        }
 
         if (block.kind != kind) {
           if (block.writing) {
@@ -101,13 +108,16 @@ Now we need to compile this narrative. We'll put the code for that in `compile.j
     }
 
     handleBlock = function(block, kind, memo) {
-      if (matches = block.match(/`([^`]+)`/)) {
-        memo.filename = matches[1]
+      var inAComment = kind == 'comment'
+      var foundCodeSnippets = block.match(/`([^`]+)`/)
+      if (inAComment && foundCodeSnippets) {
+        memo.filename = foundCodeSnippets[1]
       }
 
       if ((kind == 'code') && memo.filename) {
         block = block.replace(/(^|\n)    /g, "$1");
         writeFile(memo.filename, block);
+        memo.filename = null;
       }
     }
 
@@ -119,12 +129,30 @@ Now we need to compile this narrative. We'll put the code for that in `compile.j
 
     fs.readFile('README.md', 'utf-8', handleReadme);
 
-Then install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and run:
+In order to generate all the files we described above, you just run:
+
+    node compile.js
+
+That will write them into the "build" folder. 
+
+Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and switch you into the build folder:
+
+    cd ../narrative-build
+
+Creates what's called a "git repository" that keeps track of your code:
+
+    git init
+
+Save the files we just built to the repository:
+
+    git commit -am "My own version of Narrative.js"
+
+Create an app on Heroku so we can host all this shiz:
 
     heroku create whatever_you_want_to_call_this
+
+And finally "push" the code to Heroku, which tells them to actually set it up on the intarwebs:
+
     git push heroku master
     
-And
-
-
-
+At this point if you run 
