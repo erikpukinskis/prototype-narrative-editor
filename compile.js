@@ -1,6 +1,4 @@
 var fs = require('fs');
-var _ = require('underscore');
-var sys = require('sys')
 var exec = require('child_process').exec;
 
 if (!String.prototype.startsWith) {
@@ -37,9 +35,10 @@ function chunkLines(content, categorizer) {
 
   blocks.eachBlock = function(process) {
     var memo = {}
-    _(this).each(function(block, i) {
+    for(i=0; i<this.length; i++) {
+      block = this[i];
       process(block.lines.join("\n"), block.kind, memo);
-    })
+    }
   }
 
   return blocks;
