@@ -37,30 +37,38 @@ function chunkLines(content, categorizer) {
     blocks.push(block);
   }
 
-  blocks.eachBlock = function(callback) {
+  blocks.eachBlock = function(process, callback) {
+    var mutex = 0;
+    var memo = {}
     _(this).each(function(block) {
-      callback(block.lines.join("\n"), block.kind);
+      process(block.lines.join("\n"), block.kind, memo, function() {
+        console.log("came back!")
+        mutex -= 1;
+        if (mutex == 0) {
+          callback();
+        }
+      });
+      mutex += 1;
     })
   }
 
   return blocks;
 }
 
-function* writeFile(filename, content) {
-  yield exec("ls -la", function(error, stdout, sterr) {
-    sys.puts(stdout)     
+function writeFile(filename, content, callback) {
+  exec("mkdir -p build", function() {
+    fs.writeFile('build/' + filename, content, callback);
   });
 }
 
-function* handleBlock(block, kind, file) {
+function handleBlock(block, kind, memo, callback) {
   if (matches = block.match(/`([^`]+)`/)) {
-    file.name = matches[1]
+    memo.filename = matches[1]
   }
-  if ((kind == 'code') && file.name) {
+  if ((kind == 'code') && memo.filename) {
     block = block.replace(/(^|\n)    /g, "$1");
-    yield writeFile(filename, block).then(function() {
-      filename = null;        
-    });
+    writeFile(memo.filename, block, callback);
+    memo.filename = null;
   }
 }
 
@@ -69,5 +77,7 @@ fs.readFile('README.md', 'utf-8', function(err, content) {
     return line.startsWith('    ') ? 'code' : 'comment';    
   }
   
-  chunkLines(content, byCodeOrComment).eachBlock(handleBlock);
+  chunkLines(content, byCodeOrComment).eachBlock(handleBlock, function() {
+    console.log("and we're done!");
+  });
 });
