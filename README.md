@@ -12,7 +12,7 @@ First off, this is a web app written in HTML. We keep that html in a file called
     Hello, world!
     </html>
 
-In order for your web browser to be able to read that file, we need to start a web server. Let's put the code for a simple [Node.js](http://nodejs.org/) server in `server.js`:
+In order for your web browser to be able to read that file, we need to start a web server. Let's put the code for a simple Node.js server in `server.js`:
 
     var express = require("express");
     var marked = require("marked");
