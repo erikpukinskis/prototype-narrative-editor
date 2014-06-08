@@ -1,5 +1,5 @@
-narrative
-=========
+Narrative JS
+============
 
 This is a web app. It just serves this one page that you're reading right now. What's kind of neat is that this page describes everything that has to happen for it to exist on the internet. 
 
@@ -7,12 +7,12 @@ What's really neat is that this page also contains everything it needs to compil
 
 Here's how it works.
 
-the server
+The server
 ----------
 
 First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](README.md).
 
-In order for you to be able to read a nicely formatted version of this document in your web browser, there needs to be a web server that can take requests from folks on the internet, convert that README file into HTML, and send it down to peoples' web browsers on their phones and computers.
+In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take requests from folks on the internet, convert that README file into HTML, and send it down to peoples' web browsers on their phones and computers.
 
 There are lots of ways to accomplish that, but one good way is to write a little server in another language, called Javascript. It's just a few lines of code, and we can put that in a filed called `server.js`:
 
@@ -42,8 +42,8 @@ There's a bunch going on in that code. It loads a library called [Express](http:
 
 But the only thing you really need to know about that code is that it starts a web server that spits out the HTML version of our README file whenever you visit '/' on the server. In our case that's the slash on the end of <http://narrativejs.herokuapp.com/>.
 
-system stuff
-------------
+The system
+----------
 
 In order for that server to run, we need to actually set up a server that has Express and Marked and Node and knows how to fire everything up. For that we need two more files. The first is `package.json`, which describes the libraries we need:
 
@@ -65,7 +65,7 @@ And we also need to tell the computer what it has to do to start the server. We 
 
 That just says when you want to start the web stuff, run the command "node server.js".
 
-the compiler
+The compiler
 ------------
 
 So that's all we need to start our server. But all of these goodies are locked away inside this README file you're looking at right now!
@@ -165,10 +165,10 @@ There's a lot going on there, but the gist of it is that we read in the README.m
 
 And that's it! That's all of the code we need for this narrative to come alive!
 
-running your own copy of narrative.js
--------------------------------------
+Running your own copy of Narrative
+----------------------------------
 
-It's lovely that we have all of this code all written out here, but what do we actually *do* with it to get our Hello World server running?
+It's lovely that we have all of this code all written out here, but what do we actually *do* with it to get our server running?
 
 You'll need to [install Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer first. Then open a terminal and run:
 
@@ -189,9 +189,9 @@ You'll see all of the files we described above! Neat! In order to start the serv
     npm install
     node server.js
 
-And then open up <http://localhost:5000> in your web browser (by clicking that link!) and you should see our Hello, World app! Cool! That's a legit web server running on your computer.
+And then open up <http://localhost:5000> in your web browser (by clicking that link!) and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
 
-putting it on the intarwebs
+Putting it on the intarwebs
 ---------------------------
 
 Now, in order to get something on the web, we need to deploy it to Heroku. Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and switch you into the build folder:
@@ -204,19 +204,26 @@ Now create a git repository that will keeps track of your code:
 
 Save the files we just built into the repository:
 
-    git commit -am "My own version of Narrative.js"
+    git add .
+    git commit -m "My own version of Narrative.js"
 
 Create an app on Heroku so we can host all this shiz:
 
-    heroku create whatever_you_want_to_call_this
+    heroku create whatever-you-want-to-call-this
 
 And finally "push" the code to Heroku, which tells them to actually set it up on the web:
 
     git push heroku master
     
-At this point you should have your very open copy of Narrative.js on the internet! Just go to <http://whatever_you_want_to_call_this.herokuapp.com>, or whatever you called it.
+At this point you should have your very open copy of Narrative.js on the internet! Just go to <http://whatever-you-want-to-call-this.herokuapp.com>, or whatever you called it.
 
-developer tips
+Why would I want to do this?
+----------------------------
+
+Right now Narrative JS doesn't really do a whole lot except describe itself. But my next goal is to turn it into an app that can actually edit itself and other narratives.
+
+
+Developer tips
 --------------
 
 If you want to play with it, I recommend just editing the README.md file and then running this in your terminal:
@@ -224,3 +231,31 @@ If you want to play with it, I recommend just editing the README.md file and the
     echo 'THIS IS IT!'; node compile.js; cd ../narrative-build; npm install; foreman start; cd ../narrative
 
 Then reload your <http://localhost:5000>, poke around, press CTRL+C and repeat.
+
+<style>
+  body {
+    font-size: 14pt;
+    max-width: 700px;
+    margin: 2em auto;
+    color: #333;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  h1, h2 {
+    font-weight: normal;
+  }
+
+  pre {
+    padding: 10px;
+  }
+
+  pre, p code {
+    font-size: 12pt;
+    border: 1px solid #ddd;
+    background: #eee;
+    color: teal;
+  }
+</style>
