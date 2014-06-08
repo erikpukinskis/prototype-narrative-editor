@@ -12,9 +12,9 @@ The server
 
 First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](README.md).
 
-In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take requests from folks on the internet, convert that README file into HTML, and send it down to peoples' web browsers on their phones and computers.
+In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phones or laptop or whatever.
 
-There are lots of ways to accomplish that, but Narrative does it with a little server written in Javascript. It's just a few lines of code in a filed called `server.js`:
+There are lots of ways to set up a web server, but right now we're using a little server written in Javascript. It's just a few lines of code in a file called `server.js`:
 
     var express = require("express");
     var marked = require("marked");
@@ -39,7 +39,7 @@ There are lots of ways to accomplish that, but Narrative does it with a little s
 
 There's a bunch going on in that code. It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It loads another library called [Marked](https://github.com/chjj/marked) that knows how to convert Markdown into HTML.
 
-But the only thing you really need to know about that code is that it starts a web server that spits out the HTML version of our README file whenever you visit '/' on the server. In our case that's the slash on the end of <http://narrativejs.herokuapp.com/>.
+But the only thing you really need to know about that code is that it starts a web server that spits out the HTML version of our README file whenever a web browser asks for it.
 
 The system
 ----------
@@ -52,7 +52,7 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
 
     {
       "name": "narrative",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "dependencies": {
         "express": "*",
         "marked": "*"
@@ -62,20 +62,22 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
       }
     }
 
-And we also need to tell the Heroku what it has to do to start the server. We do that in a `Procfile`:
+We also need to tell Heroku what it has to do to start the server. We do that in a `Procfile`:
 
     web: node server.js
 
-That just tells Heroku that in order to start the web server they have to run the command "node server.js".
+That just tells them that to start the web server they should run the command "node server.js".
 
-And that's it! That's all the code we need to start a server. The only problem is, all of this is just written down in our [README.md](README.md) file! We need it to actually be split out into all of those files for this whole train to get on the tracks!
+And that's it! That's all the code we need to start this server. The only problem is, all of it is locked away in our [README.md](README.md) file, and Heroku doesn't understand files like this. 
+
+We need something to actually go through our narrative and make real, usable files from it.
 
 The compiler
 ------------
 
-This is the whole point of writing code in the form of a narrative. We can provide all of this nice structure and explanation, but then we can also just compile the narrative to use it!
+This is sort of the whole point of this project. You're reading this nicely formatted, linear document that includes not just the code but a structure for understanding the code. But we also want to be able to run the code, because that's what code is for!
 
-In order for that to happen, we need some code that understands these Markdown files with code and filenames all over the place and knows what to do with it. Here's some javascript that does the trick, which we can put in `compile.js`. 
+In order for that to happen, we need something that understands this Markdown file you are reading, with filenames and blocks of code and can turn those into actual files. Here's some javascript that does the trick, which is in a file called `compile.js`. 
 
 It's a bit of a doozie. Don't worry about understanding it all just yet:
 
@@ -168,12 +170,12 @@ It's a bit of a doozie. Don't worry about understanding it all just yet:
 
 There's a lot going on there, but the gist of it is that we read in the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
 
-And that's it! That's all of the code we need for this narrative to come alive!
+And that's it! That's all of the code we need for this narrative to come alive! We just need that little bit of human-intervention that I mentioned before.
+
+That's where you come in. Tie your shoes and tighten your belt, we're about to deploy some software.
 
 Running your own copy of Narrative
 ----------------------------------
-
-It's lovely that we have all of this code all written out here, but what do we actually *do* with it to get our server running?
 
 You'll need to [install Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer first. Then open a terminal and run:
 
@@ -199,7 +201,7 @@ And then open up <http://localhost:5000> in your web browser (by clicking that l
 Putting it on the intarwebs
 ---------------------------
 
-Now, in order to get something on the web, we need to deploy it to Heroku. Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and create a git repository that will keeps track of your code:
+Now, in order to get it on the web so that the whole world can see it, we need to deploy it to Heroku. Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and create a git repository that will keeps track of your code:
 
     git init
 
