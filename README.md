@@ -1,5 +1,5 @@
-Narrative JS
-============
+Narrative
+=========
 
 This is a web app. It just serves this one page that you're reading right now. What's kind of neat is that this page describes everything that has to happen for it to exist on the internet. 
 
@@ -12,25 +12,24 @@ The server
 
 First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](README.md).
 
-In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take requests from folks on the internet, convert that README file into HTML, and send it down to peoples' web browsers on their phones and computers.
+In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take requests from folks on the internet, converts that README file into HTML, and send it down to peoples' web browsers on their phones and computers.
 
-There are lots of ways to accomplish that, but one good way is to write a little server in another language, called Javascript. It's just a few lines of code, and we can put that in a filed called `server.js`:
+There are lots of ways to accomplish that, but Narrative does it with a little server written in Javascript. It's just a few lines of code in a filed called `server.js`:
 
     var express = require("express");
     var marked = require("marked");
     var fs = require("fs");
     var app = express();
 
-    app.use('/', express.static('.'));
-
     app.get('/', function(request, response){
-      console.log("\n\n\n\n\nBLAHAHA!\n\n\n\n\n");
       var markdown = fs.readFileSync('README.md').toString();
 
       marked(markdown, function(xxxx, html) {
         response.send(html);
       });
     });
+
+    app.use('/', express.static('.'));
 
     var port = Number(process.env.PORT || 5000);
     
@@ -45,11 +44,15 @@ But the only thing you really need to know about that code is that it starts a w
 The system
 ----------
 
-In order for that server to run, we need to actually set up a server that has Express and Marked and Node and knows how to fire everything up. For that we need two more files. The first is `package.json`, which describes the libraries we need:
+In order for that server to run, we need to actually set up a computer somewhere that has Express and Marked and Node and knows how to fire everything up. 
+
+Luckily, it's 2014 and there's a service called [Heroku](http://heroku.com) that will do all of that for us. We just need to provide them with two more files that show them what to do. 
+
+The first is `package.json`, which describes the libraries we need (Express, Marked, and Node):
 
     {
       "name": "narrative",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "express": "*",
         "marked": "*"
@@ -59,20 +62,22 @@ In order for that server to run, we need to actually set up a server that has Ex
       }
     }
 
-And we also need to tell the computer what it has to do to start the server. We do that in a `Procfile`:
+And we also need to tell the Heroku what it has to do to start the server. We do that in a `Procfile`:
 
     web: node server.js
 
-That just says when you want to start the web stuff, run the command "node server.js".
+That just tells Heroku that in order to start the web server they have to run the command "node server.js".
+
+And that's it! That's all the code we need to start a server. The only problem is, all of this is just written down in our [README.md](README.md) file! We need it to actually be split out into all of those files for this whole train to get on the tracks!
 
 The compiler
 ------------
 
-So that's all we need to start our server. But all of these goodies are locked away inside this README file you're looking at right now!
+This is the whole point of writing code in the form of a narrative. We can provide all of this nice structure and explanation, but then we can also just compile the narrative to use it!
 
-In order to actually get usable copies of these files, we need to compile this narrative!
+In order for that to happen, we need some code that understands these Markdown files with code and filenames all over the place and knows what to do with it. Here's some javascript that does the trick, which we can put in `compile.js`. 
 
-We'll put the code for that in `compile.js`. It's a doozie. Don't worry about understanding it all just yet:
+It's a bit of a doozie. Don't worry about understanding it all just yet:
 
     var fs = require('fs');
     var exec = require('child_process').exec;
@@ -161,7 +166,7 @@ We'll put the code for that in `compile.js`. It's a doozie. Don't worry about un
 
     fs.readFile('README.md', 'utf-8', handleReadme);
 
-There's a lot going on there, but the gist of it is that we read in the README.md file, split it up into chunks, find all of these files we've described, and saves them into a folder called "narrative-build".
+There's a lot going on there, but the gist of it is that we read in the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and saves them into a folder called "narrative-build".
 
 And that's it! That's all of the code we need for this narrative to come alive!
 
@@ -228,7 +233,8 @@ Developer tips
 
 If you want to play with it, I recommend just editing the README.md file and then running this in your terminal:
 
-    echo 'THIS IS IT!'; node compile.js; cd ../narrative-build; npm install; foreman start; cd ../narrative
+    echo 'THIS IS IT!'; node compile.js; cd ../narrative-build; \
+    npm install; foreman start; cd ../narrative
 
 Then reload your <http://localhost:5000>, poke around, press CTRL+C and repeat.
 
@@ -237,7 +243,12 @@ Then reload your <http://localhost:5000>, poke around, press CTRL+C and repeat.
     font-size: 14pt;
     max-width: 700px;
     margin: 2em auto;
+    padding: 0 1em;
     color: #333;
+  }
+
+  a {
+    color: #9B59B6;
   }
 
   h1 {
@@ -256,6 +267,6 @@ Then reload your <http://localhost:5000>, poke around, press CTRL+C and repeat.
     font-size: 12pt;
     border: 1px solid #ddd;
     background: #eee;
-    color: teal;
+    color: #1ABC9C;
   }
 </style>
