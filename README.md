@@ -52,7 +52,7 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
 
     {
       "name": "narrative",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "dependencies": {
         "express": "*",
         "marked": "*"
