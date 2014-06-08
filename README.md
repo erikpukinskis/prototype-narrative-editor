@@ -1,7 +1,7 @@
 narrative
 =========
 
-If you keep reading, this web page will explain exactly how it came to be.
+Keep reading. This web page will explain exactly how it came to be.
 
 the server
 ----------
@@ -12,7 +12,7 @@ First off, this is a web app written in HTML. It's kept in a file called `index.
     Hello, world!
     </html>
 
-In order for your web browser to be able to read that file, we need to start a web server. Let's put the code for a simple Node.js server in `server.js`:
+In order for a web browser to be able to get that file, a web server needed to be established. Here is the actual code that lets you read this, written in `server.js`:
 
     var express = require("express");
     var marked = require("marked");
@@ -36,9 +36,11 @@ In order for your web browser to be able to read that file, we need to start a w
       console.log("Listening on " + port);
     }); 
 
-That just says load the [Express](http://expressjs.com/) library, create a new app, and make all the files in the current folder publicly accessible our domain (http://narrativejs.herokuapp.com).
 
-In order to make that work, we need to start a server with Node on it and the packages we'll need. The convention in the Node community is to configure that in a file called `package.json`:
+
+What you just read allows for [Express](http://expressjs.com/) the creation of a whole new app. This is the code that describes how to respond to anyone who is trying to read this.  all the files in the current folder publicly accessible our domain (http://narrativejs.herokuapp.com).
+
+In order to make that work, I needed to start a server with Node and some other packages. The convention in the Node community is to make that happen in a file called `package.json`:
 
     {
       "name": "narrative",
@@ -52,7 +54,7 @@ In order to make that work, we need to start a server with Node on it and the pa
       }
     }
 
-Heroku will look at that and install all the necessary files. They also need a `Procfile` to tell them how to start the server:
+Heroku, a service that runs your software on their computers, looks at that and installs all the necessary files. They need something called a `Procfile` to tell them how to start the server:
 
     web: node server.js
 
