@@ -12,7 +12,7 @@ The server
 
 First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](README.md).
 
-In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take requests from folks on the internet, converts that README file into HTML, and send it down to peoples' web browsers on their phones and computers.
+In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take requests from folks on the internet, convert that README file into HTML, and send it down to peoples' web browsers on their phones and computers.
 
 There are lots of ways to accomplish that, but Narrative does it with a little server written in Javascript. It's just a few lines of code in a filed called `server.js`:
 
@@ -52,7 +52,7 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
 
     {
       "name": "narrative",
-      "version": "0.0.4",
+      "version": "0.0.5",
       "dependencies": {
         "express": "*",
         "marked": "*"
@@ -166,7 +166,7 @@ It's a bit of a doozie. Don't worry about understanding it all just yet:
 
     fs.readFile('README.md', 'utf-8', handleReadme);
 
-There's a lot going on there, but the gist of it is that we read in the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and saves them into a folder called "narrative-build".
+There's a lot going on there, but the gist of it is that we read in the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
 
 And that's it! That's all of the code we need for this narrative to come alive!
 
@@ -199,15 +199,11 @@ And then open up <http://localhost:5000> in your web browser (by clicking that l
 Putting it on the intarwebs
 ---------------------------
 
-Now, in order to get something on the web, we need to deploy it to Heroku. Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and switch you into the build folder:
-
-    cd ../narrative-build
-
-Now create a git repository that will keeps track of your code:
+Now, in order to get something on the web, we need to deploy it to Heroku. Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and create a git repository that will keeps track of your code:
 
     git init
 
-Save the files we just built into the repository:
+We need to do that because git is what we use to actually send all of this stuff to Heroku. Save the files we just built into the repository:
 
     git add .
     git commit -m "My own version of Narrative.js"
@@ -216,7 +212,7 @@ Create an app on Heroku so we can host all this shiz:
 
     heroku create whatever-you-want-to-call-this
 
-And finally "push" the code to Heroku, which tells them to actually set it up on the web:
+You'll have to choose a name of your own. And then finally "push" the code to Heroku, so they can set it up on the web:
 
     git push heroku master
     
@@ -225,8 +221,9 @@ At this point you should have your very open copy of Narrative.js on the interne
 Why would I want to do this?
 ----------------------------
 
-Right now Narrative JS doesn't really do a whole lot except describe itself. But my next goal is to turn it into an app that can actually edit itself and other narratives.
+Right now Narrative JS doesn't really do a whole lot except describe itself. But my next goal is to turn it into an app that can actually edit itself and other narratives. And allow you to create and deploy your own narratives without leaving the web browser. All that terminal stuff is way more complicated than it needs to be.
 
+But for now this is the bare minimum thing that I could get working that demonstrates the idea of narrative-driven programming. So it's a fun start.
 
 Developer tips
 --------------
