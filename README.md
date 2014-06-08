@@ -239,6 +239,7 @@ If you want to play with it, I recommend just editing the README.md file and the
 Then reload your <http://localhost:5000>, poke around, press CTRL+C and repeat.
 
 <style>
+  <!--
   body {
     font-size: 14pt;
     max-width: 700px;
@@ -269,4 +270,5 @@ Then reload your <http://localhost:5000>, poke around, press CTRL+C and repeat.
     background: #eee;
     color: #1ABC9C;
   }
+  -->
 </style>
