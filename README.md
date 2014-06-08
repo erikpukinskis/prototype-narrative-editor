@@ -52,7 +52,7 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
 
     {
       "name": "narrative",
-      "version": "0.0.6",
+      "version": "0.1.0",
       "dependencies": {
         "express": "*",
         "marked": "*"
@@ -75,9 +75,9 @@ We need something to actually go through our narrative and make real, usable fil
 The compiler
 ------------
 
-This is sort of the whole point of this project. You're reading this nicely formatted, linear document that includes not just the code but a structure for understanding the code. But we also want to be able to run the code, because that's what code is for!
+This is sort of the whole point of this strange little app. You're reading this nice, linear narrative and all the code that made it show up. But we also want to be able to run that code. That's what code is for!
 
-In order for that to happen, we need something that understands this Markdown file you are reading, with filenames and blocks of code and can turn those into actual files. Here's some javascript that does the trick, which is in a file called `compile.js`. 
+In order for that to happen, we need something that understands this Markdown file you are reading, with all it's file names and blocks of code, and can spit out actual files. Here's some javascript that does the trick. It's in a file called `compile.js`.
 
 It's a bit of a doozie. Don't worry about understanding it all just yet:
 
@@ -168,25 +168,25 @@ It's a bit of a doozie. Don't worry about understanding it all just yet:
 
     fs.readFile('README.md', 'utf-8', handleReadme);
 
-There's a lot going on there, but the gist of it is that we read in the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
+There's a lot going on there, but the gist of it is that we take the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
 
-And that's it! That's all of the code we need for this narrative to come alive! We just need that little bit of human-intervention that I mentioned before.
+And that's it! That's all of the code we need for this narrative to come alive! 
 
-That's where you come in. Tie your shoes and tighten your belt, we're about to deploy some software.
+... We just need that little bit of human-intervention that I mentioned before, and that's where you come in. Tie your shoes and tighten your belt, we're about to deploy some software.
 
 Running your own copy of Narrative
 ----------------------------------
 
-You'll need to [install Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer first. Then open a terminal and run:
+You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer. Then open a terminal and run:
 
     git clone https://github.com/erikpukinskis/narrative.git
     cd narrative
 
-That will put you into a folder that has this very document (README.md) and our compile.js file. In order to generate all the files we described above, you just run:
+That will put you into a folder that has this very document (README.md) and the compile.js file described above. In order to generate your copies of the files, run:
 
     node compile.js
 
-Now type
+Now type:
 
     ls ../narrative-build
 
@@ -196,7 +196,9 @@ You'll see all of the files we described above! Neat! In order to start the serv
     npm install
     node server.js
 
-And then open up <http://localhost:5000> in your web browser (by clicking that link!) and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
+Now open up <http://localhost:5000> in your web browser and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
+
+Try changing some text in the README.md and running "node compile.js" and "node server.js" again, reload your browser and you should see your changes!
 
 Putting it on the intarwebs
 ---------------------------
