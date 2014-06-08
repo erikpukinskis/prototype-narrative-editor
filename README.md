@@ -3,7 +3,7 @@ Narrative
 
 This is a web app. It just serves this one page that you're reading right now. What's kind of neat is that this page describes everything that has to happen for it to exist on the internet. 
 
-What's really neat is that this page also contains everything it needs to compile itself. All it needs is a human to run a few commands and it can create a complete, running copy of itself.
+What's really neat is that this page also contains everything it needs to create a complete working copy of itself. All it needs is a human to run a few commands to help it along.
 
 Here's how it works.
 
