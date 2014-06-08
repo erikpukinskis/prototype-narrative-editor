@@ -1,6 +1,8 @@
 narrative
 =========
 
+This is a web page. But it's a special one. It is a web page that describes, in complete detail, how it came to be.
+
 the server
 ----------
 
