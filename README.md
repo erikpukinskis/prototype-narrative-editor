@@ -12,7 +12,7 @@ The server
 
 First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](README.md).
 
-In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phones or laptop or whatever.
+In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
 There are lots of ways to set up a web server, but right now we're using a little server written in Javascript. It's just a few lines of code in a file called `server.js`:
 
@@ -52,7 +52,7 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
 
     {
       "name": "narrative",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "express": "*",
         "marked": "*"
