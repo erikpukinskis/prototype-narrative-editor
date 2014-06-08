@@ -52,7 +52,7 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
 
     {
       "name": "narrative",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "dependencies": {
         "express": "*",
         "marked": "*"
@@ -228,16 +228,6 @@ Why would I want to do this?
 Right now Narrative JS doesn't really do a whole lot except describe itself. But my next goal is to turn it into an app that can actually edit itself and other narratives. And allow you to create and deploy your own narratives without leaving the web browser. All that terminal stuff is way more complicated than it needs to be.
 
 But for now this is the bare minimum thing that I could get working that demonstrates the idea of narrative-driven programming. So it's a fun start.
-
-Developer tips
---------------
-
-If you want to play with it, I recommend just editing the README.md file and then running this in your terminal:
-
-    echo 'THIS IS IT!'; node compile.js; cd ../narrative-build; \
-    npm install; foreman start; cd ../narrative
-
-Then reload your <http://localhost:5000>, poke around, press CTRL+C and repeat.
 
 <style>
   <!--
