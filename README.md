@@ -1,7 +1,8 @@
 narrative
 =========
 
-This isn't going to be pretty, but here's the story of how this came to be.
+the server
+----------
 
 First off, this is a web app written in HTML. We keep that html in a file called `index.html`:
 
@@ -41,19 +42,19 @@ Heroku will look at that and install all the necessary files. They also need a `
 
     web: node server.js
 
-So that's what the server needs to know, but how do we get this all started? You'll need to [install Git](http://git-scm.com/downloads) on your computer and then open a terminal and enter:
+the compiler
+------------
 
-    git clone https://github.com/erikpukinskis/narratorjs.git
-    cd narratorjs
-    
-Now we need to compile this narrative. We'll put the code for that in `compile.js`:
+So that's what the server needs to know, but all I've done so far is write this all out in this README.md file. In order to actuall get all of these files, we need to compile this narrative.
+
+We'll put the code for that in `compile.js`:
 
     var fs = require('fs');
     var exec = require('child_process').exec;
 
     handleReadme = function(error, content) {
       chunkLines(content).eachBlock(handleBlock);
-      console.log("Look in build/ for your stuff!");
+      console.log("Look in ../narrative-build/ for your stuff!");
     }
 
     startsWith = function(string, pattern) {
@@ -122,28 +123,53 @@ Now we need to compile this narrative. We'll put the code for that in `compile.j
     }
 
     writeFile = function(filename, content, callback) {
-      exec("mkdir -p build", function() {
-        fs.writeFile('build/' + filename, content, callback);
+      exec("mkdir -p ../narrative-build", function() {
+        fs.writeFile('../narrative-build/' + filename, content, callback);
       });
     }
 
     fs.readFile('README.md', 'utf-8', handleReadme);
 
-In order to generate all the files we described above, you just run:
+And that's it! You'll notice there's not much else in this Git repository. The README file which you're reading right now, and the compile.js file that knows what to do with it.
+
+running your own copy of narrative.js
+-------------------------------------
+
+It's lovely that we have all of this code, but what do we actually *do* with it to get our Hello World server running?
+
+You'll need to [install Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer first. Then open a terminal and run:
+
+    git clone https://github.com/erikpukinskis/narratorjs.git
+    cd narratorjs
+
+That will put you into a folder that has this very document (README.md) and our compile.js file. In order to generate all the files we described above, you just run:
 
     node compile.js
 
-That will write them into the "build" folder. 
+Now type
 
-Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and switch you into the build folder:
+    ls ../narrative-build
+
+You'll see all of the files we described above! Neat! In order to start the server you just do:
+
+    cd ../narrative-build
+    npm install
+    node server.js
+
+And then open up http://localhost:5000 in your web browser (by clicking that link!) and you should see our Hello, World app! Cool! That's a legit web server running on your computer.
+
+putting it on the intarwebs
+---------------------------
+
+Now, in order to get something on the web, we need to deploy it to Heroku. Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and switch you into the build folder:
 
     cd ../narrative-build
 
-Creates what's called a "git repository" that keeps track of your code:
+Now create a git repository that will keeps track of your code:
 
     git init
 
-Save the files we just built to the repository:
+Save the files we just built into the repository:
 
     git commit -am "My own version of Narrative.js"
 
@@ -151,8 +177,8 @@ Create an app on Heroku so we can host all this shiz:
 
     heroku create whatever_you_want_to_call_this
 
-And finally "push" the code to Heroku, which tells them to actually set it up on the intarwebs:
+And finally "push" the code to Heroku, which tells them to actually set it up on the web:
 
     git push heroku master
     
-At this point if you run 
+At this point you should have your very open copy of Narrative.js on the internet! Just 
