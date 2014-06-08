@@ -1,31 +1,33 @@
 narrative
 =========
 
-Keep reading. This web page will explain exactly how it came to be.
+This is a web app. It just serves this one page that you're reading right now. What's kind of neat is that this page describes everything that has to happen for it to exist on the internet. 
+
+What's really neat is that this page also contains everything it needs to compile itself. All it needs is a human to run a few commands and it can create a complete, running copy of itself.
+
+Here's how it works.
 
 the server
 ----------
 
-First off, this is a web app written in HTML. It's kept in a file called `index.html`:
+First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](README.md).
 
-    <html>
-    Hello, world!
-    </html>
+In order for you to be able to read a nicely formatted version of this document in your web browser, there needs to be a web server that can take requests from folks on the internet, convert that README file into HTML, and send it down to peoples' web browsers on their phones and computers.
 
-In order for a web browser to be able to get that file, a web server needed to be established. Here is the actual code that lets you read this, written in `server.js`:
+There are lots of ways to accomplish that, but one good way is to write a little server in another language, called Javascript. It's just a few lines of code, and we can put that in a filed called `server.js`:
 
     var express = require("express");
     var marked = require("marked");
     var fs = require("fs");
     var app = express();
 
-    app.get('/', function(request, response){
-      var markdown = fs.readFileSync('README.md');
-      console.log("markdown is " + markdown + "\n\n\nThat's all folks");
-      console.log("here we are! marked is " + marked + "\n\n\n\nMARKED! DONE!");
+    app.use('/', express.static('.'));
 
-      marked(markdown, function(html) {
-        console.log("html is " + html);
+    app.get('/', function(request, response){
+      console.log("\n\n\n\n\nBLAHAHA!\n\n\n\n\n");
+      var markdown = fs.readFileSync('README.md').toString();
+
+      marked(markdown, function(xxxx, html) {
         response.send(html);
       });
     });
@@ -36,11 +38,14 @@ In order for a web browser to be able to get that file, a web server needed to b
       console.log("Listening on " + port);
     }); 
 
+There's a bunch going on in that code. It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It loads another library called [Marked](https://github.com/chjj/marked) that knows how to convert Markdown into HTML.
 
+But the only thing you really need to know about that code is that it starts a web server that spits out the HTML version of our README file whenever you visit '/' on the server. In our case that's the slash on the end of <http://narrativejs.herokuapp.com/>.
 
-What you just read allows for [Express](http://expressjs.com/) the creation of a whole new app. This is the code that describes how to respond to anyone who is trying to read this.  all the files in the current folder publicly accessible our domain (http://narrativejs.herokuapp.com).
+system stuff
+------------
 
-In order to make that work, I needed to start a server with Node and some other packages. The convention in the Node community is to make that happen in a file called `package.json`:
+In order for that server to run, we need to actually set up a server that has Express and Marked and Node and knows how to fire everything up. For that we need two more files. The first is `package.json`, which describes the libraries we need:
 
     {
       "name": "narrative",
@@ -54,16 +59,20 @@ In order to make that work, I needed to start a server with Node and some other 
       }
     }
 
-Heroku, a service that runs your software on their computers, looks at that and installs all the necessary files. They need something called a `Procfile` to tell them how to start the server:
+And we also need to tell the computer what it has to do to start the server. We do that in a `Procfile`:
 
     web: node server.js
+
+That just says when you want to start the web stuff, run the command "node server.js".
 
 the compiler
 ------------
 
-So that's what the server needs to know, but all I've done so far is write this all out in this README.md file. In order to actuall get all of these files, we need to compile this narrative.
+So that's all we need to start our server. But all of these goodies are locked away inside this README file you're looking at right now!
 
-We'll put the code for that in `compile.js`:
+In order to actually get usable copies of these files, we need to compile this narrative!
+
+We'll put the code for that in `compile.js`. It's a doozie. Don't worry about understanding it all just yet:
 
     var fs = require('fs');
     var exec = require('child_process').exec;
@@ -152,17 +161,19 @@ We'll put the code for that in `compile.js`:
 
     fs.readFile('README.md', 'utf-8', handleReadme);
 
-And that's it! You'll notice there's not much else in this Git repository. The README file which you're reading right now, and the compile.js file that knows what to do with it.
+There's a lot going on there, but the gist of it is that we read in the README.md file, split it up into chunks, find all of these files we've described, and saves them into a folder called "narrative-build".
+
+And that's it! That's all of the code we need for this narrative to come alive!
 
 running your own copy of narrative.js
 -------------------------------------
 
-It's lovely that we have all of this code, but what do we actually *do* with it to get our Hello World server running?
+It's lovely that we have all of this code all written out here, but what do we actually *do* with it to get our Hello World server running?
 
 You'll need to [install Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer first. Then open a terminal and run:
 
-    git clone https://github.com/erikpukinskis/narratorjs.git
-    cd narratorjs
+    git clone https://github.com/erikpukinskis/narrative.git
+    cd narrative
 
 That will put you into a folder that has this very document (README.md) and our compile.js file. In order to generate all the files we described above, you just run:
 
@@ -178,7 +189,7 @@ You'll see all of the files we described above! Neat! In order to start the serv
     npm install
     node server.js
 
-And then open up http://localhost:5000 in your web browser (by clicking that link!) and you should see our Hello, World app! Cool! That's a legit web server running on your computer.
+And then open up <http://localhost:5000> in your web browser (by clicking that link!) and you should see our Hello, World app! Cool! That's a legit web server running on your computer.
 
 putting it on the intarwebs
 ---------------------------
@@ -203,13 +214,13 @@ And finally "push" the code to Heroku, which tells them to actually set it up on
 
     git push heroku master
     
-At this point you should have your very open copy of Narrative.js on the internet! Just go to http://whatever_you_want_to_call_this.herokuapp.com, or whatever you called it.
+At this point you should have your very open copy of Narrative.js on the internet! Just go to <http://whatever_you_want_to_call_this.herokuapp.com>, or whatever you called it.
 
 developer tips
 --------------
 
 If you want to play with it, I recommend just editing the README.md file and then running this in your terminal:
 
-    echo 'THIS IS IT!'; node compile.js; cd ../narrative-build; foreman start; cd ../narrative
+    echo 'THIS IS IT!'; node compile.js; cd ../narrative-build; npm install; foreman start; cd ../narrative
 
-Then reload your http://localhost:5000, poke around, press CTRL+C and repeat.
+Then reload your <http://localhost:5000>, poke around, press CTRL+C and repeat.
