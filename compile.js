@@ -3,7 +3,8 @@ var exec = require('child_process').exec;
 
 handleReadme = function(error, content) {
   chunkLines(content).eachBlock(handleBlock);
-  console.log("Look in build/ for your stuff!");
+  copyFile('README.md', '../narrative-build');
+  console.log("Look in ../narrative-build/ for your stuff!");
 }
 
 startsWith = function(string, pattern) {
@@ -72,9 +73,14 @@ handleBlock = function(block, kind, memo) {
 }
 
 writeFile = function(filename, content, callback) {
-  exec("mkdir -p build", function() {
-    fs.writeFile('build/' + filename, content, callback);
+  exec("mkdir -p ../narrative-build", function() {
+    fs.writeFile('../narrative-build/' + filename, content, callback);
   });
+}
+
+copyFile = function(filename, directory) {
+  fs.createReadStream(filename)
+    .pipe(fs.createWriteStream(directory + '/' + filename));
 }
 
 fs.readFile('README.md', 'utf-8', handleReadme);

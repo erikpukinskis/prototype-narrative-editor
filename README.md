@@ -13,10 +13,21 @@ First off, this is a web app written in HTML. We keep that html in a file called
 In order for your web browser to be able to read that file, we need to start a web server. Let's put the code for a simple [Node.js](http://nodejs.org/) server in `server.js`:
 
     var express = require("express");
+    var marked = require("marked");
+    var fs = require("fs");
     var app = express();
-    
-    app.use('/', express.static('.'));
-    
+
+    app.get('/', function(request, response){
+      var markdown = fs.readFileSync('README.md');
+      console.log("markdown is " + markdown + "\n\n\nThat's all folks");
+      console.log("here we are! marked is " + marked + "\n\n\n\nMARKED! DONE!");
+
+      marked(markdown, function(html) {
+        console.log("html is " + html);
+        response.send(html);
+      });
+    });
+
     var port = Number(process.env.PORT || 5000);
     
     app.listen(port, function() {
@@ -31,7 +42,8 @@ In order to make that work, we need to start a server with Node on it and the pa
       "name": "narrative",
       "version": "0.0.1",
       "dependencies": {
-        "express": "*"
+        "express": "*",
+        "marked": "*"
       },
       "engines": {
         "node": "*"
@@ -54,6 +66,7 @@ We'll put the code for that in `compile.js`:
 
     handleReadme = function(error, content) {
       chunkLines(content).eachBlock(handleBlock);
+      copyFile('README.md', '../narrative-build');
       console.log("Look in ../narrative-build/ for your stuff!");
     }
 
@@ -126,6 +139,11 @@ We'll put the code for that in `compile.js`:
       exec("mkdir -p ../narrative-build", function() {
         fs.writeFile('../narrative-build/' + filename, content, callback);
       });
+    }
+
+    copyFile = function(filename, directory) {
+      fs.createReadStream(filename)
+        .pipe(fs.createWriteStream(directory + '/' + filename));
     }
 
     fs.readFile('README.md', 'utf-8', handleReadme);
