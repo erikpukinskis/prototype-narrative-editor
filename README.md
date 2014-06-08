@@ -181,4 +181,4 @@ And finally "push" the code to Heroku, which tells them to actually set it up on
 
     git push heroku master
     
-At this point you should have your very open copy of Narrative.js on the internet! Just 
+At this point you should have your very open copy of Narrative.js on the internet! Just go to http://whatever_you_want_to_call_this.herokuapp.com, or whatever you called it.
