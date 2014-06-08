@@ -200,3 +200,12 @@ And finally "push" the code to Heroku, which tells them to actually set it up on
     git push heroku master
     
 At this point you should have your very open copy of Narrative.js on the internet! Just go to http://whatever_you_want_to_call_this.herokuapp.com, or whatever you called it.
+
+developer tips
+--------------
+
+If you want to play with it, I recommend just editing the README.md file and then running this in your terminal:
+
+    echo 'THIS IS IT!'; node compile.js; cd ../narrative-build; foreman start; cd ../narrative
+
+Then reload your http://localhost:5000, poke around, press CTRL+C and repeat.
