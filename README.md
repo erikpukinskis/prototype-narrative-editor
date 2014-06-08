@@ -6,7 +6,7 @@ If you keep reading, this web page will explain exactly how it came to be.
 the server
 ----------
 
-First off, this is a web app written in HTML. We keep that html in a file called `index.html`:
+First off, this is a web app written in HTML. It's kept in a file called `index.html`:
 
     <html>
     Hello, world!
