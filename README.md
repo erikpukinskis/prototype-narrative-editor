@@ -7,7 +7,7 @@ What's really neat is that this page also contains everything it needs to create
 
 Here's how it works.
 
-The server
+The Server
 ----------
 
 First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](README.md).
@@ -17,20 +17,10 @@ In order for you to be reading a nicely formatted version of this document in yo
 There are lots of ways to set up a web server, but right now we're using a little server written in Javascript. It's just a few lines of code in a file called `server.js`:
 
     var express = require("express");
-    var marked = require("marked");
-    var fs = require("fs");
     var app = express();
-    var Handlebars = require('hbs').handlebars;
 
-    app.get('/', function(request, response){
-      var markdown = fs.readFileSync('README.md').toString();
-
-      marked(markdown, function(xxxx, html) {
-        response.render('./context.html', {
-          html: new Handlebars.SafeString(html)
-        });
-      });
-    });
+    app.get.apply(app, require("./read_controller"));
+    app.get.apply(app, require("./edit_controller"));
 
     app.set('view engine', 'html');
     app.engine('html', require('hbs').__express);
@@ -44,33 +34,42 @@ There are lots of ways to set up a web server, but right now we're using a littl
       console.log("Listening on " + port);
     }); 
 
-There's a bunch going on in that code. It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It loads another library called [Marked](https://github.com/chjj/marked) that knows how to convert Markdown into HTML.
+There's a bunch going on in that code. .
 
-But the only thing you really need to know about that code is that it starts a web server that spits out the HTML version of our README file whenever a web browser asks for it.
+But the only thing you really need to know about that code is that it It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It took the request you just sent from your web browser for this page, and passed it on to the "Read" controller.
 
-You will notice that we mentioned a file called `context.html`. This is the file that has HTML for all of the stuff that needs to go around the narrative.
+Reading
+-------
+
+After the server deciphered your request, it fires up `read_controller.js` which connects itself to the '/' path (the / after narrativejs.herokuapp.com in the address for this page). It grabs the README.md file, converts it to HTML, and sticks it in a template.
+
+    var marked = require("marked");
+    var fs = require("fs");
+    var Handlebars = require('hbs').handlebars;
+
+    module.exports = ['/', function(request, response){
+      var markdown = fs.readFileSync('README.md').toString();
+
+      marked(markdown, function(xxxx, html) {
+        response.render('./read.html', {
+          html: new Handlebars.SafeString(html)
+        });
+      });
+    }];
+
+That mentions a file called `read.html`. This is just some HTML that goes around the narrative itself, telling the browser that we're an HTML document, we need a CSS stylesheet to make things pretty, and we want to link to the Edit page:
 
     <html>
       <head>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.js"></script>
-
-        <link rel="stylesheet" href="stylesheet.css" />
-
-        <script>
-          App = Ember.Application.create();
-        </script>
+        <link rel="stylesheet" href="read.css" />
       </head>
       <body>
-        <script type="text/x-handlebars">
-          {{html}}
-        <script>
-
+        <a href="/edit">Edit</a>
+        {{html}}
       </body>
     </html>
 
-We also need some CSS in `stylesheet.css` to make all of that look pretty:
+And that stylesheet goes in `read.css`:
 
     body {
       font-size: 14pt;
@@ -102,6 +101,38 @@ We also need some CSS in `stylesheet.css` to make all of that look pretty:
       background: #eee;
       color: #1ABC9C;
     }
+
+Writing
+-------
+
+We also referenced `edit_controller.js` in our server above. That connects to the '/edit' address you get to if you click the Edit link above:
+
+    module.exports = ['/edit', function(request, response) {
+      response.render('edit.html');
+    }];
+
+And `edit.html` is an app written in Ember.js:
+
+    <html>
+      <head>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.js"></script>
+
+        <script>
+          App = Ember.Application.create();
+        </script>
+      </head>
+      <body>
+        <script type="text/x-handlebars">
+          <a href="/">Read</a>
+          This is the editor!
+        <script>
+
+      </body>
+    </html>
+
+There's a lot going on there. It loads Ember and some other javascript libraries that it needs to work. It creates an Ember application with a Handlebars template and a link back to the Read page.
 
 The system
 ----------
