@@ -25,11 +25,16 @@ There are lots of ways to set up a web server, but right now we're using a littl
       var markdown = fs.readFileSync('README.md').toString();
 
       marked(markdown, function(xxxx, html) {
-        response.send(html);
+        response.render('./context.html');
       });
     });
 
+    app.set('view engine', 'html');
+    app.engine('html', require('hbs').__express);
+    app.set('views', __dirname);
+
     app.use('/', express.static('.'));
+    app.use(require('express-jquery')('/jquery.js'));
 
     var port = Number(process.env.PORT || 5000);
     
@@ -40,6 +45,12 @@ There are lots of ways to set up a web server, but right now we're using a littl
 There's a bunch going on in that code. It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It loads another library called [Marked](https://github.com/chjj/marked) that knows how to convert Markdown into HTML.
 
 But the only thing you really need to know about that code is that it starts a web server that spits out the HTML version of our README file whenever a web browser asks for it.
+
+You will notice that we mentioned a file called `context.html`. This is the file that has HTML for all of the stuff that needs to go around the narrative.
+
+    <html>
+    Hello, world!
+    </html>
 
 The system
 ----------
@@ -55,7 +66,9 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
       "version": "0.1.2",
       "dependencies": {
         "express": "*",
-        "marked": "*"
+        "marked": "*",
+        "express-jquery": "*",
+        "hbs": "*"
       },
       "engines": {
         "node": "*"
