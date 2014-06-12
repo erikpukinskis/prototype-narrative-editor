@@ -52,8 +52,12 @@ But the only thing you really need to know about that code is that it starts a w
 You will notice that we mentioned a file called `context.html`. This is the file that has HTML for all of the stuff that needs to go around the narrative.
 
     <html>
-    Hello, world!
-    {{html}}
+      <head>
+        <script src="/jquery.js"></script>
+      </head>
+      <body>
+      {{html}}
+      </body>
     </html>
 
 The system
