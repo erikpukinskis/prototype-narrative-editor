@@ -20,12 +20,15 @@ There are lots of ways to set up a web server, but right now we're using a littl
     var marked = require("marked");
     var fs = require("fs");
     var app = express();
+    var Handlebars = require('hbs').handlebars;
 
     app.get('/', function(request, response){
       var markdown = fs.readFileSync('README.md').toString();
 
       marked(markdown, function(xxxx, html) {
-        response.render('./context.html');
+        response.render('./context.html', {
+          html: new Handlebars.SafeString(html)
+        });
       });
     });
 
@@ -50,6 +53,7 @@ You will notice that we mentioned a file called `context.html`. This is the file
 
     <html>
     Hello, world!
+    {{html}}
     </html>
 
 The system
