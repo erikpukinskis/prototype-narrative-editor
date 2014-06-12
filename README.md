@@ -37,7 +37,6 @@ There are lots of ways to set up a web server, but right now we're using a littl
     app.set('views', __dirname);
 
     app.use('/', express.static('.'));
-    app.use(require('express-jquery')('/jquery.js'));
 
     var port = Number(process.env.PORT || 5000);
     
@@ -53,12 +52,56 @@ You will notice that we mentioned a file called `context.html`. This is the file
 
     <html>
       <head>
-        <script src="/jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.js"></script>
+
+        <link rel="stylesheet" href="stylesheet.css" />
+
+        <script>
+          App = Ember.Application.create();
+        </script>
       </head>
       <body>
-      {{html}}
+        <script type="text/x-handlebars">
+          {{html}}
+        <script>
+
       </body>
     </html>
+
+We also need some CSS in `stylesheet.css` to make all of that look pretty:
+
+    body {
+      font-size: 14pt;
+      max-width: 700px;
+      margin: 2em auto;
+      padding: 0 1em;
+      color: #333;
+    }
+
+    a {
+      color: #9B59B6;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h1, h2 {
+      font-weight: normal;
+    }
+
+    pre {
+      padding: 10px;
+    }
+
+    pre, p code {
+      font-size: 12pt;
+      border: 1px solid #ddd;
+      background: #eee;
+      color: #1ABC9C;
+    }
 
 The system
 ----------
@@ -75,7 +118,6 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
       "dependencies": {
         "express": "*",
         "marked": "*",
-        "express-jquery": "*",
         "hbs": "*"
       },
       "engines": {
@@ -249,38 +291,3 @@ Why would I want to do this?
 Right now Narrative JS doesn't really do a whole lot except describe itself. But my next goal is to turn it into an app that can actually edit itself and other narratives. And allow you to create and deploy your own narratives without leaving the web browser. All that terminal stuff is way more complicated than it needs to be.
 
 But for now this is the bare minimum thing that I could get working that demonstrates the idea of narrative-driven programming. So it's a fun start.
-
-<style>
-  <!--
-  body {
-    font-size: 14pt;
-    max-width: 700px;
-    margin: 2em auto;
-    padding: 0 1em;
-    color: #333;
-  }
-
-  a {
-    color: #9B59B6;
-  }
-
-  h1 {
-    text-align: center;
-  }
-
-  h1, h2 {
-    font-weight: normal;
-  }
-
-  pre {
-    padding: 10px;
-  }
-
-  pre, p code {
-    font-size: 12pt;
-    border: 1px solid #ddd;
-    background: #eee;
-    color: #1ABC9C;
-  }
-  -->
-</style>
