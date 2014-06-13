@@ -1,6 +1,8 @@
 Narrative
 =========
 
+Level: 1
+
 This is a web app. It just serves this one page that you're reading right now. What's kind of neat is that this page describes everything that has to happen for it to exist on the internet. 
 
 What's really neat is that this page also contains everything it needs to create a complete working copy of itself. All it needs is a human to run a few commands to help it along.
@@ -38,6 +40,22 @@ There's a bunch going on in that code. .
 
 But the only thing you really need to know about that code is that it It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It took the request you just sent from your web browser for this page, and passed it on to the "Read" controller.
 
+> ### Now this is a sidebar
+> 
+> This is the part of the code that I need to change next, but I don't know 
+> how to change it. I know I want to be able to be able to download a 
+> browserified version of the "medium-editor" npm module. 
+>
+> So I think that means I need a separate server that just takes requests for 
+> browserified js files. On to a separate narrative... 
+>
+> <browserified.md>
+>
+> And it also seems like there's some use for a service that just hosts our 
+> files. And maybe it's a rethinkdb proxy?
+> 
+> <data.md>
+
 Writing
 -------
 
@@ -54,7 +72,7 @@ And `edit.html` is an app written in Ember.js:
     </head>
     <body>
       <script type="text/x-handlebars">
-        {{outlet}}
+        {{outlet}}  
       </script>
 
       <script type="text/x-handlebars" id="index">
