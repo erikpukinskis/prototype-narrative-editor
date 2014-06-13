@@ -83,4 +83,4 @@ copyFile = function(filename, directory) {
     .pipe(fs.createWriteStream(directory + '/' + filename));
 }
 
-fs.readFile('README.md', 'utf-8', handleReadme);
+fs.readFile(process.argv[2], 'utf-8', handleReadme);

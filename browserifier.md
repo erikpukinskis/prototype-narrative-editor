@@ -5,8 +5,9 @@ Level: 2
 
 This is a little `server.js` that takes requests to browserify npm modules.
 
-    var express = require("express");
-    var app = express();
+
+
+    var app = require("express").express();
 
     app.get('/:moduleName', function(request, response) {
       // this is where you kick off the browserifying
