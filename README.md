@@ -19,11 +19,11 @@ There are lots of ways to set up a web server, but right now we're using a littl
     var express = require("express");
     var app = express();
 
-    app.get.apply(app, require("./read_controller"));
-    app.get.apply(app, require("./edit_controller"));
+    app.get('/', function(xxxx, response) {
+      response.render('edit.html');
+    });
 
-    app.set('view engine', 'html');
-    app.engine('html', require('hbs').__express);
+    app.engine('html', require('ejs').renderFile);
     app.set('views', __dirname);
 
     app.use('/', express.static('.'));
@@ -38,38 +38,58 @@ There's a bunch going on in that code. .
 
 But the only thing you really need to know about that code is that it It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It took the request you just sent from your web browser for this page, and passed it on to the "Read" controller.
 
-Reading
+Writing
 -------
 
-After the server deciphered your request, it fires up `read_controller.js` which connects itself to the '/' path (the / after narrativejs.herokuapp.com in the address for this page). It grabs the README.md file, converts it to HTML, and sticks it in a template.
+You are never just reading a narrative. All narratives are living documents that you are editing.
 
-    var marked = require("marked");
-    var fs = require("fs");
-    var Handlebars = require('hbs').handlebars;
+And `edit.html` is an app written in Ember.js:
 
-    module.exports = ['/', function(request, response){
-      var markdown = fs.readFileSync('README.md').toString();
-
-      marked(markdown, function(xxxx, html) {
-        response.render('./read.html', {
-          html: new Handlebars.SafeString(html)
-        });
-      });
-    }];
-
-That mentions a file called `read.html`. This is just some HTML that goes around the narrative itself, telling the browser that we're an HTML document, we need a CSS stylesheet to make things pretty, and we want to link to the Edit page:
-
+    <!DOCTYPE html>
     <html>
-      <head>
-        <link rel="stylesheet" href="read.css" />
-      </head>
-      <body>
-        <a href="/edit">Edit</a>
-        {{html}}
-      </body>
+    <head>
+      <meta charset="utf-8">
+      <title>Ember Starter Kit</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+      <script type="text/x-handlebars">
+        <h2>Welcome to Ember.js</h2>
+
+        {{outlet}}
+      </script>
+
+      <script type="text/x-handlebars" id="index">
+        <ul>
+        {{#each item in model}}
+          <li>{{item}}</li>
+        {{/each}}
+        </ul>
+      </script>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.js"></script>
+
+      <script>
+        App = Ember.Application.create();
+
+        App.Router.map(function() {
+          // put your routes here
+        });
+
+        App.IndexRoute = Ember.Route.extend({
+          model: function() {
+            return ['red', 'yellow', 'blue'];
+          }
+        });
+      </script>
+    </body>
     </html>
 
-And that stylesheet goes in `read.css`:
+There's a lot going on there. It loads Ember and some other javascript libraries that it needs to work. It creates an Ember application with a Handlebars template and a link back to the Read page.
+
+And we also need a CSS stylesheet to make things pretty, which goes in `styles.css`:
 
     body {
       font-size: 14pt;
@@ -102,37 +122,6 @@ And that stylesheet goes in `read.css`:
       color: #1ABC9C;
     }
 
-Writing
--------
-
-We also referenced `edit_controller.js` in our server above. That connects to the '/edit' address you get to if you click the Edit link above:
-
-    module.exports = ['/edit', function(request, response) {
-      response.render('edit.html');
-    }];
-
-And `edit.html` is an app written in Ember.js:
-
-    <html>
-      <head>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.js"></script>
-
-        <script>
-          App = Ember.Application.create();
-        </script>
-      </head>
-      <body>
-        <script type="text/x-handlebars">
-          <a href="/">Read</a>
-          This is the editor!
-        <script>
-
-      </body>
-    </html>
-
-There's a lot going on there. It loads Ember and some other javascript libraries that it needs to work. It creates an Ember application with a Handlebars template and a link back to the Read page.
 
 The system
 ----------
@@ -148,8 +137,7 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
       "version": "0.1.2",
       "dependencies": {
         "express": "*",
-        "marked": "*",
-        "hbs": "*"
+        "ejs": "*"
       },
       "engines": {
         "node": "*"
