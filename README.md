@@ -54,34 +54,31 @@ And `edit.html` is an app written in Ember.js:
     </head>
     <body>
       <script type="text/x-handlebars">
-        <h2>Welcome to Ember.js</h2>
-
         {{outlet}}
       </script>
 
       <script type="text/x-handlebars" id="index">
-        <ul>
-        {{#each item in model}}
-          <li>{{item}}</li>
-        {{/each}}
-        </ul>
+        {{html}}
       </script>
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
 
       <script>
         App = Ember.Application.create();
 
-        App.Router.map(function() {
-          // put your routes here
-        });
-
         App.IndexRoute = Ember.Route.extend({
           model: function() {
-            return ['red', 'yellow', 'blue'];
-          }
+            return Ember.$.get('README.md');
+          },
+        });
+
+        App.IndexController = Ember.Route.extend({
+          html: function() {
+            return new Handlebars.SafeString(marked(this.get('model')));
+          }.property('model'),
         });
       </script>
     </body>
