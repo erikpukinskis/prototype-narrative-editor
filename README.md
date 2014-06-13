@@ -38,7 +38,7 @@ There are lots of ways to set up a web server, but right now we're using a littl
 
 There's a bunch going on in that code. .
 
-But the only thing you really need to know about that code is that it It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It took the request you just sent from your web browser for this page, and passed it on to the "Read" controller.
+But the only thing you really need to know about that code is that it It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It took the request you just sent from your web browser for this page, and passed it on to the "gitRead" controller.
 
 > Now this is a sidebar.
 > 
@@ -49,12 +49,12 @@ But the only thing you really need to know about that code is that it It loads a
 > So I think that means I need a separate server that just takes requests for 
 > browserified js files. On to a separate narrative... 
 >
-> <browserified.md>
+> [browserified.md](browserified.md)
 >
 > And it also seems like there's some use for a service that just hosts our 
 > files. And maybe it's a rethinkdb proxy?
 > 
-> <data.md>
+> [data.md](data.md)
 
 Writing
 -------

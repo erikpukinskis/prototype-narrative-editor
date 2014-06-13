@@ -103,10 +103,10 @@ The future
 I think eventually these narratives aren't files, they're functions. And we want it to be a function that can just run over and over forever and that will generally be OK and safe and everything.
 
     function(content) {
-      
+
     }
 
-Here's what a server might look like as a function:
+Here's what a server might look like as a function: (See [node-server](node-server.md))
 
     function(server) {
       server.get('/', function(xxxx, response) {
