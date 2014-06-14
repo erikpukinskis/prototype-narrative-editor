@@ -68,45 +68,48 @@
     library = function() {
       count = 0
 
+      summarize = function(func) {
+        return func.toString().replace(/(?:\r\n|\r|\n)/g, '').replace(/ +/, ' ').substr(0,50);
+      }
+
       function Library() { 
         this.funcs = {}; 
         return this; 
       }
       Library.prototype.give = function(name, func) {
-        console.log("Gave " + name);
         this.funcs[name] = func;
-        console.log(_(this.funcs).size() + " funcs");
-        console.log("Server is a " + this.funcs.server);
-        console.log("Hell world is " + this.funcs.helloworld);
+        console.log("Gave " + name + " to the library (" + _(this.funcs).size() + " funcs) " + summarize(func));
       };
 
       Library.prototype.take = function(name) {
         count++
         if (count > 10 ) { return }
-        console.log("Looking for " + name);
-        _(this.funcs).each(function(func, i) {
-          console.log("&&&&&&& Func " + i + ": " + func);
-        });
-        console.log("Funcs are " + JSON.stringify(this.funcs));
-        console.log(_(this.funcs).size() + " funcs");
+
         func = this.funcs[name];
-        console.log("Found it: " + func.toString());
+        if (!func) {
+          console.log("Nothing in the library called " + name);
+          return
+        }
+
         dependencies = annotate(func);
-        console.log("Deps: <" + dependencies + ">>");
 
         argumentsForCall = []
         for(var i=0; i<dependencies.length; i++) {
           dep = dependencies[i];
-          console.log("Dep %%%" + dep + "%%%% ");
           returnVal = this.take(dep);
-          console.log("Returned " + returnVal);
           argumentsForCall.push(returnVal);
         }
-        console.log("calling " + name + ": " + func.toString());
-        console.log("\n\n...with params " + argumentsForCall)
-        returnVal = func.apply({}, argumentsForCall);
-        console.log("Got back " + returnVal);
-        return returnVal;
+
+        arguments = _(dependencies)
+          .chain()
+          .zip(argumentsForCall)
+          .object()
+          .value()
+
+        result = func.apply({}, argumentsForCall);
+
+        console.log("Took " + name + " out of the library with (" + JSON.stringify(arguments) + ") and it looks like this: " + summarize(result));
+        return result;
       }
 
       return new Library();      
@@ -118,7 +121,7 @@
     // goes up.
       
     library.give('server', function() {
-      console.log("generating a server");
+      console.log("Building a server.");
       Server = function() {}
       Server.prototype.initialize = function(port) {
         this.routes = {};
@@ -160,4 +163,4 @@
       });
     });
 
-    library.take('hello-world');
+    library.take('helloworld');
