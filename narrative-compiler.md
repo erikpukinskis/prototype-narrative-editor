@@ -80,19 +80,3 @@ It's a bit of a doozie. Don't worry about understanding it all just yet:
 
 There's a lot going on there, but the gist of it is that we take the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
 
-The future
-----------
-
-This is a function called lib:
-
-    argumentsFor = function(f) {
-      return f.toString().replace(/.*\(|\).*/ig,"").split(',');
-    }
-
-    libs = {}
-
-    lib = function(name, func) {
-      libs[name] = func
-    }
-
-The idea is that these lib functions are idempotent. You can run them over and over without changing the result.
