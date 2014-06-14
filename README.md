@@ -49,7 +49,7 @@ But the only thing you really need to know about that code is that it It loads a
 > So I think that means I need a separate server that just takes requests for 
 > browserified js files. On to a separate narrative... 
 >
-> [browserified.md](browserified.md)
+> [browserifier.md](browserified.md)
 >
 > And it also seems like there's some use for a service that just hosts our 
 > files. And maybe it's a rethinkdb proxy?
