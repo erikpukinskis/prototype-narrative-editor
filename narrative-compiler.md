@@ -95,33 +95,4 @@ This is a function called lib:
       libs[name] = func
     }
 
-
-
-
-This compiler takes some text, breaks it into blocks. For each of those blocks, it grabs the necessary dependencies and passes them on.
-
-There's a server somewhere. That's a given. You have to keep reminding the compiler about the server:
-
-  lib('compiler', function(document, callback) {
-    data.write(key, content)
-  });
-
-You can just run it over and over, whenever the document changes.
-
-
-I think eventually these narratives aren't files, they're functions. And we want it to be a function that can just run over and over forever and that will generally be OK and safe and everything.
-
-    function(content) {
-
-    }
-
-Here's what a server might look like as a function: (See [node-server](node-server.md))
-
-    function(server) {
-      server.get('/', function(xxxx, response) {
-        response.render('hello, world!');
-      });
-    }
-
-
-Then we just eval that code!
+The idea is that these lib functions are idempotent. You can run them over and over without changing the result.
