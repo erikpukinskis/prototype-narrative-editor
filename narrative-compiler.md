@@ -7,15 +7,6 @@ In order for that to happen, we need something that understands this Markdown fi
 
 It's a bit of a doozie. Don't worry about understanding it all just yet:
 
-    var fs = require('fs');
-    var exec = require('child_process').exec;
-
-    handleReadme = function(error, content) {
-      chunkLines(content).eachBlock(handleBlock);
-      copyFile('README.md', '../narrative-build');
-      console.log("Look in ../narrative-build/ for your stuff!");
-    }
-
     startsWith = function(string, pattern) {
       pattern = new RegExp("^" + pattern);
       return !!string.match(pattern);
@@ -59,46 +50,64 @@ It's a bit of a doozie. Don't worry about understanding it all just yet:
       return blocks;
     }
 
-    eachBlock = function(process) {
+    eachBlock = function(callback) {
       var memo = {}
       for(i=0; i<this.length; i++) {
         block = this[i];
-        process(block.lines.join("\n"), block.kind, memo);
+        block.lines.join("\n"), block.kind, memo);
+
+        var inAComment = kind == 'comment'
+        var foundCodeSnippets = block.match(/`([^`]+)`/)
+        if (inAComment && foundCodeSnippets) {
+          memo.filename = foundCodeSnippets[1]
+        }
+
+        if ((kind == 'code') && memo.filename) {
+          block = block.replace(/(^|\n)    /g, "$1");
+          callback(memo.filename, block);        
+          memo.filename = null;
+        }
+
       }
     }
 
-    handleBlock = function(block, kind, memo) {
-      var inAComment = kind == 'comment'
-      var foundCodeSnippets = block.match(/`([^`]+)`/)
-      if (inAComment && foundCodeSnippets) {
-        memo.filename = foundCodeSnippets[1]
-      }
-
-      if ((kind == 'code') && memo.filename) {
-        block = block.replace(/(^|\n)    /g, "$1");
-        writeFile(memo.filename, block);
-        memo.filename = null;
-      }
-    }
-
-    writeFile = function(filename, content, callback) {
-      exec("mkdir -p ../narrative-build", function() {
-        fs.writeFile('../narrative-build/' + filename, content, callback);
+    lib('compiler', function(document, data) {
+      chunkLines(content).eachBlock(function(filename, content){
+        data.write(filename, content)
       });
-    }
+    });
 
-    copyFile = function(filename, directory) {
-      fs.createReadStream(filename)
-        .pipe(fs.createWriteStream(directory + '/' + filename));
-    }
-
-    console.log(process.argv)
-    fs.readFile('README.md', 'utf-8', handleReadme);
 
 There's a lot going on there, but the gist of it is that we take the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
 
 The future
 ----------
+
+This is a function called lib:
+
+    argumentsFor = function(f) {
+      return f.toString().replace(/.*\(|\).*/ig,"").split(',');
+    }
+
+    libs = {}
+
+    lib = function(name, func) {
+      libs[name] = func
+    }
+
+
+
+
+This compiler takes some text, breaks it into blocks. For each of those blocks, it grabs the necessary dependencies and passes them on.
+
+There's a server somewhere. That's a given. You have to keep reminding the compiler about the server:
+
+  lib('compiler', function(document, callback) {
+    data.write(key, content)
+  });
+
+You can just run it over and over, whenever the document changes.
+
 
 I think eventually these narratives aren't files, they're functions. And we want it to be a function that can just run over and over forever and that will generally be OK and safe and everything.
 
