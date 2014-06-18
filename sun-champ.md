@@ -13,7 +13,7 @@ today i am making my first blog. i want the blog to be the color blue, and have 
 
 Maybe it could even be used for storytelling:
 
-    library.give('legendofhelga', function(forest, creatures, helga) {
+    library.give('legendofhelga', function(forest, creatures, helga, let) {
       repeat(four, function() {
         lion = creatures.beget('lion')
         lion.enter(forest)
@@ -22,4 +22,5 @@ Maybe it could even be used for storytelling:
       forest.weather('lightning and thunder under a black sky and a full moon')
 
       helga.enter(forest)
+      let.user.control(helga)
     }
