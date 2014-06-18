@@ -1,5 +1,5 @@
     var _ = require('underscore');
-
+    var print = require('pretty-print');
 
     // ANGULAR ANNOTATE
     // https://github.com/angular/angular.js/blob/master/src/auto/injector.js
@@ -78,10 +78,11 @@
       }
       Library.prototype.give = function(name, func) {
         this.funcs[name] = func;
-        console.log("Gave " + name + " to the library (" + _(this.funcs).size() + " funcs) " + summarize(func));
+        console.log("Gave " + name + " <<" + summarize(func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
       };
 
       Library.prototype.take = function(name) {
+        var _this = this;
         count++
         if (count > 10 ) { return }
 
@@ -91,24 +92,27 @@
           return
         }
 
-        dependencies = annotate(func);
+        var dependencies = annotate(func);
+        console.log("Taking " + name + " out of the library. It needs " + dependencies.join(", ") + ".")
 
-        argumentsForCall = []
-        for(var i=0; i<dependencies.length; i++) {
-          dep = dependencies[i];
-          returnVal = this.take(dep);
-          argumentsForCall.push(returnVal);
-        }
+        var args = {}
+        _(dependencies).each(function(dep) { 
+          args[dep] = _this.take(dep);
+        });
 
-        arguments = _(dependencies)
-          .chain()
-          .zip(argumentsForCall)
-          .object()
-          .value()
+        print({args: args}, {});
+        var values = _(args).values();
+        var result = func.apply({}, values);
 
-        result = func.apply({}, argumentsForCall);
-
-        console.log("Took " + name + " out of the library with (" + JSON.stringify(arguments) + ") and it looks like this: " + summarize(result));
+        console.log({
+          name: name,
+          func: func,
+          dependencies: dependencies,
+          args: args,
+          values: values,
+          result: result
+        });
+        console.log("Took " + name + " out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
         return result;
       }
 
