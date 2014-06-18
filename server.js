@@ -10,6 +10,39 @@
     var _ = require('underscore');
     var print = require('pretty-print');
 
+
+
+    // INDENT helps print out nested stuff so I can understand it
+
+    indent = function(string) {
+      console.log(new Array(indent.depth).join("  ") + string);
+    }
+    indent.depth = 1
+    indent.in = function() {
+      this.depth++
+      indent(this.depth + '->')
+    }
+    indent.out = function() {
+      this.depth--
+      indent('<-' + this.depth)
+    }
+
+    // indent("hello!")
+    // indent.in()
+    // indent("and now?")
+    // indent.in()
+    // indent("one")
+    // indent("two")
+    // indent("three")
+    // indent.out()
+    // indent("and what of a long paragraph?");
+    // indent.out()
+    // indent("ok")
+    // indent.out()
+    // indent("spoooky")
+
+
+
     // ANGULAR ANNOTATE
     // https://github.com/angular/angular.js/blob/master/src/auto/injector.js
 
@@ -81,13 +114,19 @@
         return func.toString().replace(/(?:\r\n|\r|\n)/g, '').replace(/ +/, ' ').substr(0,50);
       }
 
+      hash = function(string){
+        return string.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0).toString(36).substr(1,10);
+      }
+
       function Library() { 
         this.funcs = {}; 
         return this; 
       }
       Library.prototype.give = function(name, func) {
+        func.hash = hash(func.toString())
         this.funcs[name] = func;
-        console.log("Gave " + name + " <<" + summarize(func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
+        indent("hash is " + func.hash)
+        indent("Gave " + name + " (" + func.hash.substr(0,40) + ")<<" + summarize(func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
       };
 
       Library.prototype.take = function(name) {
@@ -95,33 +134,32 @@
         count++
         if (count > 10 ) { return }
 
-        func = this.funcs[name];
+        var func = this.funcs[name];
+        indent("funcs[" + name + "] is " + func.hash);
         if (!func) {
-          console.log("Nothing in the library called " + name);
+          indent("Nothing in the library called " + name);
           return
         }
 
         var dependencies = annotate(func);
-        console.log("Taking " + name + " out of the library. It needs " + dependencies.join(", ") + ".")
+        indent("Taking " + name + " out of the library. It needs " + dependencies.join(", ") + ".")
 
         var args = {}
         _(dependencies).each(function(dep) { 
+          indent('Taking out ' + dep)
+          indent.in()
           args[dep] = _this.take(dep);
+          indent.out()
         });
 
-        print({args: args}, {});
         var values = _(args).values();
-        var result = func.apply({}, values);
 
-        console.log({
-          name: name,
-          func: func,
-          dependencies: dependencies,
-          args: args,
-          values: values,
-          result: result
-        });
-        console.log("Took " + name + " out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
+        indent("running func " + func.hash + " to respond to take(" + name + ")....")
+        indent.in()
+        var result = func.apply({}, values);
+        indent.out()
+        indent("....ran it! got back " + result);
+        indent("Took " + name + " out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
         return result;
       }
 
@@ -134,7 +172,7 @@
     // goes up.
       
     library.give('server', function() {
-      console.log("Building a server.");
+      indent("Building a server.");
       Server = function() {}
       Server.prototype.initialize = function(port) {
         this.routes = {};
@@ -149,7 +187,9 @@
         });
 
         this.app.listen(port, function() {
-          console.log("Listening on " + port);
+          indent.in()
+          indent("Listening on " + port);
+          indent.out()
         });
       }
 
@@ -157,7 +197,7 @@
         this.routes[pattern] = handler;
       };
       var server = new Server();
-      console.log("Built a server: " + server);
+      indent("Built a server: " + server);
       return server;
     });
 
@@ -166,14 +206,20 @@
     // Says hello when you visit.
 
     library.give('helloworld', function(server) {
-      console.log("generating a hello world");
+      indent("generating a hello world");
       if (!server) {
-        console.log("no server!");
+        indent("no server!");
         return;
       }
       server.get('/', function(xxxx, response) {
+        indent.in()
+        indent('responding on server!')
+        indent.out()
         response.render('hello, world!');
       });
     });
 
+    indent("Diving in!")
+    indent.in()
     library.take('helloworld');
+    indent.out()
