@@ -1,3 +1,12 @@
+    //
+    //
+    //
+    // So, sadly this is not a runnable narrative. I'm just going to try to
+    // get things working and then split them out into separate narratives
+    // which will all hopefully be libs.
+    //
+
+
     var _ = require('underscore');
     var print = require('pretty-print');
 

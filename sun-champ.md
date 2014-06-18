@@ -10,3 +10,16 @@ today i am making my first blog. i want the blog to be the color blue, and have 
         photos('http://flickr.com/sunchamp/new+mexico+trip')
       )
     )
+
+Maybe it could even be used for storytelling:
+
+    library.give('legendofhelga', function(forest, creatures, helga) {
+      repeat(four, function() {
+        lion = creatures.beget('lion')
+        lion.enter(forest)
+      })
+
+      forest.weather('lightning and thunder under a black sky and a full moon')
+
+      helga.enter(forest)
+    }
