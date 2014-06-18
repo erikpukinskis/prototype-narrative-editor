@@ -1,6 +1,8 @@
 Narrative
 =========
 
+_*Warning: This is totally broken right now!*_
+
 Level: 1
 
 Narrative is a tree of functions. But they're better functions. You watch results change as you type. You see red test lights going off within a couple keystrokes of a breakage. It is accessible and editable from any computer, big or small, with a web browser. They are instantly and forever deployed and usable on the internet without you having to set that up. Other people can just as instantly run instances of your function for their use. And can just as easily use their own modified version. They discourage the use of side effects by living in a sandbox. And they're also written as stories, with a beginning and an end.
