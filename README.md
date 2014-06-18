@@ -3,7 +3,14 @@ Narrative
 
 Level: 1
 
-This is a web app. It just serves this one page that you're reading right now. What's kind of neat is that this page describes everything that has to happen for it to exist on the internet. 
+Narrative is a tree of functions. But they're better functions. You watch results change as you type. You see red test lights going off within a couple keystrokes of a breakage. It is accessible and editable from any computer, big or small, with a web browser. They are instantly and forever deployed and usable on the internet without you having to set that up. Other people can just as instantly run instances of your function for their use. And can just as easily use their own modified version. They discourage the use of side effects by living in a sandbox. And they're also written as stories, with a beginning and an end.
+
+Here is one!
+
+This is a web app.
+------------------
+
+It just serves this one page that you're reading right now. What's kind of neat is that this page describes everything that has to happen for it to exist on the internet. 
 
 What's really neat is that this page also contains everything it needs to create a complete working copy of itself. All it needs is a human to run a few commands to help it along.
 
