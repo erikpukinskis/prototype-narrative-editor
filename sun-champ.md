@@ -24,3 +24,4 @@ Maybe it could even be used for storytelling:
       helga.enter(forest)
       let.user.control(helga)
     }
+

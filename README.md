@@ -30,10 +30,6 @@ There are lots of ways to set up a web server, but right now we're using a littl
     var express = require("express");
     var app = express();
 
-    app.get('/', function(xxxx, response) {
-      response.render('edit.html');
-    });
-
     app.engine('html', require('ejs').renderFile);
     app.set('views', __dirname);
 
@@ -45,25 +41,17 @@ There are lots of ways to set up a web server, but right now we're using a littl
       console.log("Listening on " + port);
     }); 
 
-There's a bunch going on in that code. .
+OK! Or maybe the new server is something like this:
 
-But the only thing you really need to know about that code is that it It loads a library called [Express](http://expressjs.com/) that knows how to talk to web browsers. It took the request you just sent from your web browser for this page, and passed it on to the "gitRead" controller.
+    library.give('helloworld', function(server) {
+      server.get('/', function(xxxx, response) {
+        response.render('edit.html');
+      });
+    });
 
-> Now this is a sidebar.
-> 
-> This is the part of the code that I need to change next, but I don't know 
-> how to change it. I know I want to be able to be able to download a 
-> browserified version of the "medium-editor" npm module. 
->
-> So I think that means I need a separate server that just takes requests for 
-> browserified js files. On to a separate narrative... 
->
-> [browserifier.md](browserified.md)
->
-> And it also seems like there's some use for a service that just hosts our 
-> files. And maybe it's a rethinkdb proxy?
-> 
-> [data.md](data.md)
+And then to start it up, we just do:
+
+    library.take('helloworld');
 
 Writing
 -------
@@ -186,78 +174,4 @@ The compiler
 ------------
 
 We compile narratives with [narrative-comiler](narrative-compiler.md).
-
-
-We need to be able to turn a narrative into actual files, and there's a module for that. Let's hook it up in `compile.js`:
-
-    compiler = require('narrative-compiler')
-
-    compiler.
-
-This is sort of the whole point of this strange little app. You're reading this nice, linear narrative and all the code that made it show up. But we also want to be able to run that code. That's what code is for!
-
-
-> node 
-> This is where there would be some fancy reference to another narrative!
->
-> we need the `compile module`, and then our serve
-
-And that's it! That's all of the code we need for this narrative to come alive! 
-
-... We just need that little bit of human-intervention that I mentioned before, and that's where you come in. Tie your shoes and tighten your belt, we're about to deploy some software.
-
-Running your own copy of Narrative
-----------------------------------
-
-You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer. Then open a terminal and run:
-
-    git clone https://github.com/erikpukinskis/narrative.git
-    cd narrative
-
-That will put you into a folder that has this very document (README.md) and the compile.js file described above. In order to generate your copies of the files, run:
-
-    node compile.js
-
-Now type:
-
-    ls ../narrative-build
-
-You'll see all of the files we described above! Neat! In order to start the server you just do:
-
-    cd ../narrative-build
-    npm install
-    node server.js
-
-Now open up <http://localhost:5000> in your web browser and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
-
-Try changing some text in the README.md and running "node compile.js" and "node server.js" again, reload your browser and you should see your changes!
-
-Putting it on the intarwebs
----------------------------
-
-Now, in order to get it on the web so that the whole world can see it, we need to deploy it to Heroku. Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and create a git repository that will keeps track of your code:
-
-    git init
-
-We need to do that because git is what we use to actually send all of this stuff to Heroku. Save the files we just built into the repository:
-
-    git add .
-    git commit -m "My own version of Narrative.js"
-
-Create an app on Heroku so we can host all this shiz:
-
-    heroku create whatever-you-want-to-call-this
-
-You'll have to choose a name of your own. And then finally "push" the code to Heroku, so they can set it up on the web:
-
-    git push heroku master
-    
-At this point you should have your very open copy of Narrative.js on the internet! Just go to <http://whatever-you-want-to-call-this.herokuapp.com>, or whatever you called it.
-
-Why would I want to do this?
-----------------------------
-
-Right now Narrative JS doesn't really do a whole lot except describe itself. But my next goal is to turn it into an app that can actually edit itself and other narratives. And allow you to create and deploy your own narratives without leaving the web browser. All that terminal stuff is way more complicated than it needs to be.
-
-But for now this is the bare minimum thing that I could get working that demonstrates the idea of narrative-driven programming. So it's a fun start.
 
