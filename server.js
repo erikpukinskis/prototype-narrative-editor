@@ -110,7 +110,8 @@
     library = function() {
       count = 0
 
-      summarize = function(func) {
+      summarize = function(stuff) {
+        if (!(typeof stuff == 'string')) { return new String(stuff).toString() }
         return func.toString().replace(/(?:\r\n|\r|\n)/g, '').replace(/ +/, ' ').substr(0,50);
       }
 
@@ -125,7 +126,6 @@
       Library.prototype.give = function(name, func) {
         func.hash = hash(func.toString())
         this.funcs[name] = func;
-        indent("hash is " + func.hash)
         indent("Gave " + name + " (" + func.hash.substr(0,40) + ")<<" + summarize(func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
       };
 
@@ -135,18 +135,16 @@
         if (count > 10 ) { return }
 
         var func = this.funcs[name];
-        indent("funcs[" + name + "] is " + func.hash);
         if (!func) {
           indent("Nothing in the library called " + name);
           return
         }
 
         var dependencies = annotate(func);
-        indent("Taking " + name + " out of the library. It needs " + dependencies.join(", ") + ".")
+        indent("Taking " + name + " (" + func.hash + ") out of the library. It needs " + (dependencies.length ? '['+dependencies.join(", ")+']' : 'nothing' ) + ". Running func...")
 
         var args = {}
         _(dependencies).each(function(dep) { 
-          indent('Taking out ' + dep)
           indent.in()
           args[dep] = _this.take(dep);
           indent.out()
@@ -154,12 +152,11 @@
 
         var values = _(args).values();
 
-        indent("running func " + func.hash + " to respond to take(" + name + ")....")
         indent.in()
         var result = func.apply({}, values);
         indent.out()
         indent("....ran it! got back " + result);
-        indent("Took " + name + " out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
+        indent("Took " + name + " (" + func.hash + ") out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
         return result;
       }
 
@@ -172,17 +169,16 @@
     // goes up.
       
     library.give('server', function() {
-      indent("Building a server.");
-      Server = function() {}
-      Server.prototype.initialize = function(port) {
-        this.routes = {};
-
+      Server = function() {
+        this.routes = {}
+        indent('initializing server')
         var express = require("express");
         this.app = express();
         var port = Number(port || 5000);
-      
+
         this.app.get('*', function(request, response) {
-          var handler = this.routes[req.url];
+          return response.send('hello person!')
+          var handler = this.routes[request.url];
           handler(request, response);
         });
 
@@ -196,7 +192,11 @@
       Server.prototype.get = function(pattern, handler) {
         this.routes[pattern] = handler;
       };
+
+      indent('Starting new server...')
+      indent.in()
       var server = new Server();
+      indent.out()
       indent("Built a server: " + server);
       return server;
     });
@@ -206,11 +206,7 @@
     // Says hello when you visit.
 
     library.give('helloworld', function(server) {
-      indent("generating a hello world");
-      if (!server) {
-        indent("no server!");
-        return;
-      }
+      indent("<in hello world builder>");
       server.get('/', function(xxxx, response) {
         indent.in()
         indent('responding on server!')
