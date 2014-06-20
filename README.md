@@ -132,7 +132,7 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
 
     {
       "name": "narrative",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "dependencies": {
         "express": "*",
         "ejs": "*"
