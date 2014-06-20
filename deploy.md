@@ -1,28 +1,3 @@
-Running your own copy of Narrative
-----------------------------------
-
-You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer. Then open a terminal and run:
-
-    git clone https://github.com/erikpukinskis/narrative.git
-    cd narrative
-
-That will put you into a folder that has this very document (README.md) and the compile.js file described above. In order to generate your copies of the files, run:
-
-    node compile.js
-
-Now type:
-
-    ls ../narrative-build
-
-You'll see all of the files we described above! Neat! In order to start the server you just do:
-
-    cd ../narrative-build
-    npm install
-    node server.js
-
-Now open up <http://localhost:5000> in your web browser and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
-
-Try changing some text in the README.md and running "node compile.js" and "node server.js" again, reload your browser and you should see your changes!
 
 Putting it on the intarwebs
 ---------------------------
