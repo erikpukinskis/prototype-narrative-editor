@@ -29,7 +29,7 @@ Let's make a server! We'll call it Narrative:
       });
     });
 
-We're giving it to the library to hold on to (don't trust myself with that!). It needs one other narrative from the library in order to work: [Express](express.md), a web server. 
+We're giving it to the [library](library.md) to hold on to (don't trust myself with that!). It needs one other narrative from the library in order to work: [Express](express.md), a web server. 
 
 Writing
 -------
