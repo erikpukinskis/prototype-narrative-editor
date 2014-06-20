@@ -71,12 +71,25 @@ It's a bit of a doozie. Don't worry about understanding it all just yet:
       }
     }
 
-    lib('compiler', function(document, data) {
+    library.give('compiler', function(document, folder) {
       chunkLines(content).eachBlock(function(filename, content){
-        data.write(filename, content)
-      });
-    });
+        folder.write(filename, content)
+      })
+    })
 
+    library.give('folder', function() {
+      return {
+        write: function(filename, content) {
+          // save to filesystem here
+        }
+      }
+    })
+
+TODO:
+
+Generate a JS file from this. run `node compile.js` on README.js and get out a complete project.
+
+Look for lib('blah', function(args...)) lines and use them to build the narratives into the JS file.
 
 There's a lot going on there, but the gist of it is that we take the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
 

@@ -25,40 +25,22 @@ First off, this document is written in a filed called README.md. It's written in
 
 In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
-There are lots of ways to set up a web server, but right now we're using a little server written in Javascript. It's just a few lines of code in a file called `server.js`:
+Let's make a server! We'll call it 'narrative':
 
-    var express = require("express");
-    var app = express();
+    library.give('narrative', function(express) {
+      express.use('/', express.static('.'));
 
-    app.engine('html', require('ejs').renderFile);
-    app.set('views', __dirname);
-
-    app.use('/', express.static('.'));
-
-    var port = Number(process.env.PORT || 5000);
-    
-    app.listen(port, function() {
-      console.log("Listening on " + port);
-    }); 
-
-OK! Or maybe the new server is something like this:
-
-    library.give('helloworld', function(server) {
-      server.get('/', function(xxxx, response) {
+      express.get('/', function(xxxx, response) {
         response.render('edit.html');
       });
     });
 
-And then to start it up, we just do:
-
-    library.take('helloworld');
+That's our server, narrative, and we're giving it to the library to hold on to (don't trust myself with that!). It needs one other function from the library in order to work: express, a web server.
 
 Writing
 -------
 
-You are never just reading a narrative. All narratives are living documents that you are editing.
-
-And `edit.html` is an app written in Ember.js:
+We mentioned ad `edit.html` above. That's the HTML we are passing down that actually sets up the editor:
 
     <!DOCTYPE html>
     <html>
@@ -138,11 +120,17 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       font-style: italic;
     }
 
+That's it! To start it up, we just do:
+
+    library.take('helloworld');
+
+You can go to [http://localhost:5000](http://localhost:5000) to see it.
+
 
 The system
 ----------
 
-In order for that server to run, we need to actually set up a computer somewhere that has Express and Marked and Node and knows how to fire everything up. 
+Great. So that's In order for that server to run, we need to actually set up a computer somewhere that has Express and Marked and Node and knows how to fire everything up. 
 
 Luckily, it's 2014 and there's a service called [Heroku](http://heroku.com) that will do all of that for us. We just need to provide them with two more files that show them what to do. 
 
