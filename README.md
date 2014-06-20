@@ -148,7 +148,7 @@ We also need to tell Heroku what it has to do to start the server. We do that in
 
 That just tells them that to start the web server they should run the command "node server.js".
 
-And that's it! That's all the code we need to start this server. The only problem is, all of it is locked away in our [README.md](README.md) file, and Heroku doesn't understand files like this. 
+And that's it! That's all the code we need to start this server. The only problem is, all of it is locked away in our [README.md](https://raw.githubusercontent.com/erikpukinskis/narrative/master/README.md) file, and Heroku doesn't understand files like this. 
 
 We need something to actually go through our narrative and make real, usable files from it.
 
