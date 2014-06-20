@@ -3,7 +3,7 @@ Narrative Compiler
 
 Level: 2
 
-In order for that to happen, we need something that understands this Markdown file you are reading, with all it's file names and blocks of code, and can spit out actual files. Here's some javascript that does the trick. It's in a file called `compile-narrative.js`.
+In order for that to happen, we need something that understands this Markdown file you are reading, with all it's file names and blocks of code, and can spit out actual files. Here's some javascript that does the trick. It's in a file called `compile.js`.
 
 It's a bit of a doozie. Don't worry about understanding it all just yet:
 
