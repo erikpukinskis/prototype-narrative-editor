@@ -140,7 +140,7 @@ The first is `package.json`, which describes the various things running the serv
     }
 
 We also need to tell Heroku what it has to do to start the server. We do that in a `Procfile`:
-e
+
     web: node server.js
 
 That just tells them that to start the web server they should run the command "node server.js".
