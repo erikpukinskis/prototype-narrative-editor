@@ -1,59 +1,43 @@
-Node Server
------------
+Express
+-------
 
-This is the abstract encapsulation of the dynamical everything-piped-to-everything realtime
-It probably starts off like this:
+This is what you use to set up an Express/Node server:
+      
+    library.give('express', function() {
+      Server = function() {
+        var _server = this
+        _server.routes = {}
+        indent('initializing server')
+        var express = require("express");
+        _server.app = express();
+        var port = Number(port || 5000);
 
-    var express = require("express");
-    var app = express();
+        this.app.get('*', function(request, response) {
+          var handler = _server.routes[request.url];
+          handler(request, response);
+        });
 
-And then there's maybe some sort of Express middleware thing that happens here. Maybe there's also just some interface to the Express router that I can tie into and change the routes. Maybe I just have to dig into the router source.
+        this.app.listen(port, function() {
+          indent.in()
+          indent("Listening on " + port);
+          indent.out()
+        });
+      }
 
-Regardless, we want to get to the point that we can do this:
+      Server.prototype.get = function(pattern, handler) {
+        this.routes[pattern] = handler;
+      };
 
-    server.get('/', function(xxxx, response) {
-      response.render('edit.html');
+      indent('Starting new server...')
+      indent.in()
+      var server = new Server();
+      indent.out()
+      indent("Built a server: " + server);
+      return server;
     });
 
-    server.get('/', function(xxx,res) {
-      res.send('hiya!');
-    });
+It boots up an express server with a catch-all route so that
+we can keep messing around with the routes after the server
+goes up.
 
-And the server will server 'hiya'.
 
-  Server = function() {}
-  Server.prototype.initialize = function(port) {
-    var express = require("express");
-    this.app = express();
-    var port = Number(port || 5000);
-  
-    this.app.listen(port, function() {
-      console.log("Listening on " + port);
-    });
-  }
-
-  lib('server', function(){
-    return new Server();
-  }
-
-Here's what a server might look like as a function: (See [node-server](node-server.md))
-
-    function(server) {
-      server.get('/', function(xxxx, response) {
-        response.render('hello, world!');
-      });
-    }
-
-Or:
-
-var server = require('node-server').server();
-
-server.get('/', function(xxxx, response) {
-  response.render('edit.html');
-});
-
-server.get('/', function(xxx,res) {
-  res.send('hiya!');
-});
-
-server.start();

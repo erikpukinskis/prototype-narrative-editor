@@ -25,7 +25,6 @@ And then we have `edit.html`:
     <script>
     words = Word.several(['libary', 'noodel', 'hamburger', 'snowman'])
 
-
 OK, too complicated. Let's just write it out.
 
 There's a contenteditable div, and it's sending out wordTyped events, and we're storing them in an array.
@@ -46,7 +45,7 @@ As we are typing words, Narrative is continually searching for keywords:
 We need some sort of function that makes the grid:
 
     makeGrid = function() {
-      
+
     }
 
 I think I wrote a book named|
