@@ -34,7 +34,7 @@ That's our server, narrative, and we're giving it to the library to hold on to (
 Writing
 -------
 
-We mentioned ad `edit.html` above. That's the HTML we are passing down that actually sets up the editor:
+We mentioned `edit.html` above. That's the HTML we are passing down that actually sets up the editor:
 
     <!DOCTYPE html>
     <html>
