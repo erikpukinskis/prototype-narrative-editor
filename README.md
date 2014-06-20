@@ -3,12 +3,6 @@ Narrative
 
 _*Warning: This is totally broken right now!*_
 
-Level: 1
-
-Narrative is a tree of functions. But they're better functions. You watch results change as you type. You see red test lights going off within a couple keystrokes of a breakage. It is accessible and editable from any computer, big or small, with a web browser. They are instantly and forever deployed and usable on the internet without you having to set that up. Other people can just as instantly run instances of your function for their use. And can just as easily use their own modified version. They discourage the use of side effects by living in a sandbox. And they're also written as stories, with a beginning and an end.
-
-Here is one!
-
 This is a web app.
 ------------------
 
@@ -25,7 +19,7 @@ First off, this document is written in a filed called README.md. It's written in
 
 In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
-Let's make a server! We'll call it 'narrative':
+Let's make a server! We'll call it Narrative:
 
     library.give('narrative', function(express) {
       express.use('/', express.static('.'));
