@@ -29,7 +29,7 @@ Let's make a server! We'll call it Narrative:
       });
     });
 
-That's our server, narrative, and we're giving it to the library to hold on to (don't trust myself with that!). It needs one other function from the library in order to work: express, a web server.
+That's our server, narrative, and we're giving it to the library to hold on to (don't trust myself with that!). It needs one other function from the library in order to work: [express](express.md), a web server.
 
 Writing
 -------
