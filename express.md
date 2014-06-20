@@ -7,7 +7,6 @@ This is what you use to set up an Express/Node server:
       Server = function() {
         var _server = this
         _server.routes = {}
-        indent('initializing server')
         var express = require("express");
         _server.app = express();
         var port = Number(port || 5000);
@@ -18,9 +17,7 @@ This is what you use to set up an Express/Node server:
         });
 
         this.app.listen(port, function() {
-          indent.in()
-          indent("Listening on " + port);
-          indent.out()
+          console.log("Listening on " + port);
         });
       }
 
@@ -28,12 +25,7 @@ This is what you use to set up an Express/Node server:
         this.routes[pattern] = handler;
       };
 
-      indent('Starting new server...')
-      indent.in()
-      var server = new Server();
-      indent.out()
-      indent("Built a server: " + server);
-      return server;
+      return new Server();
     });
 
 It boots up an express server with a catch-all route so that
