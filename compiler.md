@@ -1,11 +1,21 @@
-Narrative Compiler
-------------------
+Compiler
+--------
 
-Level: 2
+We need something that understands narratives, with all their file names and blocks of code, and can spit out actual files that can be executed! Here's some javascript that does the trick.
 
-In order for that to happen, we need something that understands this Markdown file you are reading, with all it's file names and blocks of code, and can spit out actual files. Here's some javascript that does the trick. It's in a file called `compile.js`.
+Note that this narrative requires that it be built with library loaded, but we don't have a way to load it here. For that, we need to build it with a compiler that already has the new features! So temporarily I'm working in [server.js](server.js) to write at least enough features that we can compile this file, at which point we'll be bootstrapped again compiler-wise.
 
 It's a bit of a doozie. Don't worry about understanding it all just yet:
+
+
+    // We need to figure out which narratives we're depending on, and compile those narratives first. But all of their dependencies first. These all go into server.js.
+    
+    // Next to go in there are the blocks which are not preceded by a `file` in a paragraph.
+    
+    // Of course we still write out the files specified. (That should be it's own narrative at some point but I'm trying avoid scope creep here.)
+    
+    // Require's are auto-detected, and go into the package.json
+    
 
     startsWith = function(string, pattern) {
       pattern = new RegExp("^" + pattern);
@@ -71,25 +81,16 @@ It's a bit of a doozie. Don't worry about understanding it all just yet:
       }
     }
 
+There's a lot going on there, but the gist of it is that we take the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
+
+And really that needs to get squeezed into something more like this:
+
     library.give('compiler', function(document, folder) {
       chunkLines(content).eachBlock(function(filename, content){
         folder.write(filename, content)
       })
     })
 
-    library.give('folder', function() {
-      return {
-        write: function(filename, content) {
-          // save to filesystem here
-        }
-      }
-    })
+Which needs [folder.md](folder.md). And to actually use it we need to compile in this at the end:
 
-TODO:
-
-Generate a JS file from this. run `node compile.js` on README.js and get out a complete project.
-
-Look for lib('blah', function(args...)) lines and use them to build the narratives into the JS file.
-
-There's a lot going on there, but the gist of it is that we take the [README.md](README.md) file, split it up into chunks, find all of these files we've described, and save them into a folder called "narrative-build".
-
+    fs.readFile(process.argv[2], 'utf-8', handleReadme);
