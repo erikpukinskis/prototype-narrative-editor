@@ -15,7 +15,7 @@ Here's how it works.
 The Server
 ----------
 
-First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](README.md).
+First off, this document is written in a filed called README.md. It's written in a language called Markdown. You can see that file [here](https://raw.githubusercontent.com/erikpukinskis/narrative/master/README.md).
 
 In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
@@ -29,7 +29,7 @@ Let's make a server! We'll call it Narrative:
       });
     });
 
-That's our server, narrative, and we're giving it to the library to hold on to (don't trust myself with that!). It needs one other function from the library in order to work: express, a web server.
+That's our server, narrative, and we're giving it to the library to hold on to (don't trust myself with that!). It needs one other function from the library in order to work: [Express](express.md), a web server. 
 
 Writing
 -------
@@ -118,7 +118,7 @@ That's it! To start it up, we just do:
 
     library.take('helloworld');
 
-You can go to [http://localhost:5000](http://localhost:5000) to see it.
+You can go to [http://localhost:5000](http://localhost:5000) to see it. If you are interested in changing something and putting your changes on the internet, you may benefit from reading [deploy.md](deploy.md).
 
 
 The system
@@ -143,17 +143,27 @@ The first is `package.json`, which describes the libraries we need (Express, Mar
     }
 
 We also need to tell Heroku what it has to do to start the server. We do that in a `Procfile`:
-
+e
     web: node server.js
 
 That just tells them that to start the web server they should run the command "node server.js".
 
 And that's it! That's all the code we need to start this server. The only problem is, all of it is locked away in our [README.md](README.md) file, and Heroku doesn't understand files like this. 
 
-We need something to actually go through our narrative and make real, usable files from it.
+So we need a compiler. The compiler carries out all of the events described in a narrative. We compile narratives with [compiler.md](compiler.md).
+ 
 
-The compiler
-------------
 
-We compile narratives with [narrative-comiler](narrative-compiler.md).
+
+
+
+
+
+
+
+
+
+
+
+
 
