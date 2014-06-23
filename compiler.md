@@ -3,7 +3,7 @@ Compiler
 
 We need something that understands narratives, with all their file names and blocks of code, and can spit out actual files that can be executed! Here's some javascript that does the trick.
 
-Note that this narrative requires that it be built with library loaded, but we don't have a way to load it here. For that, we need to build it with a compiler that already has the new features! So temporarily I'm working in [server.js](server.js) to write at least enough features that we can compile this file, at which point we'll be bootstrapped again compiler-wise.
+Note that this narrative requires that it be built with library loaded, but we don't have a way to load it here. For that, we need to build it with a compiler that already has the new features! So temporarily I'm working in [compile.js](compile.js) to write at least enough features that we can compile this file, at which point we'll be bootstrapped again compiler-wise.
 
 It's a bit of a doozie. Don't worry about understanding it all just yet:
 
@@ -17,7 +17,6 @@ It's a bit of a doozie. Don't worry about understanding it all just yet:
 >  
 > Require's are auto-detected, and go into the package.json
 
-    a
     startsWith = function(string, pattern) {
       pattern = new RegExp("^" + pattern);
       return !!string.match(pattern);
