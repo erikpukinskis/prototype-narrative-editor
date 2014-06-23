@@ -9,9 +9,63 @@ var exec = require('child_process').exec;
 
 // Require's are auto-detected, and go into the package.json
 
+Func = function(func) {
+  dependencies = {}
+
+  this.dependencies = function() {
+    set = new Set()
+    this.addDependencies(set)
+    return set
+  }
+
+  this.addDependencies = function(set) {
+    return dependencies.map(function(dep) {
+      dep.addDependencies(set)
+      set.add(dep)
+    }).flatten()
+  }
+
+  this.run = function() {
+    this.dependencies().each(function(dependency) {
+      dependency.run();
+    })
+    func.run()
+  }
+}
+
+//OK, so narratives compile to javascript functions. You can check them into the library. 
+
+//If you want to run one, you ask for the dependency set, the dependency tree flattened into a list. For each of those we check if they're in the library. If they are, cool. If not, we compile them from the markdown and check them in. Repeat for the dependencies of each of those. We have to be careful we only do this once per narrative.
+
+//At this point, we should have something in the library for everything we'll need to touch.
+
+//You can then ask the library to take out each of those dependencies. That will run the function for the narrative, but it presumes its dependencies are loaded. This requires we load the narratives starting with the ones with no dependencies, and then the ones that depend on those, and the ones that depend upon those, and so on.
+
+//And then finally we just call the main narrative's function.
+
+grabDependenciesFromCodeBlocks = function(blocks) {
+  blocks.forEach(function(block) {
+    block.lines.forEach(function(line) {
+      console.log(line)
+      match = line.match(/library/)
+      console.log(match)
+    })
+  })
+}
 
 handleReadme = function(error, content) {
-  chunkLines(content).eachBlock(handleBlock);
+  blocks = getBlocksFromNarrative(content);
+  dependencies = grabDependenciesFromCodeBlocks(blocks)
+  console.log("dependencies are " + dependencies)
+  source = compileDependencyTree(dependencies)
+  unassignedCodeBlocks(blocks).each(function(block) {
+    source = source + block.source
+  })
+  filesystem.write(source, 'server.js')
+  files = grabFilesFromCodeBlocks(blocks)
+  files.each(function(filename, content) {
+    filesystem.write(content, filename)
+  })
   copyFile('README.md', '../narrative-build');
   console.log("Look in ../narrative-build/ for your stuff!");
 }
@@ -21,7 +75,7 @@ startsWith = function(string, pattern) {
   return !!string.match(pattern);
 }
 
-chunkLines = function(content) {
+getBlocksFromNarrative = chunkLines = function(content) {
   var block = {lines: []};
   var blocks = [];
   var kind;

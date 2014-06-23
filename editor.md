@@ -9,7 +9,7 @@ Here's what I really wanted to get down though:
 
 We definitely should not use medium-editor. This needs to be a fully custom, fully integrated editing experience. You should simply be able to write the word lib( and you'll be in a function. And you type code until you want to stop, and you type # to break out. And you can break out at any indentation level and the comments will be indented just the same.
 
-Other random idea: Each depth should be a different color.
+Other random idea: Each depth should be a different color. 
 
 Here's some code for search-as-you-type.
 
@@ -55,8 +55,7 @@ I think I wrote a book named|
 
 And those search results would get dimmer as you got further away. And they wouldn't stay on the screen long unless you arrow-keyed down into them.
 
-When you type library.give it explains to you what that is. It shows you the first line of the library.give narrative! And that links to it!
-
+When you type library.give it explains to you what that is. It shows you the first line of the library.give narrative! And that links to it! And if you just press the right arrow after it auto-completes it, you just gracefully slide over to the full document. The first line can be bigger font so when it's a little smaller because it's further back in the z-axis, the font actually just looks normal size. Then when you rightarrow over to it, it zooms to full size while the rest of the narrative fades in.
 
 
 

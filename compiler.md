@@ -7,16 +7,17 @@ Note that this narrative requires that it be built with library loaded, but we d
 
 It's a bit of a doozie. Don't worry about understanding it all just yet:
 
+> Next steps
+>
+> We need to figure out which narratives we're depending on, and compile those narratives first. But all of their dependencies first. These all go >into server.js.
+>  
+> Next to go in there are the blocks which are not preceded by a `file` >in a paragraph.
+>  
+> Of course we still write out the files specified. (That should be it's >own narrative at some point but I'm trying avoid scope creep here.)
+>  
+> Require's are auto-detected, and go into the package.json
 
-    // We need to figure out which narratives we're depending on, and compile those narratives first. But all of their dependencies first. These all go into server.js.
-    
-    // Next to go in there are the blocks which are not preceded by a `file` in a paragraph.
-    
-    // Of course we still write out the files specified. (That should be it's own narrative at some point but I'm trying avoid scope creep here.)
-    
-    // Require's are auto-detected, and go into the package.json
-    
-
+    a
     startsWith = function(string, pattern) {
       pattern = new RegExp("^" + pattern);
       return !!string.match(pattern);
