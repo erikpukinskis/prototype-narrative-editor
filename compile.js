@@ -118,28 +118,6 @@ var exec = require('child_process').exec
 
 
 
-
-    // FOLDER
-
-    folder = {
-      write: function(filename, content) {
-        fs.mkdirSync('../narrative-build')
-        fs.writeFileSync('../narrative-build/' + filename, content)
-      },
-      read: function(filename) {
-        return fs.readFileSync(filename).toString()
-      }
-    }    
-
-
-
-
-
-
-
-
-
-
     // LIBRARY
 
     library = function() {
@@ -157,16 +135,18 @@ var exec = require('child_process').exec
       Library.prototype.give = function(name, func) {
         func.hash = Math.random().toString(35).substr(2,30)
         func.dependencies = annotate(func)
-        this.require(dependencies)
+        this.require(func.dependencies)
+        func.name = name
         this.funcs[name] = func;
         indent("Gave " + name + " (" + func.hash.substr(0,40) + ")<<" + summarize(func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
       };
       Library.prototype.require = function(dependencies) {
-        compile = this.take('compile')
+        var _lib = this
+        compile = _lib.take('compile')
         if (!compile) { return }
 
         dependencies.forEach(function(dep) {
-          if (!this.funcs[dep]) {
+          if (!_lib.funcs[dep]) {
             compile.andRun(dep)
           }
         })
@@ -197,9 +177,17 @@ var exec = require('child_process').exec
         indent("Took " + name + " (" + func.hash + ") out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
         return result;
       }
-
-      Library.prototype.dependencyChainFor = function(dependencies) {
-        return ['express', 'folder']
+      Library.prototype.narrativesInLoadOrder = function() {
+        var _lib = this
+        _(this.funcs).each(function(f) { f.depth = 0 })
+        _(this.funcs).each(function(func) {
+          func.dependencies.forEach(function(dep) {
+            if (_lib.funcs[dep].depth <= func.depth) {
+              _lib.funcs[dep].depth = func.depth + 1
+            }
+          })
+        })
+        return _(this.funcs).sortBy(function(f) { return -f.depth })
       }
 
       return new Library();      
@@ -211,13 +199,31 @@ var exec = require('child_process').exec
 
 
 
+    // FOLDER
+
+    library.give('folder', function() {
+      return {
+        write: function(filename, content) {
+          var path = '../narrative-build/'
+          if (!fs.existsSync(path)) {
+            fs.mkdirSync(path)
+          }
+          fs.writeFileSync(path + filename, content)
+        },
+        read: function(filename) {
+          return fs.readFileSync(filename).toString()
+        }
+      }    
+    })
+
+
 
 
 
 
     // COMPILE takes a narrative and evaluates the unassigned blocks
 
-    library.give('compile', function(xfolder) {
+    library.give('compile', function(folder) {
 
       startsWith = function(string, pattern) {
         pattern = new RegExp("^" + pattern);
@@ -267,7 +273,7 @@ var exec = require('child_process').exec
           var inAComment = block.kind == 'comment'
           var inCode = !inAComment
           var matches = block.lines.join().match(/`([^`]+)`/)
-          var hasBackticks = !!match
+          var hasBackticks = !!matches
 
           if (inAComment && hasBackticks) {
             filenameLastSeen = matches[1]
@@ -289,11 +295,11 @@ var exec = require('child_process').exec
 
       compile.andRun = function(name) {
         blocks = compile(name)
-        blocks.forEach(function(block)) {
+        blocks.forEach(function(block) {
           if (block.unassigned) {
             eval(block.source)
           }
-        }
+        })
         return blocks
       }
 
@@ -309,11 +315,12 @@ var exec = require('child_process').exec
 
     // BUILD reads a narrative and does what it's told
 
-    library.give('build', function(xcompile) {
+    library.give('build', function(folder, compile) {
       saveNarratives = function(narratives) { 
         narratives.forEach(function(narrative) {
           source = narrative.selfLoadingSource
           filename = narrative.name + '.js'
+          indent('Saving ' + filename)
           folder.write(filename, source)
         })
       }
@@ -335,13 +342,13 @@ var exec = require('child_process').exec
       }
 
       return function(name) {
-        blocks = library.take('compile').andRun(name)
+        blocks = compile.andRun(name)
 
-        blocks.each(block) {
+        blocks.forEach(function(block) {
           if ((block.kind == 'code') && block.filename) {
             saveFile(block)
           }
-        }
+        })
 
         narratives = library.narrativesInLoadOrder()
         saveNarratives(narratives)
@@ -358,4 +365,4 @@ var exec = require('child_process').exec
 
 // Go!
 
-library.take('build')(process.argv[2]))
+library.take('build')(process.argv[2])
