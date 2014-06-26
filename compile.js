@@ -1,5 +1,7 @@
-var fs = require('fs');
-var exec = require('child_process').exec;
+var fs = require('fs')
+var _ = require('underscore')
+var exec = require('child_process').exec
+require('./library')
 
 // We need to figure out which narratives we're depending on, and compile those narratives first. But all of their dependencies first. These all go into server.js.
 
@@ -9,29 +11,29 @@ var exec = require('child_process').exec;
 
 // Require's are auto-detected, and go into the package.json
 
-Func = function(func) {
-  dependencies = {}
-
-  this.dependencies = function() {
-    set = new Set()
-    this.addDependencies(set)
-    return set
-  }
-
-  this.addDependencies = function(set) {
-    return dependencies.map(function(dep) {
-      dep.addDependencies(set)
-      set.add(dep)
-    }).flatten()
-  }
-
-  this.run = function() {
-    this.dependencies().each(function(dependency) {
-      dependency.run();
-    })
-    func.run()
-  }
-}
+// Func = function(func) {
+//   dependencies = {}
+// 
+//   this.dependencies = function() {
+//     set = new Set()
+//     this.addDependencies(set)
+//     return set
+//   }
+// 
+//   this.addDependencies = function(set) {
+//     return dependencies.map(function(dep) {
+//       dep.addDependencies(set)
+//       set.add(dep)
+//     }).flatten()
+//   }
+// 
+//   this.run = function() {
+//     this.dependencies().each(function(dependency) {
+//       dependency.run();
+//     })
+//     func.run()
+//   }
+// }
 
 //OK, so narratives compile to javascript functions. You can check them into the library. 
 
@@ -43,30 +45,91 @@ Func = function(func) {
 
 //And then finally we just call the main narrative's function.
 
-grabDependenciesFromCodeBlocks = function(blocks) {
-  blocks.forEach(function(block) {
-    block.lines.forEach(function(line) {
-      console.log(line)
-      match = line.match(/library/)
-      console.log(match)
-    })
-  })
+Set = function() {
+  var object = {}
+  this.add = function(item) {
+    object[item] = true
+  }
+  this.toArray = function() {
+    return _(object).keys()
+  }
 }
 
-handleReadme = function(error, content) {
+grabDependenciesFromCodeBlocks = function(blocks) {
+  dependencies = new Set()
+  blocks = [{lines: ["library.give('blah', function(express, ya) {"]}]
+  blocks.forEach(function(block) {
+    block.lines.forEach(function(line) {
+      match = line.match(/library.give.*\((.*)\) {/)
+      if (!match) { return }
+      match[1].split(',').forEach(function(dep) {
+        dependencies.add(dep.trim())
+      })
+    })
+  })
+  return dependencies.toArray()
+}
+
+
+unassignedCodeblocks = function(blocks) {
+  var foundSomethingInBackticks = false
+  var unassigned = []
+
+  blocks.forEach(function(block) {
+    var inAComment = block.kind == 'comment'
+    var inCode = !inAComment
+    var hasBackticks = block.lines.join().match(/`([^`]+)`/)
+    if (inAComment && hasBackticks) {
+      foundSomethingInBackticks = true
+    } else if (inCode && !foundSomethingInBackticks) {
+      unassigned.push(block)
+    } else if (inCode && foundSomethingInBackticks) {
+      foundSomethingInBackticks = false
+    }
+  })
+
+  return unassigned
+}
+
+sourceFor = function(dep) {
+  // get the source lines from the .md file
+}
+
+// compile md into:
+//   blocks
+// 
+// save fileblocks
+// eval code blocks
+//   library.give also compiles the dependencies if needed
+// write all of the files from the library
+// add them all to the top of the main one as
+//
+// library.give:
+//   look at arguments, eval the md for any deps that don't already exist
+
+
+handleReadme = function(error, content, name) {
   blocks = getBlocksFromNarrative(content);
-  dependencies = grabDependenciesFromCodeBlocks(blocks)
-  console.log("dependencies are " + dependencies)
-  source = compileDependencyTree(dependencies)
-  unassignedCodeBlocks(blocks).each(function(block) {
-    source = source + block.source
+  unassignedCodeblocks(blocks).forEach(function(block) {
+    eval(block.source)
   })
-  filesystem.write(source, 'server.js')
-  files = grabFilesFromCodeBlocks(blocks)
-  files.each(function(filename, content) {
-    filesystem.write(content, filename)
+
+  narratives = library.narrativesInLoadOrder()
+
+  requires = "require('./library')\n"
+  sourequiresrce += narratives.map(function(narrative) {
+    return "require('" + narrative.name + "')"
+  }).join('\n')
+
+  narratives.forEach(function(narrative) {
+    source = narrative.selfLoadingSource
+    filename = narrative.name + '.js'
+    if (narrative.name == name) {
+      source = requires + source
+    }
+    filesystem.write(filename, source)
   })
-  copyFile('README.md', '../narrative-build');
+
   console.log("Look in ../narrative-build/ for your stuff!");
 }
 
