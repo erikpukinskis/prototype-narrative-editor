@@ -27,16 +27,15 @@ var exec = require('child_process').exec
 
     // INDENT helps print out nested stuff so I can understand it
     indent = function(string) {
-      console.log(new Array(indent.depth).join("  ") + string);
+      indentation = new Array(indent.depth)
+      console.log(indentation.join("    ") + string);
     }
     indent.depth = 1
     indent.in = function() {
       this.depth++
-      indent(this.depth + '->')
     }
     indent.out = function() {
       this.depth--
-      indent('<-' + this.depth)
     }
     // indent("hello!")
     // indent.in()
@@ -124,8 +123,16 @@ var exec = require('child_process').exec
       count = 0
       // A helper for grabbing the first little bit of a function:
       summarize = function(stuff) {
-        if (!(typeof stuff == 'string')) { return new String(stuff).toString() }
-        return func.toString().replace(/(?:\r\n|\r|\n)/g, '').replace(/ +/, ' ').substr(0,50);
+        if (typeof stuff == 'string') { 
+          return '  [' + stuff.
+            toString()
+            .replace(/(?:\r\n|\r|\n)/g, '')
+            .replace(/ +/, ' ')
+            .substr(0,50) + ']  '
+        } else {
+          stuff = new String(stuff).toString()
+          return summarize(stuff)
+        }
       }
       function Library() { 
         this.funcs = {}; 
@@ -173,7 +180,7 @@ var exec = require('child_process').exec
         indent.in()
         var result = func.apply({}, values);
         indent.out()
-        indent("....ran it! got back " + result);
+        indent("....ran it! got back " + summarize(result))
         indent("Took " + name + " (" + func.hash + ") out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
         return result;
       }
@@ -294,10 +301,17 @@ var exec = require('child_process').exec
       }
 
       compile.andRun = function(name) {
+        indent('Compiling ' + name)
+        indent.in()
         blocks = compile(name)
+        indent.out()
+
         blocks.forEach(function(block) {
+          indent('Running block "' + block.lines[0] + '"')
           if (block.unassigned) {
+            indent.in()
             eval(block.source)
+            indent.out()
           }
         })
         return blocks
@@ -341,12 +355,17 @@ var exec = require('child_process').exec
         folder.write(block.filename, source)
       }
 
-      return function(name) {
+      return build = function(name) {
+        indent('building ' + name)
+        indent.in()
         blocks = compile.andRun(name)
+        indent.out()
 
         blocks.forEach(function(block) {
           if ((block.kind == 'code') && block.filename) {
+            indent.in()
             saveFile(block)
+            indent.out()
           }
         })
 
