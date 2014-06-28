@@ -140,21 +140,32 @@ var exec = require('child_process').exec
       }
       // `give` grabs a name and a function and stores them away for later use
       Library.prototype.give = function(name, func) {
-        func.hash = Math.random().toString(35).substr(2,30)
-        func.dependencies = annotate(func)
-        this.require(func.dependencies)
-        func.name = name
-        this.funcs[name] = func;
-        indent("Gave " + name + " (" + func.hash.substr(0,40) + ")<<" + summarize(func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
+        indent('Giving ' + name + ' to the library...')
+        narrative = {
+          hash: Math.random().toString(35).substr(2,30),
+          dependencies: annotate(func),
+          name: name,
+          func: func
+        }
+        this.funcs[name] = narrative;
+        indent.in()
+        this.require(narrative.dependencies)
+        indent.out()
+        indent("Gave " + name + " (" + narrative.hash.substr(0,40) + ")<<" + summarize(narrative.func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
       };
       Library.prototype.require = function(dependencies) {
+        if (dependencies.length < 1) { return }
         var _lib = this
-        compile = _lib.take('compile')
-        if (!compile) { return }
+        indent('Requiring ' + dependencies + ' to be in the library.')
 
         dependencies.forEach(function(dep) {
           if (!_lib.funcs[dep]) {
-            compile.andRun(dep)
+            indent('Compiling ' + dep)
+            indent.in()
+            _lib.take('compile').andRun(dep)
+            indent.out()
+          } else {
+            indent('found ' + dep)
           }
         })
       }
@@ -163,25 +174,25 @@ var exec = require('child_process').exec
         var _this = this;
         count++
         if (count > 10 ) { return }
-        var func = this.funcs[name];
-        if (!func) {
+        var narrative = this.funcs[name];
+        if (!narrative) {
           indent("Nothing in the library called " + name);
           return
         }
-        var dependencies = annotate(func);
-        indent("Taking " + name + " (" + func.hash + ") out of the library. It needs " + (dependencies.length ? '['+dependencies.join(", ")+']' : 'nothing' ) + ". Running func...")
+        indent("Taking " + name + " (" + narrative.hash + ") out of the library. It needs " + (narrative.dependencies.length ? '['+narrative.dependencies.join(", ")+']' : 'nothing' ) + '.')
         var args = {}
-        _(dependencies).each(function(dep) { 
+        _(narrative.dependencies).each(function(dep) { 
           indent.in()
           args[dep] = _this.take(dep);
           indent.out()
         });
         var values = _(args).values();
+        indent('Running the func for ' + name + '....')
         indent.in()
-        var result = func.apply({}, values);
+        var result = narrative.func.apply({}, values);
         indent.out()
         indent("....ran it! got back " + summarize(result))
-        indent("Took " + name + " (" + func.hash + ") out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
+        indent("Took " + name + " (" + narrative.hash + ") out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
         return result;
       }
       Library.prototype.narrativesInLoadOrder = function() {
@@ -279,9 +290,12 @@ var exec = require('child_process').exec
         blocks.forEach(function(block) {
           var inAComment = block.kind == 'comment'
           var inCode = !inAComment
-          var matches = block.lines.join().match(/`([^`]+)`/)
+          var matches = block.lines.join('').match(/`([^`]+)`/)
           var hasBackticks = !!matches
 
+          if (inCode) {
+            block.source = block.lines.join("\n").replace(/(^|\n)    /g, "$1")
+          }
           if (inAComment && hasBackticks) {
             filenameLastSeen = matches[1]
           } else if (inCode && !filenameLastSeen) {
@@ -307,11 +321,16 @@ var exec = require('child_process').exec
         indent.out()
 
         blocks.forEach(function(block) {
-          indent('Running block "' + block.lines[0] + '"')
           if (block.unassigned) {
+            indent('Running unassigned block """' + block.lines + '"""')
             indent.in()
-            eval(block.source)
+            new Function(block.source).apply(this)
             indent.out()
+            indent('Ran it.')
+          } else if (block.kind == 'comment') {
+            indent('Enjoying comment block: "' + block.lines[0] + '..."')
+          } else {
+            indent('Skipping code block ' + block.lines[0] + ', which was saved to ' + block.filename)
           }
         })
         return blocks
@@ -331,43 +350,50 @@ var exec = require('child_process').exec
 
     library.give('build', function(folder, compile) {
       saveNarratives = function(narratives) { 
+        indent('Writing depdencies...')
+        indent.in()
         narratives.forEach(function(narrative) {
           source = narrative.selfLoadingSource
           filename = narrative.name + '.js'
-          indent('Saving ' + filename)
+          indent(filename)
           folder.write(filename, source)
         })
+        indent.out()
       }
 
       addRequires = function(narratives, name) {
-        requires = "require('./library')\n"
-        requires += narratives.map(function(narrative) {
-          return "require('" + narrative.name + "')"
-        }).join('\n')
+        var names = _(narratives).pluck('name')
 
-        source = folder.read(name + '.js')
+        requires = "require('./library')\n"
+        names.forEach(function(name) {
+          requires += "require('" + name + "')\n"
+        })
+
+        source = folder.read('../narrative-build/' + name + '.js')
         source = requires + source
         folder.write(name + '.js', source)
+        indent('Added requries for ' + names + '.')
       }
 
       saveFile = function(block) {
-        source = block.lines.join().replace(/(^|\n)    /g, "$1")
-        folder.write(block.filename, source)
+        folder.write(block.filename, block.source)
       }
 
       return build = function(name) {
         indent('building ' + name)
         indent.in()
-        blocks = compile.andRun(name)
+        blocks = compile(name)
         indent.out()
 
+        indent('Writing files...')
+        indent.in()
         blocks.forEach(function(block) {
           if ((block.kind == 'code') && block.filename) {
-            indent.in()
+            indent(block.filename)
             saveFile(block)
-            indent.out()
           }
         })
+        indent.out()
 
         narratives = library.narrativesInLoadOrder()
         saveNarratives(narratives)

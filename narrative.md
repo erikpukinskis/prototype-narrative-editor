@@ -19,7 +19,7 @@ First off, this document is written in a filed called README.md. It's written in
 
 In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
-Let's make a server! We'll call it Narrative:
+Let's make a server! We'll call it Narrative and put it in `narrative.js`:
 
     library.give('narrative', function(express) {
       express.use('/', express.static('.'));
