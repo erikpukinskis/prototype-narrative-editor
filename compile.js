@@ -294,7 +294,7 @@ var exec = require('child_process').exec
           var hasBackticks = !!matches
 
           if (inCode) {
-            block.source = block.lines.join("\n").replace(/(^|\n)    /g, "$1")
+            block.source = block.lines.join(" \n").replace(/(^|\n)    /g, "$1")
           }
           if (inAComment && hasBackticks) {
             filenameLastSeen = matches[1]
