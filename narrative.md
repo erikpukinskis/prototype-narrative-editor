@@ -22,12 +22,12 @@ In order for you to be reading a nicely formatted version of this document in yo
 Let's make a server! We'll call it Narrative and put it in `narrative.js`:
 
     library.give('narrative', function(express) {
-      express.use('/', express.static('.'));
+      express.use('/', express.static('.'))
 
       express.get('/', function(xxxx, response) {
-        response.render('edit.html');
-      });
-    });
+        response.render('edit.html')
+      })
+    })
 
 We're giving it to the [library](library.md) to hold on to (don't trust myself with that!). It needs one other narrative from the library in order to work: [Express](express.md), a web server. 
 
