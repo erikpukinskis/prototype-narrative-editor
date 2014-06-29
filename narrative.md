@@ -21,6 +21,8 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Let's make a server! We'll call it Narrative and put it in `narrative.js`:
 
+> *Todo: The static file serving doesn't seem to be working.*
+
     library.give('narrative', function(express) {
       express.use(express.static('.'))
 
