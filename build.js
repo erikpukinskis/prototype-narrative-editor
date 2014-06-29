@@ -6,6 +6,12 @@ require('./compile')
 var _ = require('underscore')
 
 
+// OK, here we are. :) We had great momentum. Knew where we were going. Got there. Rad. 
+
+// Yay! We can just require it. We just have to save it properly.
+
+
+
 // BUILD reads a narrative and does what it's told
 
 library.give('build', function(folder, compile) {
@@ -13,8 +19,7 @@ library.give('build', function(folder, compile) {
     indent('Writing depdencies...')
     indent.in()
     narratives.forEach(function(narrative) {
-      source = narrative.source
-      console.log('source is ' + narrative.source)
+      source = narrative.selfLoadingSource
       filename = narrative.name + '.js'
       indent(filename)
       folder.write(filename, source)

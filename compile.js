@@ -1,9 +1,5 @@
 
-// OK, here we are. :) We had great momentum. Knew where we were going. Got there. Rad. 
-
-// Yay! We can just require it. We just have to save it properly.
-
-// COMPILE takes a narrative and evaluates the unassigned blocks
+// COMPILE pulls code blocks out of a narrative and runs the unassigned ones
 
 library.give('compile', function(folder) {
 

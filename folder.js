@@ -1,6 +1,7 @@
-var fs = require('fs')
 
 library.give('folder', function() {
+  var fs = require('fs')
+
   return {
     write: function(filename, content) {
       var path = '../narrative-build/'

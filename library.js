@@ -34,7 +34,8 @@ library = function() {
       dependencies: annotate(func),
       name: name,
       func: func,
-      source: func.toString()
+      source: func.toString(),
+      selfLoadingSource: 'library.give("' + name + '", ' + func.toString() + ')'
     }
     this.funcs[name] = narrative;
     indent.in()
