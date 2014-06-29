@@ -33,7 +33,8 @@ library = function() {
       hash: Math.random().toString(35).substr(2,30),
       dependencies: annotate(func),
       name: name,
-      func: func
+      func: func,
+      source: func.toString()
     }
     this.funcs[name] = narrative;
     indent.in()

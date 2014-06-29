@@ -179,6 +179,8 @@ In order to start the server you just do:
 Now open up [http://localhost:5000](http://localhost:5000) in your web browser and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
 
 Try changing some text in the README.md and running "node compile.js" and "node server.js" again, reload your browser and you should see your changes!
+
+If you want to deploy it on the web, checkout out the [deploy instructions](deploy.md).
  
 ----
 ¹ If you want to bootstrap the process just from the narrative, you can just save the README.md file and then copy just the javascript out of compiler.md and paste it into compile.js and run that. But we include compile.js in this repository as a convenience.

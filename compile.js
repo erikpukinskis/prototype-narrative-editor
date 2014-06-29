@@ -16,11 +16,14 @@ var _ = require('underscore')
           fs.writeFileSync(path + filename, content)
         },
         read: function(filename) {
-          return fs.readFileSync(filename).toString()
+          if (fs.existsSync(filename)) {
+            return fs.readFileSync(filename).toString()
+          }
         },
         copy: function(filename, destination) {
           path = destination + '/' + filename
-          this.write(path, this.read(filename))
+          console.log('copying ' + filename + ' to ' + destination)
+          fs.createReadStream(filename).pipe(fs.createWriteStream(path))
         }
       }    
     })
@@ -96,6 +99,9 @@ var _ = require('underscore')
       }
 
       compile = function(name) {
+        if (source = folder.read(name + '.js')) {
+          console.log('found ' + name + '.js!')
+        }
         source = folder.read(name + '.md')
         blocks = getBlocks(source)
         analyze(blocks)
@@ -141,7 +147,8 @@ var _ = require('underscore')
         indent('Writing depdencies...')
         indent.in()
         narratives.forEach(function(narrative) {
-          source = narrative.selfLoadingSource
+          source = narrative.source
+          console.log('source is ' + narrative.source)
           filename = narrative.name + '.js'
           indent(filename)
           folder.write(filename, source)

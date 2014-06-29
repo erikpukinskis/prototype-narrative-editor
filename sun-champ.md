@@ -1,7 +1,11 @@
 sun champ
 ---------
 
-today i am making my first blog. i want the blog to be the color blue, and have little yellow dasies all over. i want the website to have all of my photos from my trip to new mexico, which are located in the file on my comuter tittled "trip"
+This is a sample narrative. It was translated from this natural language description:
+
+> today i am making my first blog. i want the blog to be the color blue, and have little yellow dasies all over. i want the website to have all of my photos from my trip to new mexico, which are located in the file on my comuter tittled "trip"
+
+Here that is in javascript:
 
     library.give('sun-champ', function(blog, photos, random) {
       blog.set('color', 'blue')
@@ -11,7 +15,9 @@ today i am making my first blog. i want the blog to be the color blue, and have 
       )
     )
 
-Maybe it could even be used for storytelling:
+The hope is that eventually that will actually work within the Narrative world.
+
+Here's another one, for a game:
 
     library.give('legendofhelga', function(forest, creatures, helga, let) {
       repeat(four, function() {

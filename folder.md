@@ -1,8 +1,6 @@
 Folder
 ------
 
-    library.give('folder', function() {
-      // return [temporarily moved to compile.js]
-    })
+Working in [folder.js](folder.js) temporarily.
 
 
