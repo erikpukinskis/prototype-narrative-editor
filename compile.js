@@ -8,7 +8,7 @@ library.give('compile', function(folder) {
     return !!string.match(pattern);
   }
 
-  getBlocks = chunkLines = function(content) {
+  getBlocks = function(content) {
     var block = {lines: []};
     var blocks = [];
     var kind;
@@ -68,10 +68,8 @@ library.give('compile', function(folder) {
   }
 
   compile = function(name) {
-    if (source = folder.read(name + '.js')) {
-      console.log('found ' + name + '.js!')
-    }
     source = folder.read(name + '.md')
+    if (!source) { throw new Error(name + '.md not found.')}
     blocks = getBlocks(source)
     analyze(blocks)
     return blocks
@@ -87,7 +85,7 @@ library.give('compile', function(folder) {
       if (block.unassigned) {
         indent('Running unassigned block """' + block.lines[0].trim() + '"""')
         indent.in()
-        new Function(block.source).apply(this)
+        eval(block.source)
         indent.out()
         indent('Ran it.')
       } else if (block.kind == 'comment') {

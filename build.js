@@ -1,20 +1,18 @@
-var indent = require('./indent')
-var library = require('./library')
-require('./folder')
-require('./compile')
-
-var _ = require('underscore')
-
-
-// OK, here we are. :) We had great momentum. Knew where we were going. Got there. Rad. 
-
-// Yay! We can just require it. We just have to save it properly.
-
 
 
 // BUILD reads a narrative and does what it's told
 
 library.give('build', function(folder, compile) {
+  recompile = function(names) {
+    indent('Rebuilding library (' + names + ':')
+    indent.in()
+    _(names).forEach(function(name) {
+      indent('Compiling ' + name)
+      compile.andRun(name)
+    })
+    indent.out()
+  }
+
   saveNarratives = function(narratives) { 
     indent('Writing depdencies...')
     indent.in()
@@ -66,6 +64,7 @@ library.give('build', function(folder, compile) {
     indent('Running central narrative...')
     new Function(source).apply(this)
 
+    recompile(library.list())
     narratives = library.dependenciesFor(name)
     saveNarratives(narratives)
     addRequires(narratives, name)
@@ -75,7 +74,3 @@ library.give('build', function(folder, compile) {
     console.log("Look in ../narrative-build/ for your stuff!");
   }  
 })
-
-// Go!
-
-library.take('build')(process.argv[2])

@@ -55,8 +55,6 @@ library = function() {
       if (!_lib.funcs[dep]) {
         indent('Compiling ' + dep)
         indent.in()
-        // TODO: check for a .js file and use it if it's already compiled.
-        // ... although maybe the narrative compilation should be elsewhere.
         _lib.take('compile').andRun(dep)
         indent.out()
       } else {
@@ -109,6 +107,10 @@ library = function() {
       .reject(function(narrative) { return narrative.name == name })
       .sortBy(function(f) { return -f.depth })
       .value()
+  }
+
+  Library.prototype.list = function() {
+    return _(this.funcs).map(function(n) { return n.name })
   }
 
   return new Library();      
