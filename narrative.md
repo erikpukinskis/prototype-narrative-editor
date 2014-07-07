@@ -127,7 +127,7 @@ The first is `package.json`, which describes the various things running the serv
 
     {
       "name": "narrative",
-      "version": "0.1.3",
+      "version": "0.2.0",
       "dependencies": {
         "express": "*",
         "ejs": "*",
