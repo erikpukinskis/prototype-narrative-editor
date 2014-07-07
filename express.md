@@ -12,7 +12,8 @@ This is what you use to set up an Express/Node server:
         this.app = express()
         var port = Number(port || 5000)
 
-        this.app.get('*', function(request, response) {
+        this.app.get('/', function(request, response) {
+          indent('Getting url ' + request.url)
           var handler = _this.routes[request.url];
           handler(request, response)
         })
@@ -29,8 +30,8 @@ This is what you use to set up an Express/Node server:
       Server.prototype.static = express.static;
 
       Server.prototype.use = function() {
-        indent('using with args')
-        indent(arguments)
+        indent("\n\n\n\nusing with args")
+        indent(arguments[0])
         this.app.use.apply(this.app, arguments)
       }
 

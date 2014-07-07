@@ -67,7 +67,9 @@ Reads a narrative and does what it's told.
         indent('Running central narrative...')
         new Function(source).apply(this)
 
-        recompile(library.list())
+        // TODO: Why do we do this again? When you figure it out, rename
+        // these methods so they are self explanatory.
+        // recompile(library.list())
         var narratives = library.dependenciesFor(name)
         saveNarratives(narratives)
         addRequires(narratives, name)
