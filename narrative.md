@@ -54,10 +54,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         {{html}}
       </script>
 
-      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+      <script src="/libs/jquery.js"></script>
+      <script src="/libs/handlebars.js"></script>
+      <script src="/libs/ember.js"></script>
+      <script src="/libs/marked.js"></script>
 
       <script>
         App = Ember.Application.create();
