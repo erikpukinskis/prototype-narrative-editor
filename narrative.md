@@ -1,8 +1,6 @@
 Narrative
 =========
 
-_*Warning: This is somewhat broken right now.*_
-
 This is a web app.
 ------------------
 
@@ -19,9 +17,7 @@ First off, this document is written in a filed called narrative.md. It's written
 
 In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
-Let's make a server! We'll call it Narrative and put it in `narrative.js`:
-
-> *Todo: The static file serving doesn't seem to be working.*
+Let's make a server! We'll put it in `narrative.js`:
 
     library.give('narrative', function(express) {
       express.use(express.static('.'))
@@ -151,52 +147,5 @@ That just tells them that to start the web server they should run the command "n
 Running your own copy of Narrative
 ----------------------------------
 
-So those are some snippets of code to run. But some human intervention is necessary for that to actually happen. Like, real computers need to be on in the real world in a closet somewhere.
-
-Here's how.
-
-You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer. Then open a terminal and run:
-
-  git clone https://github.com/erikpukinskis/narrative.git
-  cd narrative
-
-That will put you into a folder that has this very document (README.md) and the a file called compile.js, which was generated from the [compiler.md](compiler.md) narrative¹.
-
-That narrative will actually read a narrative file, and write out a javascript file that can actually be run on your computer to start the server! You do that like this:
-
-  node compile.js
-
-That also will spit out all the files described in the narrative. So now if you type:
-
-  ls ../narrative-build
-
-... you'll see styles.css, edit.html, and all of the other files we described above! Neat! 
-
-In order to start the server you just do:
-
-  cd ../narrative-build
-  npm install
-  node server.js
-
-Now open up [http://localhost:5000](http://localhost:5000) in your web browser and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
-
-Try changing some text in the README.md and running "node compile.js" and "node server.js" again, reload your browser and you should see your changes!
-
-If you want to deploy it on the web, checkout out the [deploy instructions](deploy.md).
- 
-----
-¹ If you want to bootstrap the process just from the narrative, you can just save the README.md file and then copy just the javascript out of compiler.md and paste it into compile.js and run that. But we include compile.js in this repository as a convenience.
-
-
-
-
-
-
-
-
-
-
-
-
-
+If you want to run Narrative on your computer or deploy your own copy on the web, check out the [deploy instructions](deploy.md).
 

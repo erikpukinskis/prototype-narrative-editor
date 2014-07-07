@@ -1,3 +1,36 @@
+Running it on your own computer
+-------------------------------
+
+So those are some snippets of code to run. But some human intervention is necessary for that to actually happen. Like, real computers need to be on in the real world in a closet somewhere.
+
+Here's how.
+
+You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer. Then open a terminal and run:
+
+  git clone https://github.com/erikpukinskis/narrative.git
+  cd narrative
+
+That will put you into a folder that has this very document (README.md) and the a file called compile.js, which was generated from the [compiler.md](compiler.md) narrative¹.
+
+That narrative will actually read a narrative file, and write out a javascript file that can actually be run on your computer to start the server! You do that like this:
+
+  node compile.js
+
+That also will spit out all the files described in the narrative. So now if you type:
+
+  ls ../narrative-build
+
+... you'll see styles.css, edit.html, and all of the other files we described above! Neat! 
+
+In order to start the server you just do:
+
+  cd ../narrative-build
+  npm install
+  node server.js
+
+Now open up [http://localhost:5000](http://localhost:5000) in your web browser and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
+
+Try changing some text in the README.md and running "node compile.js" and "node server.js" again, reload your browser and you should see your changes!
 
 Putting it on the intarwebs
 ---------------------------
