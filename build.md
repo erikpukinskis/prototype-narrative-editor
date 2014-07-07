@@ -8,12 +8,9 @@ Reads a narrative and does what it's told.
     library.give('build', function(folder, compile) {
       recompile = function(names) {
         indent('Rebuilding library (' + names + ':')
-        indent.in()
         _(names).forEach(function(name) {
-          indent('Compiling ' + name)
           compile.andRun(name)
         })
-        indent.out()
       }
 
       saveNarratives = function(narratives) { 
@@ -48,7 +45,7 @@ Reads a narrative and does what it's told.
       }
 
       return build = function(name) {
-        indent('Building "' + name + '"')
+        indent('Building ' + name)
         indent.in()
         var blocks = compile(name)
         indent.out()

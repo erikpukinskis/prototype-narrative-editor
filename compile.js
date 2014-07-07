@@ -74,40 +74,20 @@ library.give('compile', function(folder) {
     var source = folder.read(name + '.md')
     if (!source) { throw new Error(name + '.md not found.')}
     indent('Compiling ' + name)
-    indent.in()
     var blocks = getBlocks(source)
-    indent.out()
-    indent('Analyzing ' + name)
-    indent.in()
     analyze(blocks)
-    indent.out()
-    indent('Compiled ' + name)
     return blocks
   }
 
   compile.andRun = function(name) {
-    indent('Running ' + name)
-    indent.in()
     var blocks = compile(name)
-    indent.out()
 
-    indent('Handling blocks for ' + name)
-    indent.in()
     blocks.forEach(function(block) {
       if (block.unassigned) {
-        indent('Running unassigned block """' + block.lines[0].trim() + '"""')
-        indent.in()
         eval(block.source)
-        indent.out()
-        indent('Ran it.')
-      } else if (block.kind == 'comment') {
-        indent('Enjoying comment block: "' + block.lines[0].substr(0,50).trim() + '..."')
-      } else {
-        indent('Skipping code block """' + block.lines[0].trim() + '""", which was saved to ' + block.filename)
       }
     })
-    indent.out()
-    indent('Done with andRun for ' + name)
+
     return blocks
   }
 

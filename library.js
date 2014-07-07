@@ -8,11 +8,11 @@ library = function() {
   // grabs the first little bit of a function:
   var summarize = function(stuff) {
     if (typeof stuff == 'string') { 
-      return '  [' + stuff.
+      return stuff.
         toString()
         .replace(/(?:\r\n|\r|\n)/g, '')
         .replace(/ +/, ' ')
-        .substr(0,50) + ']  '
+        .substr(0,50)
     } else {
       var stuff = new String(stuff).toString()
       return summarize(stuff)
@@ -26,7 +26,6 @@ library = function() {
 
   // grabs a name and a function and stores them away for later use
   Library.prototype.give = function(name, func) {
-    indent('Giving ' + name + ' to the library...')
     var narrative = {
       hash: Math.random().toString(35).substr(2,3),
       dependencies: annotate(func),
@@ -36,12 +35,8 @@ library = function() {
       selfLoadingSource: 'library.give("' + name + '", ' + func.toString() + ')'
     }
     this.funcs[name] = narrative;
-    indent.in()
     this.require(narrative.dependencies)
-    indent.out()
-    indent("Gave " + name + " (" + narrative.hash.substr(0,40) + ")<<" + summarize(narrative.func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
-    // This seems wrong:
-    // Gave narrative (ap6)<<  [function () {   var express = require("express")     
+    indent("Gave " + name + " (" + narrative.hash.substr(0,40) + ")\t\"" + summarize(narrative.func) + "...\"\t\tto the library (#" + _(this.funcs).size() + ") ");
   };
 
   // looks for a narrative for any dependencies that haven't been given yet,
@@ -49,18 +44,13 @@ library = function() {
   Library.prototype.require = function(dependencies) {
     if (dependencies.length < 1) { return }
     var _lib = this
-    indent('Requiring ' + dependencies + ' to be in the library.')
 
     dependencies.forEach(function(dep) {
       if (!_lib.funcs[dep]) {
         indent('Compiling ' + dep)
         indent.in()
-        // OK, this is maybe the problem. We don't *always* want to run 
-        // the dependencies, right?????
         _lib.take('compile').andRun(dep)
         indent.out()
-      } else {
-        indent('found ' + dep)
       }
     })
   }
@@ -75,20 +65,13 @@ library = function() {
       indent("Nothing in the library called " + name);
       return
     }
-    indent("Taking " + name + " (" + narrative.hash + ") out of the library. It needs " + (narrative.dependencies.length ? '['+narrative.dependencies.join(", ")+']' : 'nothing' ) + '.')
     var args = {}
     _(narrative.dependencies).each(function(dep) { 
-      indent.in()
       args[dep] = _this.take(dep);
-      indent.out()
     });
     var values = _(args).values();
-    indent('Running the func for ' + name + '....')
-    indent.in()
     var result = narrative.func.apply({}, values);
-    indent.out()
-    indent("....ran it! got back " + summarize(result))
-    indent("Took " + name + " (" + narrative.hash + ") out of the library and passed it " + JSON.stringify(args) + " and it looks like this: " + summarize(result));
+    indent("Took " + name + " (" + narrative.hash + ") out of the library, passed it " + JSON.stringify(args) + ", got back " + summarize(result));
     return result;
   }
 
