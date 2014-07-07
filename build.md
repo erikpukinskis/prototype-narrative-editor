@@ -76,6 +76,7 @@ Reads a narrative and does what it's told.
         folder.copy('library.js', '../narrative-build')
         folder.copy('annotate.js', '../narrative-build')
         folder.copy('indent.js', '../narrative-build')
+        folder.copy(name+'.md', '../narrative-build')
         console.log("Look in ../narrative-build/ for your stuff!");
       }  
     })

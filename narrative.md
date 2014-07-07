@@ -64,7 +64,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         App.IndexRoute = Ember.Route.extend({
           model: function() {
-            return Ember.$.get('README.md');
+            return Ember.$.get('narrative.md');
           },
         });
 
