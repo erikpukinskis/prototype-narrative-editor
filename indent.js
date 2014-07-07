@@ -1,5 +1,5 @@
 indent = function(string) {
-  indentation = new Array(indent.depth)
+  var indentation = new Array(indent.depth)
   console.log(indentation.join("    ") + string);
 }
 indent.depth = 1

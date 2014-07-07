@@ -20,7 +20,7 @@ Reads a narrative and does what it's told.
         indent('Writing depdencies...')
         indent.in()
         narratives.forEach(function(narrative) {
-          source = narrative.selfLoadingSource
+          var source = narrative.selfLoadingSource
           filename = narrative.name + '.js'
           indent(filename)
           folder.write(filename, source)
@@ -31,12 +31,12 @@ Reads a narrative and does what it's told.
       addRequires = function(narratives, name) {
         var names = _(narratives).pluck('name')
 
-        requires = "require('./library')\n"
+        var requires = "require('./library')\n"
         names.forEach(function(name) {
           requires += "require('./" + name + "')\n"
         })
 
-        source = folder.read('../narrative-build/' + name + '.js')
+        var source = folder.read('../narrative-build/' + name + '.js')
         source = requires + "\n" + source
         source += "\nlibrary.take('" + name + "')"
         folder.write(name + '.js', source)
@@ -50,7 +50,7 @@ Reads a narrative and does what it's told.
       return build = function(name) {
         indent('Building "' + name + '"')
         indent.in()
-        blocks = compile(name)
+        var blocks = compile(name)
         indent.out()
 
         indent('Writing files...')
@@ -68,7 +68,7 @@ Reads a narrative and does what it's told.
         new Function(source).apply(this)
 
         recompile(library.list())
-        narratives = library.dependenciesFor(name)
+        var narratives = library.dependenciesFor(name)
         saveNarratives(narratives)
         addRequires(narratives, name)
         folder.copy('library.js', '../narrative-build')

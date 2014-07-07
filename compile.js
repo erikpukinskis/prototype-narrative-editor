@@ -7,7 +7,7 @@ require('./folder')
 library.give('compile', function(folder) {
 
   startsWith = function(string, pattern) {
-    pattern = new RegExp("^" + pattern);
+    var pattern = new RegExp("^" + pattern);
     return !!string.match(pattern);
   }
 
@@ -71,11 +71,11 @@ library.give('compile', function(folder) {
   }
 
   compile = function(name) {
-    source = folder.read(name + '.md')
+    var source = folder.read(name + '.md')
     if (!source) { throw new Error(name + '.md not found.')}
     indent('Compiling ' + name)
     indent.in()
-    blocks = getBlocks(source)
+    var blocks = getBlocks(source)
     indent.out()
     indent('Analyzing ' + name)
     indent.in()
@@ -88,7 +88,7 @@ library.give('compile', function(folder) {
   compile.andRun = function(name) {
     indent('Running ' + name)
     indent.in()
-    blocks = compile(name)
+    var blocks = compile(name)
     indent.out()
 
     indent('Handling blocks for ' + name)

@@ -16,7 +16,7 @@ library.give('folder', function() {
       }
     },
     copy: function(filename, destination) {
-      path = destination + '/' + filename
+      var path = destination + '/' + filename
       indent('copying ' + filename + ' to ' + destination)
       fs.createReadStream(filename).pipe(fs.createWriteStream(path))
     }

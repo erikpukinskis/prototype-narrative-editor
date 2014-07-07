@@ -3,10 +3,10 @@ indent = require('./indent')
 _ = require('underscore')
 
 library = function() {
-  count = 0
+  var count = 0
 
   // grabs the first little bit of a function:
-  summarize = function(stuff) {
+  var summarize = function(stuff) {
     if (typeof stuff == 'string') { 
       return '  [' + stuff.
         toString()
@@ -14,7 +14,7 @@ library = function() {
         .replace(/ +/, ' ')
         .substr(0,50) + ']  '
     } else {
-      stuff = new String(stuff).toString()
+      var stuff = new String(stuff).toString()
       return summarize(stuff)
     }
   }
@@ -27,7 +27,7 @@ library = function() {
   // grabs a name and a function and stores them away for later use
   Library.prototype.give = function(name, func) {
     indent('Giving ' + name + ' to the library...')
-    narrative = {
+    var narrative = {
       hash: Math.random().toString(35).substr(2,3),
       dependencies: annotate(func),
       name: name,
