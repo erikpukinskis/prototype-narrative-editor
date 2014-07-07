@@ -48,7 +48,7 @@ Reads a narrative and does what it's told.
       }
 
       return build = function(name) {
-        indent('building ' + name)
+        indent('Building "' + name + '"')
         indent.in()
         blocks = compile(name)
         indent.out()

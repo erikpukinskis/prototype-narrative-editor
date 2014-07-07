@@ -29,6 +29,8 @@ This is what you use to set up an Express/Node server:
       Server.prototype.static = express.static;
 
       Server.prototype.use = function() {
+        indent('using with args')
+        indent(arguments)
         this.app.use.apply(this.app, arguments)
       }
 

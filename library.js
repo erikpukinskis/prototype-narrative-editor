@@ -2,8 +2,6 @@ annotate = require('./annotate')
 indent = require('./indent')
 _ = require('underscore')
 
-// 
-
 library = function() {
   count = 0
 
@@ -30,7 +28,7 @@ library = function() {
   Library.prototype.give = function(name, func) {
     indent('Giving ' + name + ' to the library...')
     narrative = {
-      hash: Math.random().toString(35).substr(2,30),
+      hash: Math.random().toString(35).substr(2,3),
       dependencies: annotate(func),
       name: name,
       func: func,
@@ -42,6 +40,8 @@ library = function() {
     this.require(narrative.dependencies)
     indent.out()
     indent("Gave " + name + " (" + narrative.hash.substr(0,40) + ")<<" + summarize(narrative.func) + ">> to the library (which now has " + _(this.funcs).size() + " funcs) ");
+    // This seems wrong:
+    // Gave narrative (ap6)<<  [function () {   var express = require("express")     
   };
 
   // looks for a narrative for any dependencies that haven't been given yet,
@@ -55,6 +55,8 @@ library = function() {
       if (!_lib.funcs[dep]) {
         indent('Compiling ' + dep)
         indent.in()
+        // OK, this is maybe the problem. We don't *always* want to run 
+        // the dependencies, right?????
         _lib.take('compile').andRun(dep)
         indent.out()
       } else {

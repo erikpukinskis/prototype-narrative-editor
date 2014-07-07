@@ -1,4 +1,7 @@
 
+require('./folder')
+
+
 // COMPILE pulls code blocks out of a narrative and runs the unassigned ones
 
 library.give('compile', function(folder) {
@@ -70,17 +73,26 @@ library.give('compile', function(folder) {
   compile = function(name) {
     source = folder.read(name + '.md')
     if (!source) { throw new Error(name + '.md not found.')}
+    indent('Compiling ' + name)
+    indent.in()
     blocks = getBlocks(source)
+    indent.out()
+    indent('Analyzing ' + name)
+    indent.in()
     analyze(blocks)
+    indent.out()
+    indent('Compiled ' + name)
     return blocks
   }
 
   compile.andRun = function(name) {
-    indent('Compiling ' + name)
+    indent('Running ' + name)
     indent.in()
     blocks = compile(name)
     indent.out()
 
+    indent('Handling blocks for ' + name)
+    indent.in()
     blocks.forEach(function(block) {
       if (block.unassigned) {
         indent('Running unassigned block """' + block.lines[0].trim() + '"""')
@@ -94,6 +106,8 @@ library.give('compile', function(folder) {
         indent('Skipping code block """' + block.lines[0].trim() + '""", which was saved to ' + block.filename)
       }
     })
+    indent.out()
+    indent('Done with andRun for ' + name)
     return blocks
   }
 
