@@ -41,48 +41,74 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       <title>Ember Starter Kit</title>
         <link rel="stylesheet" href="styles.css" />
     </head>
-    <body>
-      <script type="text/x-handlebars">
-        {{outlet}}  
-      </script>
 
-      <script type="text/x-handlebars" id="index">
-        {{html}}
-      </script>
+    <script type="text/x-handlebars">
+      {{render narrative}}
+    </script>
 
-      <script src="/libs/jquery.js"></script>
-      <script src="/libs/handlebars.js"></script>
-      <script src="/libs/ember.js"></script>
-      <script src="/libs/marked.js"></script>
+    <script type="text/x-handlebars" id="narrative">
+      {{model}}<div class="cursor"></div>
+    </script>
 
-      <script>
-        App = Ember.Application.create();
+    <script src="/libs/jquery.js"></script>
+    <script src="/libs/handlebars.js"></script>
+    <script src="/libs/ember.js"></script>
+    <script src="/libs/marked.js"></script>
 
-        App.IndexRoute = Ember.Route.extend({
-          model: function() {
-            return Ember.$.get('narrative.md');
-          },
-        });
+    <script>
+      App = Ember.Application.create();
 
-        App.IndexController = Ember.Route.extend({
-          html: function() {
-            return new Handlebars.SafeString(marked(this.get('model')));
-          }.property('model'),
-        });
-      </script>
-    </body>
+      App.NarrativeController = Ember.Controller.extend({
+        model: 'hello',
+
+        backspace: function() {
+          console.log('backspace');
+        }
+      })
+
+      App.NarrativeView = Ember.View.extend({
+        classNames: ['narrative'],
+
+        didInsertElement: function() {
+          return this.$().attr({ tabindex: 1 }), this.$().focus();
+        },
+
+        keyDown: function(e) {
+          if (e.keyCode == 8) {
+            this.get('controller').backspace();
+            return false;
+          } else {
+            console.log(e.keyCode);
+          }
+        }
+      })
+    </script>
+
     </html>
 
 There's a lot going on there. It loads Ember and some other javascript libraries that it needs to work. It creates an Ember application with a Handlebars template and a link back to the Read page.
 
 And we also need a CSS stylesheet to make things pretty, which goes in `styles.css`:
 
-    body {
-      font-size: 14pt;
+    .narrative {
+      font-family: Georgia;
+      font-size: 30px;
       max-width: 700px;
       margin: 2em auto;
       padding: 0 1em;
-      color: #333;
+    }
+
+    .narrative:focus {
+      outline: none;
+    }
+
+    .cursor {
+      display: inline-block;
+      background: #999;
+      width: 2px;
+      height: 1.2em;
+      vertical-align: -.2em;
+      color: #999
     }
 
     a {
@@ -97,20 +123,6 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       font-weight: normal;
     }
 
-    pre {
-      padding: 10px;
-    }
-
-    pre, p code {
-      font-size: 12pt;
-      border: 1px solid #ddd;
-      background: #eee;
-      color: #1ABC9C;
-    }
-
-    blockquote {
-      font-style: italic;
-    }
 
 That's it! To start it up, we just do:
 
