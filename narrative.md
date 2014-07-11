@@ -43,42 +43,100 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     </head>
 
     <script type="text/x-handlebars">
-      {{render narrative}}
+      {{render 'narrative' model}}
     </script>
 
     <script type="text/x-handlebars" id="narrative">
-      {{model}}<div class="cursor"></div>
+      {{html}}
     </script>
 
     <script src="/libs/jquery.js"></script>
     <script src="/libs/handlebars.js"></script>
     <script src="/libs/ember.js"></script>
-    <script src="/libs/marked.js"></script>
+    <script src="/libs/lodash.js"></script>
 
     <script>
       App = Ember.Application.create();
 
-      App.NarrativeController = Ember.Controller.extend({
-        model: 'hello',
+      App.ApplicationRoute = Ember.Route.extend({
+        model: function() {
+          return [{string: 'hello'}]
+        }
+      })
+
+      var splitAtCursor = function(string, cursor) {
+        return {
+          before: string.slice(0,cursor.column),
+          after: string.slice(cursor.column, string.length)
+        }
+      }
+
+      var moveCursor = function(d) {
+        return function() {
+          var column = this.get('cursor.column') + d
+          this.set('cursor.column', column)
+        }
+      }
+
+      App.NarrativeController = Ember.ArrayController.extend({
+        cursor: {line: 0, column: 0},
+
+        right: moveCursor(1),
+
+        left: moveCursor(-1),
 
         backspace: function() {
-          console.log('backspace');
-        }
+          var _this = this;
+          setTimeout(function() {
+            var cursor = _this.get('cursor')
+            var property = ['model', cursor.line, 'string'].join('.')
+            var string = _this.get(property)
+            var parts = splitAtCursor(string, cursor)
+            string = parts.before.slice(0, -1) + parts.after
+            _this.set(property, string)
+            _this.set('cursor.column', cursor.column - 1)
+          }, 0)
+        },
+
+        html: function() {
+          var strings = this.get('model')
+          var cursor = this.get('cursor')
+          var htmlLines = _(strings).map(function(line, lineNumber) {
+            if (lineNumber == cursor.line) {
+              var parts = splitAtCursor(line.string, cursor)
+              return parts.before + '<div class="cursor"></div>' + parts.after
+            } else {
+              return line.string
+            }
+          })
+          
+          var html = htmlLines.join("<br/>\n")
+          return Ember.String.htmlSafe(html)
+        }.property('model.@each.string', 'cursor.column'),
       })
 
       App.NarrativeView = Ember.View.extend({
         classNames: ['narrative'],
 
         didInsertElement: function() {
-          return this.$().attr({ tabindex: 1 }), this.$().focus();
+          return this.$().attr({ tabindex: 1 }), this.$().focus()
         },
 
         keyDown: function(e) {
-          if (e.keyCode == 8) {
-            this.get('controller').backspace();
-            return false;
+          var action = {
+            8: 'backspace',
+            39: 'right',
+            37: 'left',
+            38: 'up',
+            40: 'down'
+          }[e.keyCode];
+
+          if (action) {
+            console.log(action)
+            this.get('controller')[action]()
+            return false
           } else {
-            console.log(e.keyCode);
+            console.log(e.keyCode)
           }
         }
       })
@@ -106,6 +164,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       display: inline-block;
       background: #999;
       width: 2px;
+      margin-right: -2px;
       height: 1.2em;
       vertical-align: -.2em;
       color: #999
