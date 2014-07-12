@@ -74,7 +74,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       var moveCursor = function(d) {
         return function() {
           var column = this.get('cursor.column') + d
-          this.set('cursor.column', column)
+          if (column >= 0) {
+            this.set('cursor.column', column)
+          }
         }
       }
 
@@ -94,7 +96,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             var parts = splitAtCursor(string, cursor)
             string = parts.before.slice(0, -1) + parts.after
             _this.set(property, string)
-            _this.set('cursor.column', cursor.column - 1)
+            _this.left()
           }, 0)
         },
 
