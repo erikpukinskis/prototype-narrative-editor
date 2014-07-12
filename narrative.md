@@ -150,8 +150,13 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         enter: function() {
           var cursor = this.get('cursor')
-          var nextLine = this.get(lineProperty(cursor.line+1))
-          this.increment()
+          var linesAfter = this.slice(cursor.line, -1)
+          linesAfter.unshiftObject({string: ''})
+          this.replace(cursor.line + 1, linesAfter)
+          var narrative = this.get('model')
+          narrative.splice(cursor.line,0,'')
+          this.set('model', narrative)
+          this.incrementProperty('cursor.line')
         },
 
         html: function() {
