@@ -68,6 +68,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         }.on('didInsertElement'),
 
         keyDown: function(e) {
+          var _this = this
           var number = e.keyCode
           var controller = this.get('narrativeController')
           var action = {
@@ -84,7 +85,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             controller[action]()
             return false
           } else {
-            console.log(e.keyCode)
+            Ember.run.next(function() {
+              controller.type(_this.get('value'))
+              _this.set('value', '')
+            })
           }
         }
       });
@@ -135,6 +139,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         },
 
         type: function(letter) {
+          if (letter.length < 1) { return }
           var cursor = this.get('cursor')
           var parts = this.lineSplitAtCursor()
           var string = parts.before.concat(letter, parts.after)
@@ -188,13 +193,10 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     .focus-input {
       position: absolute;
-      left: 0;
+      opacity: 0;
+      width: 0;
       top: 0;
-      width: 100px;
-      height: 40px;
-      border: none;
-      font-size: 30px;
-      color: #666;
+      left: 0;
     }
 
     .cursor {
