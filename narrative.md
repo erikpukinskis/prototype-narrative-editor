@@ -47,6 +47,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     </script>
 
     <script type="text/x-handlebars" id="narrative">
+      {{focus-input narrativeController=controller}}
       {{html}}
     </script>
 
@@ -57,6 +58,36 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
     <script>
       App = Ember.Application.create();
+
+      App.FocusInputComponent = Ember.TextField.extend({
+        classNames: ['focus-input'],
+        needs: ['narrative'],
+
+        becomeFocused: function() {
+          this.$().focus();
+        }.on('didInsertElement'),
+
+        keyDown: function(e) {
+          var number = e.keyCode
+          var controller = this.get('narrativeController')
+          var action = {
+            8: 'backspace',
+            39: 'right',
+            37: 'left',
+            38: 'up',
+            40: 'down',
+            13: 'enter'
+          }[number];
+
+          if (action) {
+            console.log(action)
+            controller[action]()
+            return false
+          } else {
+            console.log(e.keyCode)
+          }
+        }
+      });
 
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
@@ -138,38 +169,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
       App.NarrativeView = Ember.View.extend({
         classNames: ['narrative'],
-
-        didInsertElement: function() {
-          return this.$().attr({ tabindex: 1 }), this.$().focus()
-        },
-
-        keyDown: function(e) {
-          var number = e.keyCode
-          var controller = this.get('controller')
-          var action = {
-            8: 'backspace',
-            39: 'right',
-            37: 'left',
-            38: 'up',
-            40: 'down',
-            13: 'enter'
-          }[number];
-
-          if (number >= 60 && number <= 90) {
-            var letter = String.fromCharCode(number)
-            if (!window.event.shiftKey) {
-              letter = letter.toLowerCase()
-            }
-            console.log(letter)
-            controller.type(letter)
-          } else if (action) {
-            console.log(action)
-            controller[action]()
-            return false
-          } else {
-            console.log(e.keyCode)
-          }
-        }
       })
     </script>
 
@@ -187,8 +186,15 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       padding: 0 1em;
     }
 
-    .narrative:focus {
-      outline: none;
+    .focus-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100px;
+      height: 40px;
+      border: none;
+      font-size: 30px;
+      color: #666;
     }
 
     .cursor {
