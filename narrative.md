@@ -95,15 +95,19 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
-          return [{string: 'hello'}]
+          return [{string: 'hello'}, {string: 'world'}]
         }
       })
 
-      var moveCursor = function(d) {
+      var moveCursor = function(columns, lines) {
         return function() {
-          var column = this.get('cursor.column') + d
+          var column = this.get('cursor.column') + columns
+          var line = this.get('cursor.line') + lines
           if (column >= 0) {
             this.set('cursor.column', column)
+          }
+          if (line >= 0) {
+            this.set('cursor.line', line)
           }
         }
       }
@@ -111,9 +115,13 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       App.NarrativeController = Ember.ArrayController.extend({
         cursor: {line: 0, column: 0},
 
-        right: moveCursor(1),
+        right: moveCursor(1,0),
 
-        left: moveCursor(-1),
+        left: moveCursor(-1,0),
+
+        down: moveCursor(0,1),
+
+        up: moveCursor(0,-1),
 
         lineProperty: function(line) {
           var cursor = this.get('cursor')
@@ -150,13 +158,13 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         enter: function() {
           var cursor = this.get('cursor')
-          var linesAfter = this.slice(cursor.line, -1)
-          linesAfter.unshiftObject({string: ''})
-          this.replace(cursor.line + 1, linesAfter)
-          var narrative = this.get('model')
-          narrative.splice(cursor.line,0,'')
-          this.set('model', narrative)
+          var parts = this.lineSplitAtCursor()
+          var linesAfter = this.slice(cursor.line)
+          linesAfter.unshiftObject({string: parts.before})
+          linesAfter[1] = {string: parts.after}
+          this.replace(cursor.line, linesAfter.length, linesAfter)
           this.incrementProperty('cursor.line')
+          this.set('cursor.column', 0)
         },
 
         html: function() {
@@ -174,7 +182,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           
           var html = htmlLines.join("<br/>\n")
           return Ember.String.htmlSafe(html)
-        }.property('model.@each.string', 'cursor.column'),
+        }.property('model.@each.string', 'cursor.line', 'cursor.column'),
       })
 
       App.NarrativeView = Ember.View.extend({
@@ -194,6 +202,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       max-width: 700px;
       margin: 2em auto;
       padding: 0 1em;
+      line-height: 1.3em;
     }
 
     .focus-input {
