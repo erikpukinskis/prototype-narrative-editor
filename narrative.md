@@ -103,6 +103,15 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           _this.left()
         },
 
+        type: function(letter) {
+          var cursor = this.get('cursor')
+          var parts = this.lineSplitAtCursor()
+          var string = parts.before.concat(letter, parts.after)
+
+          this.set(this.lineProperty(), string)
+          this.right()
+        },
+
         html: function() {
           var _this = this
           var strings = this.get('model')
@@ -139,7 +148,11 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             40: 'down'
           }[number];
 
-          if (action) {
+          if (number >= 60 && number <= 90) {
+            letter = String.fromCharCode(number)
+            console.log(letter)
+            controller.type(letter)
+          } else if (action) {
             console.log(action)
             controller[action]()
             return false
