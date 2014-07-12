@@ -138,12 +138,30 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           }
         },
 
+        mergeDown: function() {
+          var line = this.get('cursor.line')
+          var string = this.get(this.lineProperty(line)) + this.get(this.lineProperty(line+1))
+          this.set(this.lineProperty(line), string)
+          this.removeAt(line+1,1)
+        },
+
         backspace: function() {
           var _this = this;
+          var cursor = this.get('cursor')
           var parts = _this.lineSplitAtCursor()
-          var string = parts.before.slice(0, -1) + parts.after
-          _this.set(_this.lineProperty(), string)
-          _this.left()
+          if (parts.before.length < 1) {
+            if (cursor.line > 0) {
+              this.decrementProperty('cursor.line')
+              var previousLine = this.get(this.lineProperty())
+              this.set('cursor.column', previousLine.length)
+              this.mergeDown(cursor.line - 1)
+            }           
+
+          } else {
+            var string = parts.before.slice(0, -1) + parts.after
+            _this.set(_this.lineProperty(), string)
+            _this.left()
+          }
         },
 
         type: function(letter) {
