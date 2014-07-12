@@ -64,13 +64,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         }
       })
 
-      var splitAtCursor = function(string, cursor) {
-        return {
-          before: string.slice(0,cursor.column),
-          after: string.slice(cursor.column, string.length)
-        }
-      }
-
       var moveCursor = function(d) {
         return function() {
           var column = this.get('cursor.column') + d
@@ -87,25 +80,36 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         left: moveCursor(-1),
 
+        lineProperty: function() {
+          var cursor = this.get('cursor')
+          return ['model', cursor.line, 'string'].join('.')
+        },
+
+        lineSplitAtCursor: function() {          
+          var string = this.get(this.lineProperty())
+          var cursor = this.get('cursor')
+
+          return {
+            before: string.slice(0,cursor.column),
+            after: string.slice(cursor.column, string.length)
+          }
+        },
+
         backspace: function() {
           var _this = this;
-          setTimeout(function() {
-            var cursor = _this.get('cursor')
-            var property = ['model', cursor.line, 'string'].join('.')
-            var string = _this.get(property)
-            var parts = splitAtCursor(string, cursor)
-            string = parts.before.slice(0, -1) + parts.after
-            _this.set(property, string)
-            _this.left()
-          }, 0)
+          var parts = _this.lineSplitAtCursor()
+          var string = parts.before.slice(0, -1) + parts.after
+          _this.set(_this.lineProperty(), string)
+          _this.left()
         },
 
         html: function() {
+          var _this = this
           var strings = this.get('model')
           var cursor = this.get('cursor')
           var htmlLines = _(strings).map(function(line, lineNumber) {
             if (lineNumber == cursor.line) {
-              var parts = splitAtCursor(line.string, cursor)
+              var parts = _this.lineSplitAtCursor()
               return parts.before + '<div class="cursor"></div>' + parts.after
             } else {
               return line.string
@@ -125,17 +129,19 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         },
 
         keyDown: function(e) {
+          var number = e.keyCode
+          var controller = this.get('controller')
           var action = {
             8: 'backspace',
             39: 'right',
             37: 'left',
             38: 'up',
             40: 'down'
-          }[e.keyCode];
+          }[number];
 
           if (action) {
             console.log(action)
-            this.get('controller')[action]()
+            controller[action]()
             return false
           } else {
             console.log(e.keyCode)
