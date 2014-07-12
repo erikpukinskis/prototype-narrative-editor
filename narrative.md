@@ -80,9 +80,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         left: moveCursor(-1),
 
-        lineProperty: function() {
+        lineProperty: function(line) {
           var cursor = this.get('cursor')
-          return ['model', cursor.line, 'string'].join('.')
+          return ['model', (line || cursor.line), 'string'].join('.')
         },
 
         lineSplitAtCursor: function() {          
@@ -110,6 +110,12 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
           this.set(this.lineProperty(), string)
           this.right()
+        },
+
+        enter: function() {
+          var cursor = this.get('cursor')
+          var nextLine = this.get(lineProperty(cursor.line+1))
+          this.increment()
         },
 
         html: function() {
@@ -145,11 +151,15 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             39: 'right',
             37: 'left',
             38: 'up',
-            40: 'down'
+            40: 'down',
+            13: 'enter'
           }[number];
 
           if (number >= 60 && number <= 90) {
-            letter = String.fromCharCode(number)
+            var letter = String.fromCharCode(number)
+            if (!window.event.shiftKey) {
+              letter = letter.toLowerCase()
+            }
             console.log(letter)
             controller.type(letter)
           } else if (action) {
