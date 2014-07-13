@@ -60,7 +60,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       App = Ember.Application.create();
 
       Cursor = new function(){}
-      
+
       App.FocusInputComponent = Ember.TextField.extend({
         classNames: ['focus-input'],
         needs: ['narrative'],
@@ -126,8 +126,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         up: moveCursor(0,-1),
 
-        indent: function() {
-
+        indent: function() {          
+          var cursorLine = this.get('cursor.line');
+          this.set([cursorLine, prose].join('.'), true)
         },
 
         lineProperty: function(line) {
@@ -208,17 +209,20 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           var strings = this.get('model')
           var cursor = this.get('cursor')
           var htmlLines = _(strings).map(function(line, lineNumber) {
+            var html
             if (lineNumber == cursor.line) {
               var parts = _this.lineSplitAtCursor()
-              return parts.before + '<div class="cursor"></div>' + parts.after
+              html = parts.before + '<div class="cursor"></div>' + parts.after
             } else {
-              return line.string
+              html = line.string
             }
+
+            return '<div class="line">' + html + '</div>'
           })
           
-          var html = htmlLines.join("<br/>\n")
+          var html = htmlLines.join("\n")
           return Ember.String.htmlSafe(html)
-        }.property('model.@each.string', 'cursor.line', 'cursor.column'),
+        }.property('model.@each.string', 'model.@each.prose', 'cursor.line', 'cursor.column'),
       })
 
       App.NarrativeView = Ember.View.extend({
@@ -238,7 +242,10 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       max-width: 700px;
       margin: 2em auto;
       padding: 0 1em;
-      line-height: 1.8em;
+    }
+
+    .line {
+      line-height: 1.6em
     }
 
     .focus-input {
