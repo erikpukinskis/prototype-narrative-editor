@@ -98,7 +98,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
-          return [{string: 'hello'}, {string: 'world'}]
+          return [
+            {string: 'hello', kind: 'prose'}, 
+            {string: 'world', kind: 'prose'}
+          ]
         }
       })
 
@@ -127,8 +130,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         up: moveCursor(0,-1),
 
         indent: function() {          
-          var cursorLine = this.get('cursor.line');
-          this.set([cursorLine, prose].join('.'), true)
+          var cursorLine = this.get('cursor.line')
+          var property = ['model', cursorLine, 'kind'].join('.')
+          console.log('indenting ' + property)
+          this.set(property, 'code')
         },
 
         lineProperty: function(line) {
@@ -217,12 +222,14 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
               html = line.string
             }
 
-            return '<div class="line">' + html + '</div>'
+            var classes = ['line', line.kind]
+            classes = classes.join(' ')
+            return '<div class="' + classes + '">' + html + '</div>'
           })
           
           var html = htmlLines.join("\n")
           return Ember.String.htmlSafe(html)
-        }.property('model.@each.string', 'model.@each.prose', 'cursor.line', 'cursor.column'),
+        }.property('model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
       })
 
       App.NarrativeView = Ember.View.extend({
@@ -244,8 +251,19 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       padding: 0 1em;
     }
 
+
     .line {
-      line-height: 1.6em
+      line-height: 1.6em;      
+    }
+
+    .line.prose {
+      color: #333;
+    }
+
+    .line.code {
+      color: #1abc9c;
+      padding-left: 2em;
+      font-family: Courier;
     }
 
     .focus-input {
