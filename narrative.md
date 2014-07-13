@@ -59,6 +59,8 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <script>
       App = Ember.Application.create();
 
+      Cursor = new function(){}
+      
       App.FocusInputComponent = Ember.TextField.extend({
         classNames: ['focus-input'],
         needs: ['narrative'],
@@ -73,6 +75,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           var controller = this.get('narrativeController')
           var action = {
             8: 'backspace',
+            9: 'indent',
             39: 'right',
             37: 'left',
             38: 'up',
@@ -123,13 +126,28 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         up: moveCursor(0,-1),
 
+        indent: function() {
+
+        },
+
         lineProperty: function(line) {
-          var cursor = this.get('cursor')
-          return ['model', (line || cursor.line), 'string'].join('.')
+          if (!line || (line == Cursor)) {
+            line = this.get('cursor.line')
+          }
+
+          return ['model', line, 'string'].join('.')
+        },
+
+        getLine: function(line) {
+          return this.get(this.lineProperty(line));
+        },
+
+        setLine: function(line, string) {
+          this.set(this.lineProperty(line), string)
         },
 
         lineSplitAtCursor: function() {          
-          var string = this.get(this.lineProperty())
+          var string = this.getLine(Cursor)
           var cursor = this.get('cursor')
 
           return {
@@ -140,8 +158,8 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         mergeDown: function() {
           var line = this.get('cursor.line')
-          var string = this.get(this.lineProperty(line)) + this.get(this.lineProperty(line+1))
-          this.set(this.lineProperty(line), string)
+          var string = this.getLine(line) + this.getLine(line+1)
+          this.setLine(line, string)
           this.removeAt(line+1,1)
         },
 
@@ -152,14 +170,14 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           if (parts.before.length < 1) {
             if (cursor.line > 0) {
               this.decrementProperty('cursor.line')
-              var previousLine = this.get(this.lineProperty())
+              var previousLine = this.getLine()
               this.set('cursor.column', previousLine.length)
               this.mergeDown(cursor.line - 1)
             }           
 
           } else {
             var string = parts.before.slice(0, -1) + parts.after
-            _this.set(_this.lineProperty(), string)
+            _this.setLine(Cursor, string)
             _this.left()
           }
         },
@@ -170,7 +188,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           var parts = this.lineSplitAtCursor()
           var string = parts.before.concat(letter, parts.after)
 
-          this.set(this.lineProperty(), string)
+          this.setLine(Cursor, string)
           this.right()
         },
 
@@ -220,7 +238,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       max-width: 700px;
       margin: 2em auto;
       padding: 0 1em;
-      line-height: 1.3em;
+      line-height: 1.8em;
     }
 
     .focus-input {
