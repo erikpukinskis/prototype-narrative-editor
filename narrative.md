@@ -132,7 +132,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         indent: function() {          
           var cursorLine = this.get('cursor.line')
           var property = ['model', cursorLine, 'kind'].join('.')
-          console.log('indenting ' + property)
           this.set(property, 'code')
         },
 
@@ -201,10 +200,11 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         enter: function() {
           var cursor = this.get('cursor')
           var parts = this.lineSplitAtCursor()
+          var kind = this.get('model')[cursor.line].kind
           var linesAfter = this.slice(cursor.line)
-          linesAfter.unshiftObject({string: parts.before})
-          linesAfter[1] = {string: parts.after}
-          this.replace(cursor.line, linesAfter.length, linesAfter)
+          linesAfter.unshiftObject({string: parts.before, kind: kind})
+          linesAfter[1] = {string: parts.after, kind: kind}
+          this.replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
           this.incrementProperty('cursor.line')
           this.set('cursor.column', 0)
         },
@@ -229,7 +229,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           
           var html = htmlLines.join("\n")
           return Ember.String.htmlSafe(html)
-        }.property('model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
+        }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
       })
 
       App.NarrativeView = Ember.View.extend({
@@ -251,9 +251,9 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       padding: 0 1em;
     }
 
-
     .line {
-      line-height: 1.6em;      
+      line-height: 1.6em;
+      min-height: 1.6em;
     }
 
     .line.prose {
