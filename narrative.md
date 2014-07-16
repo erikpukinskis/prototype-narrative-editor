@@ -312,7 +312,7 @@ The first is `package.json`, which describes the various things running the serv
 
     {
       "name": "narrative",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "dependencies": {
         "express": "*",
         "ejs": "*",
