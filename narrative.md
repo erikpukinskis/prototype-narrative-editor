@@ -43,7 +43,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     </head>
 
     <script type="text/x-handlebars">
-      {{narrative-editor model}}
+      {{narrative-editor model=model}}
     </script>
 
     <script src="/libs/jquery.js"></script>
@@ -86,11 +86,11 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
           if (action) {
             console.log(action)
-            controller[action]()
+            editor[action]()
             return false
           } else {
             Ember.run.next(function() {
-              controller.type(_this.get('value'))
+              editor.type(_this.get('value'))
               _this.set('value', '')
             })
           }
@@ -120,7 +120,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       }
 
       App.NarrativeEditorComponent = Ember.Component.extend({
-        template: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}')
+        template: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}'),
+
+        classNames: ['narrative'],
 
         cursor: {line: 0, column: 0},
 
@@ -241,10 +243,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           })
           return Ember.String.htmlSafe(html)
         }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
-      })
-
-      App.NarrativeView = Ember.View.extend({
-        classNames: ['narrative'],
       })
     </script>
 
