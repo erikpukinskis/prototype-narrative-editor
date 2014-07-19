@@ -43,12 +43,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     </head>
 
     <script type="text/x-handlebars">
-      {{render 'narrative' model}}
-    </script>
-
-    <script type="text/x-handlebars" id="narrative">
-      {{focus-input narrativeController=controller}}
-      {{html}}
+      {{narrative-editor model}}
     </script>
 
     <script src="/libs/jquery.js"></script>
@@ -70,7 +65,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
       App.FocusInputComponent = Ember.TextField.extend({
         classNames: ['focus-input'],
-        needs: ['narrative'],
 
         becomeFocused: function() {
           this.$().focus();
@@ -79,7 +73,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         keyDown: function(e) {
           var _this = this
           var number = e.keyCode
-          var controller = this.get('narrativeController')
+          var editor = this.get('editor')
           var action = {
             8: 'backspace',
             9: 'indent',
@@ -125,8 +119,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         }
       }
 
-      // App.NarrativeEditorComponent = Ember.Component.extend({
-      App.NarrativeController = Ember.Controller.extend({
+      App.NarrativeEditorComponent = Ember.Component.extend({
+        template: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}')
+
         cursor: {line: 0, column: 0},
 
         right: moveCursor(1,0),
