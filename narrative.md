@@ -38,7 +38,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <html>
     <head>
       <meta charset="utf-8">
-      <title>Ember Starter Kit</title>
+      <title>Narrative</title>
         <link rel="stylesheet" href="styles.css" />
     </head>
 
@@ -60,6 +60,13 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       App = Ember.Application.create();
 
       Cursor = new function(){}
+
+      distanceFromBottomToCursor = function() {
+        var cursorEl = $('.cursor')[0]
+        if (cursorEl) {
+          return window.innerHeight - cursorEl.getBoundingClientRect().bottom
+        }
+      }
 
       App.FocusInputComponent = Ember.TextField.extend({
         classNames: ['focus-input'],
@@ -118,7 +125,8 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         }
       }
 
-      App.NarrativeController = Ember.ArrayController.extend({
+      // App.NarrativeEditorComponent = Ember.Component.extend({
+      App.NarrativeController = Ember.Controller.extend({
         cursor: {line: 0, column: 0},
 
         right: moveCursor(1,0),
@@ -201,10 +209,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           var cursor = this.get('cursor')
           var parts = this.lineSplitAtCursor()
           var kind = this.get('model')[cursor.line].kind
-          var linesAfter = this.slice(cursor.line)
+          var linesAfter = this.get('model').slice(cursor.line)
           linesAfter.unshiftObject({string: parts.before, kind: kind})
           linesAfter[1] = {string: parts.after, kind: kind}
-          this.replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
+          this.get('model').replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
           this.incrementProperty('cursor.line')
           this.set('cursor.column', 0)
         },
@@ -228,6 +236,14 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           })
           
           var html = htmlLines.join("\n")
+
+          Ember.run.next(function() {
+            EXTRA = 50
+            var distance = distanceFromBottomToCursor()
+            if (distance < EXTRA) {
+              $("html,body").animate({scrollTop: $('body').scrollTop() - distance + EXTRA}, 0)
+            }
+          })
           return Ember.String.htmlSafe(html)
         }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
       })
@@ -267,9 +283,10 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
     }
 
     .focus-input {
-      position: absolute;
+      position: fixed;
       opacity: 0;
-      width: 0;
+      width: 100%;
+      height: 100%;
       top: 0;
       left: 0;
     }
