@@ -60,7 +60,6 @@ OK, tasks:
     <script src="/libs/handlebars.js"></script>
     <script src="/libs/ember.js"></script>
     <script src="/libs/lodash.js"></script>
-    <script data-main="library" src="/libs/require.js"></script>
     <script data-main="annotate" src="/libs/require.js"></script>
     <script data-main="indent" src="/libs/require.js"></script>
     <script data-main="libs/underscore" src="/libs/require.js"></script>
@@ -68,8 +67,9 @@ OK, tasks:
 
     <script>
 
-      require(['annotate', 'underscore', 'folder', library'], function(annotate, underscore, folder, library){
-        console.log(library.take)       
+
+      require(['annotate', 'underscore'], function(annotate, underscore){
+        console.log(annotate)
       })
 
       App = Ember.Application.create();
