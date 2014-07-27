@@ -1,6 +1,33 @@
 Narrative
 =========
 
+*Status*
+
+Wow. So I just got everything working with requirejs and the editor component is actually split out into a separate narrative that's compiled and then loaded in the browser! Fun!
+
+We even killed library! That was the most complex part of the code. Cool. We did lose a few things though. The compile process doesn't rely on narratives at all anymore. It just loads stuff with requirejs. 
+
+We also lost the ability to automatically compile dependencies.
+
+*Next*
+
+I think we can work it so somehow we do 'node builder.js builder' and it compiles builder.md which lays out builder, and compile.md etc, and that writes the builder.js, compiler.js, etc, to a builder-build folder. Then you run that on the narrative folder and it builds narrative-build.
+
+Maybe builder sets up a command line thing? We definitely won't have to worry about requirejs folders. But it's a black box! We hate black boxes!
+
+* The alternative is in builder/ you run 'node ../builder-build/builder.js builder' which should be a no-op on builder-build/. Then you switch to narrative/. But I don't know if the path stuff would work out with requirejs. It could probably be resolved. This way can be functional JS eventually, which is great.
+
+For dependencies, I guess we could just read the file and look for them. And then compile all of those too. 
+
+We could also just compile all of them to their own npm modules. That's probably where things are headed anyway. Maybe we can set up our own npm server with aliases for the npm modules we want to use. For now we can just try to avoid collisions.
+
+The npm route involves setting up a bunch of infrastructure. It might be quicker just to write a quick requirejs wrapper that maintains a queryable dependency tree.
+
+If we roll our own, we can write it functional so it can work without hitting the file system. That means push updates. That seems cool.
+
+But npm handles a bunch of things well, particularly versioning and dependency resolution. Aren't I going to have to reinvent that? 
+
+
 This is a web app.
 ------------------
 
@@ -21,7 +48,7 @@ Let's make a server! We'll put it in `narrative.js`:
 
     requirejs = require('requirejs')
 
-    requirejs(['server'], function(server) {
+    requirejs(['server', 'editor'], function(server, editor) {
       console.log('hola!')
       server.use(server.static('.'))
 
@@ -36,13 +63,6 @@ Writing
 -------
 
 We mentioned `edit.html` above. That's the HTML we are passing down that actually sets up the editor:
-
-OK, tasks:
-
- * load the library with require.js
- * have the library load something with require.js
- * have the library compile those
- * have the library use that method on the server side too
 
     <!DOCTYPE html>
     <html>
