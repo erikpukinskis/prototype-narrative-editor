@@ -1,27 +1,21 @@
 Narrative
 =========
 
-*Status*
+*New Goal*
 
-Wow. So I just got everything working with requirejs and the editor component is actually split out into a separate narrative that's compiled and then loaded in the browser! Fun!
+Requirejs is working, but there's some stuff to clean up. To that end, we want to...
 
-We even killed library! That was the most complex part of the code. Cool. We did lose a few things though. The compile process doesn't rely on narratives at all anymore. It just loads stuff with requirejs. 
+Build builder from narratives
+ - get builder to build server and editor
+ - put builder js files into narratives
+ - get builder to build builder in its own folder
+ - get built builder to build narrative
 
-We also lost the ability to automatically compile dependencies. That's useful because the dep tree is going to get crazy eventually. But maybe we can get away without it? On to data?
+*Next up*
 
-*Next*
-
-In builder/ you run 'node ../builder-build/builder.js builder' which should be a no-op on builder-build/. Then you switch to narrative/. But I don't know if the path stuff would work out with requirejs. It could probably be resolved. This way can be functional JS eventually, which is great.
-
-For dependencies, I guess we could just read the file and look for them. And then compile all of those too. 
-
-We could also just compile all of them to their own npm modules. That's probably where things are headed anyway. Maybe we can set up our own npm server with aliases for the npm modules we want to use. For now we can just try to avoid collisions.
-
-The npm route involves setting up a bunch of infrastructure. It might be quicker just to write a quick requirejs wrapper that maintains a queryable dependency tree.
-
-If we roll our own, we can write it functional so it can work without hitting the file system. That means push updates. That seems cool.
-
-But npm handles a bunch of things well, particularly versioning and dependency resolution. Aren't I going to have to reinvent that? 
+ - Data
+ - Compile pulls narratives from data
+ - Hot reload
 
 
 This is a web app.
