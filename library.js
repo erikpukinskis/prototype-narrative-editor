@@ -14,6 +14,7 @@
 // indentation/colors?
 
 define(['annotate', 'indent', 'underscore'], function(annotate, indent, underscore) { 
+  throw new Error('deprecated!')
   var _ = underscore
   var count = 0
 

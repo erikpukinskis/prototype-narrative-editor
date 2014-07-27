@@ -1,5 +1,5 @@
 
-define(['library', 'folder'], function(library, folder) {
+define(['folder'], function(folder) {
   startsWith = function(string, pattern) {
     var pattern = new RegExp("^" + pattern);
     return !!string.match(pattern);

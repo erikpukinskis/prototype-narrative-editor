@@ -1,4 +1,4 @@
-define(['library', 'folder', 'compile', 'underscore'], function(library, folder, compile, underscore) {
+define(['folder', 'compile', 'underscore', 'indent'], function(folder, compile, underscore, indent) {
   var _ = underscore
   recompile = function(names) {
     indent('Rebuilding library (' + names + ':')

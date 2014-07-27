@@ -1,7 +1,154 @@
 Editor
 ------
 
-_*This is not actual code, it's just some notes on what the editor might do.*_
+This goes in `editor.js`:
+
+    var moveCursor = function(columns, lines) {
+      return function() {
+        var column = this.get('cursor.column') + columns
+        var line = this.get('cursor.line') + lines
+        if (column >= 0) {
+          this.set('cursor.column', column)
+        }
+        if (line >= 0) {
+          this.set('cursor.line', line)
+        }
+      }
+    }
+
+    define({
+      template: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}'),
+
+      classNames: ['narrative'],
+
+      cursor: {line: 0, column: 0},
+
+      right: moveCursor(1,0),
+
+      left: moveCursor(-1,0),
+
+      down: moveCursor(0,1),
+
+      up: moveCursor(0,-1),
+
+      indent: function() {          
+        var cursorLine = this.get('cursor.line')
+        var property = ['model', cursorLine, 'kind'].join('.')
+        this.set(property, 'code')
+      },
+
+      lineProperty: function(line) {
+        if (!line || (line == Cursor)) {
+          line = this.get('cursor.line')
+        }
+
+        return ['model', line, 'string'].join('.')
+      },
+
+      getLine: function(line) {
+        return this.get(this.lineProperty(line));
+      },
+
+      setLine: function(line, string) {
+        this.set(this.lineProperty(line), string)
+      },
+
+      lineSplitAtCursor: function() {          
+        var string = this.getLine(Cursor)
+        var cursor = this.get('cursor')
+
+        return {
+          before: string.slice(0,cursor.column),
+          after: string.slice(cursor.column, string.length)
+        }
+      },
+
+      mergeDown: function() {
+        var line = this.get('cursor.line')
+        var string = this.getLine(line) + this.getLine(line+1)
+        this.setLine(line, string)
+        this.removeAt(line+1,1)
+      },
+
+      backspace: function() {
+        var _this = this;
+        var cursor = this.get('cursor')
+        var parts = _this.lineSplitAtCursor()
+        if (parts.before.length < 1) {
+          if (cursor.line > 0) {
+            this.decrementProperty('cursor.line')
+            var previousLine = this.getLine()
+            this.set('cursor.column', previousLine.length)
+            this.mergeDown(cursor.line - 1)
+          }           
+
+        } else {
+          var string = parts.before.slice(0, -1) + parts.after
+          _this.setLine(Cursor, string)
+          _this.left()
+        }
+      },
+
+      type: function(letter) {
+        if (letter.length < 1) { return }
+        var cursor = this.get('cursor')
+        var parts = this.lineSplitAtCursor()
+        var string = parts.before.concat(letter, parts.after)
+
+        this.setLine(Cursor, string)
+        this.right()
+      },
+
+      enter: function() {
+        var cursor = this.get('cursor')
+        var parts = this.lineSplitAtCursor()
+        var kind = this.get('model')[cursor.line].kind
+        var linesAfter = this.get('model').slice(cursor.line)
+        linesAfter.unshiftObject({string: parts.before, kind: kind})
+        linesAfter[1] = {string: parts.after, kind: kind}
+        this.get('model').replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
+        this.incrementProperty('cursor.line')
+        this.set('cursor.column', 0)
+      },
+
+      html: function() {
+        var _this = this
+        var strings = this.get('model')
+        var cursor = this.get('cursor')
+        var htmlLines = _(strings).map(function(line, lineNumber) {
+          var html
+          if (lineNumber == cursor.line) {
+            var parts = _this.lineSplitAtCursor()
+            html = parts.before + '<div class="cursor"></div>' + parts.after
+          } else {
+            html = line.string
+          }
+
+          var classes = ['line', line.kind]
+          classes = classes.join(' ')
+          return '<div class="' + classes + '">' + html + '</div>'
+        })
+        
+        var html = htmlLines.join("\n")
+
+        Ember.run.next(function() {
+          EXTRA = 50
+          var distance = distanceFromBottomToCursor()
+          if (distance < EXTRA) {
+            $("html,body").animate({scrollTop: $('body').scrollTop() - distance + EXTRA}, 0)
+          }
+        })
+        return Ember.String.htmlSafe(html)
+      }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
+    })
+
+It's an Ember Component so you can do:
+
+
+
+
+Ideas for the future
+====================
 
 When you write code, it is hashed with the hashes of its dependencies and stored. Whenever there is an interaction with the running server, it is hashed with the hash of the server. Subsequent interactions are hashed with the hash, forming a long chain. 
 
@@ -12,24 +159,6 @@ Here's what I really wanted to get down though:
 We definitely should not use medium-editor. This needs to be a fully custom, fully integrated editing experience. You should simply be able to write the word lib( and you'll be in a function. And you type code until you want to stop, and you type # to break out. And you can break out at any indentation level and the comments will be indented just the same.
 
 Other random idea: Each depth should be a different color. 
-
-Here's some code for search-as-you-type.
-
-    library.give('editor', function(ember) {
-      ember.layout('data:edit.html')
-    })
-
-And then we have `edit.html`:
-
-    <div contenditable>
-    </div>
-
-    <script>
-    words = Word.several(['libary', 'noodel', 'hamburger', 'snowman'])
-
-OK, too complicated. Let's just write it out.
-
-There's a contenteditable div, and it's sending out wordTyped events, and we're storing them in an array.
 
 When you hit tab, you go from serif mode into code mode.
 
