@@ -19,10 +19,13 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Let's make a server! We'll put it in `narrative.js`:
 
-    library.give('narrative', function(express) {
-      express.use(express.static('.'))
+    requirejs = require('requirejs')
 
-      express.get('/', function(xxxx, response) {
+    requirejs(['server'], function(server) {
+      console.log('hola!')
+      server.use(server.static('.'))
+
+      server.get('/', function(xxxx, response) {
         response.sendfile('./edit.html')
       })
     })
@@ -33,6 +36,13 @@ Writing
 -------
 
 We mentioned `edit.html` above. That's the HTML we are passing down that actually sets up the editor:
+
+OK, tasks:
+
+ * load the library with require.js
+ * have the library load something with require.js
+ * have the library compile those
+ * have the library use that method on the server side too
 
     <!DOCTYPE html>
     <html>
@@ -50,8 +60,18 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <script src="/libs/handlebars.js"></script>
     <script src="/libs/ember.js"></script>
     <script src="/libs/lodash.js"></script>
+    <script data-main="library" src="/libs/require.js"></script>
+    <script data-main="annotate" src="/libs/require.js"></script>
+    <script data-main="indent" src="/libs/require.js"></script>
+    <script data-main="libs/underscore" src="/libs/require.js"></script>
+
 
     <script>
+
+      require(['annotate', 'underscore', 'folder', library'], function(annotate, underscore, folder, library){
+        console.log(library.take)       
+      })
+
       App = Ember.Application.create();
 
       Cursor = new function(){}
@@ -243,6 +263,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           })
           return Ember.String.htmlSafe(html)
         }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
+
+
+
       })
     </script>
 

@@ -1,8 +1,20 @@
-annotate = require('./annotate')
-indent = require('./indent')
-_ = require('underscore')
+// requirejs has an api that is compatible with client-side. we want to use it 
+// instead of just using exports. then we can try to load libraries client-side.
+// then we can split out the editor into its own narrative.
 
-library = function() {
+// then we write data
+// then we port compile to data
+// then we have the app use what compile writes to data
+// then live reload
+
+// and then we're self hosting
+
+// maybe after 1.0:
+// interleaved comments and code
+// indentation/colors?
+
+define(['annotate', 'indent', 'underscore'], function(annotate, indent, underscore) { 
+  var _ = underscore
   var count = 0
 
   // grabs the first little bit of a function:
@@ -26,53 +38,79 @@ library = function() {
 
   // grabs a name and a function and stores them away for later use
   Library.prototype.give = function(name, func) {
+    count++
+    if (count > 10 ) { throw new Error('Gave too much!') }
     var narrative = {
       hash: Math.random().toString(35).substr(2,3),
-      dependencies: annotate(func),
+      // dependencies: annotate(func),
       name: name,
       func: func,
       source: func.toString(),
       selfLoadingSource: 'library.give("' + name + '", ' + func.toString() + ')'
     }
     this.funcs[name] = narrative;
-    this.require(narrative.dependencies)
+    // this.require(narrative.dependencies)
     indent("Gave " + name + " (" + narrative.hash.substr(0,40) + ")\t\"" + summarize(narrative.func) + "...\"\t\tto the library (#" + _(this.funcs).size() + ") ");
   };
 
   // looks for a narrative for any dependencies that haven't been given yet,
   // compiles it, and runs it (which pulls in any sub-dependencies).
-  Library.prototype.require = function(dependencies) {
+  Library.prototype.require = function(dependencies, callback) {
     if (dependencies.length < 1) { return }
     var _lib = this
-
+    console.log('requiring', dependencies)
     dependencies.forEach(function(dep) {
-      if (!_lib.funcs[dep]) {
-        indent('Compiling ' + dep)
-        indent.in()
-        _lib.take('compile').andRun(dep)
-        indent.out()
-      }
+      _lib.ensure(dep, function() {
+        var loaded = _(_lib.funcs).keys()
+        var finished = _(dependencies).without(loaded).length == 0
+        if (finished) { callback() }
+      })
+    })
+  }
+
+// This needs to be async. Although at some point it has to end, right?
+  Library.prototype.ensure = function(name, callback) {
+    var _this = this
+    console.log('ensuring ' + name)
+    var narrative = this.funcs[name]
+
+    if (narrative) { return callback(narrative) }
+
+    give = function(narrative) {      
+      console.log('got back narrative: ' + JSON.stringify(narrative, undefined, 2))
+      _this.give(name, narrative)
+      callback(_this.funcs[name])
+    }
+
+    console.log('requiring ' + name)
+    requirejs([name], function(narrative) {
+      console.log('got ' + narrative)
+      give(narrative)
+      callback()
     })
   }
 
   // pulls something out of the library
-  Library.prototype.take = function(name) {
-    var _this = this;
+  Library.prototype.take = function(name, callback) {
+    console.log('taking ' + name)
+    var _this = this
     count++
-    if (count > 10 ) { return }
-    var narrative = this.funcs[name];
-    if (!narrative) {
-      indent("Nothing in the library called " + name);
-      return
-    }
-    var args = {}
-    _(narrative.dependencies).each(function(dep) { 
-      args[dep] = _this.take(dep);
-    });
-    var values = _(args).values();
-    var result = narrative.func.apply({}, values);
-    indent("Took " + name + " (" + narrative.hash + ") out of the library, passed it " + JSON.stringify(args) + ", got back " + summarize(result));
-    return result;
+    if (count > 10 ) { return callback('took too much!') }
+
+    this.ensure(name, function(narrative) {
+      callback(narrative)
+      // _(narrative.dependencies).each(function(dep) { 
+      //   _this.take(dep, function(narrative) {
+      //     args[dep]
+      //     if (args.length == narrative.dependencies.length) {
+      //       var values = _(args).values()
+      //       var result = narrative.func.apply({}, values)
+      //       indent("Took " + name + " (" + narrative.hash + ") out of the library, passed it " + JSON.stringify(args) + ", got back " + summarize(result))
+      //       callback(result)
+      //     }
+      //   })
+      // })
+    })
   }
 
   // returns an array of all of the narratives, except the named on, such that
@@ -99,6 +137,5 @@ library = function() {
   }
 
   return new Library();      
-}();
 
-module.exports = library
+})

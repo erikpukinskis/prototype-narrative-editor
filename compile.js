@@ -1,11 +1,5 @@
 
-require('./folder')
-
-
-// COMPILE pulls code blocks out of a narrative and runs the unassigned ones
-
-library.give('compile', function(folder) {
-
+define(['library', 'folder'], function(library, folder) {
   startsWith = function(string, pattern) {
     var pattern = new RegExp("^" + pattern);
     return !!string.match(pattern);
@@ -70,25 +64,27 @@ library.give('compile', function(folder) {
     })
   }
 
-  compile = function(name) {
+  compile = function(name, callback) {
     var source = folder.read(name + '.md')
     if (!source) { throw new Error(name + '.md not found.')}
     indent('Compiling ' + name)
     var blocks = getBlocks(source)
+    console.log('returning', blocks.length, 'blocks')
     analyze(blocks)
-    return blocks
+    callback(blocks)
   }
 
-  compile.andRun = function(name) {
-    var blocks = compile(name)
-
-    blocks.forEach(function(block) {
-      if (block.unassigned) {
-        eval(block.source)
-      }
+  compile.andRun = function(name, callback) {
+    console.log('andRunning')
+    compile(name, function(blocks) {      
+      blocks.forEach(function(block) {
+        if (block.unassigned) {
+          console.log('evaling ', block.source.split("\n")[0])
+          eval(block.source)
+        }
+      })
+      callback(blocks)
     })
-
-    return blocks
   }
 
   return compile

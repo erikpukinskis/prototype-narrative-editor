@@ -1,5 +1,5 @@
 
-library.give('folder', function() {
+define([], function() {
   var fs = require('fs')
 
   return {

@@ -1,9 +1,9 @@
 Express
 -------
 
-This is what you use to set up an Express/Node server:
-      
-    library.give('express', function() {
+This `server.js` is what you use to set up an Express/Node server:
+
+    define(function() {
       var express = require("express")
 
       Server = function() {
@@ -32,8 +32,8 @@ This is what you use to set up an Express/Node server:
         this.app.use.apply(this.app, arguments)
       }
 
-      return new Server();
-    });
+      return new Server()
+    })
 
 It boots up an express server with a catch-all route so that
 we can keep messing around with the routes after the server
