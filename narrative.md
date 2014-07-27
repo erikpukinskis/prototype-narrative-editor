@@ -7,15 +7,11 @@ Wow. So I just got everything working with requirejs and the editor component is
 
 We even killed library! That was the most complex part of the code. Cool. We did lose a few things though. The compile process doesn't rely on narratives at all anymore. It just loads stuff with requirejs. 
 
-We also lost the ability to automatically compile dependencies.
+We also lost the ability to automatically compile dependencies. That's useful because the dep tree is going to get crazy eventually. But maybe we can get away without it? On to data?
 
 *Next*
 
-I think we can work it so somehow we do 'node builder.js builder' and it compiles builder.md which lays out builder, and compile.md etc, and that writes the builder.js, compiler.js, etc, to a builder-build folder. Then you run that on the narrative folder and it builds narrative-build.
-
-Maybe builder sets up a command line thing? We definitely won't have to worry about requirejs folders. But it's a black box! We hate black boxes!
-
-* The alternative is in builder/ you run 'node ../builder-build/builder.js builder' which should be a no-op on builder-build/. Then you switch to narrative/. But I don't know if the path stuff would work out with requirejs. It could probably be resolved. This way can be functional JS eventually, which is great.
+In builder/ you run 'node ../builder-build/builder.js builder' which should be a no-op on builder-build/. Then you switch to narrative/. But I don't know if the path stuff would work out with requirejs. It could probably be resolved. This way can be functional JS eventually, which is great.
 
 For dependencies, I guess we could just read the file and look for them. And then compile all of those too. 
 
