@@ -1,5 +1,5 @@
-define([], function() { 
 
+define([], function() { 
 
   var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
   var FN_ARG_SPLIT = /,/;
