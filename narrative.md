@@ -1,15 +1,20 @@
 Narrative
 =========
 
-*New Goal*
+*Stack*
 
-Requirejs is working, but there's some stuff to clean up. To that end, we want to...
+Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
 
-Build builder from narratives
- - get builder js to build server and editor automatically for narrative
- - put builder js files into narratives
- - get builder to build builder in its own folder
- - get built builder to build narrative
+Get requirejs to give me a stack trace
+Get dependencies
+Compile dependencies
+Get narrative generating
+Get builder generating
+Narrative saving client side
+Server reload
+Type Narrative into itself
+
+And that'll be 3.0.
 
 *Next up*
 
