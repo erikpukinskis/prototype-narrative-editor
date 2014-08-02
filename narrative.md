@@ -6,16 +6,16 @@ Next up
 
 Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [ ] Get requirejs to give me a stack trace
- - [ ] Get dependencies
- - [ ] Compile dependencies
+ - [X] Get requirejs to give me a stack trace
+ - [X] Get dependencies
+ - [X] Compile dependencies
  - [ ] Get narrative generating
  - [ ] Get builder generating
  - [ ] Narrative saving client side
  - [ ] Server reload
  - [ ] Type Narrative into itself
 
-And that'll be 3.0.
+And that'll be 0.3.0.
 
 This is a web app.
 ------------------

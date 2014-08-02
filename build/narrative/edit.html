@@ -1,83 +1,83 @@
-<!DOCTYPE html> 
-<html> 
-<head> 
-  <meta charset="utf-8"> 
-  <title>Narrative</title> 
-    <link rel="stylesheet" href="styles.css" /> 
-</head> 
- 
-<script type="text/x-handlebars"> 
-  {{narrative-editor model=model}} 
-</script> 
- 
-<script src="/libs/jquery.js"></script> 
-<script src="/libs/handlebars.js"></script> 
-<script src="/libs/ember.js"></script> 
-<script src="/libs/lodash.js"></script> 
-<script data-main="editor" src="/libs/require.js"></script> 
- 
-<script> 
- 
- 
-  require(['editor'], function(editor){ 
- 
-    App = Ember.Application.create(); 
-    App.NarrativeEditorComponent = Ember.Component.extend(editor) 
-    Cursor = new function(){} 
- 
-    distanceFromBottomToCursor = function() { 
-      var cursorEl = $('.cursor')[0] 
-      if (cursorEl) { 
-        return window.innerHeight - cursorEl.getBoundingClientRect().bottom 
-      } 
-    } 
- 
-    App.FocusInputComponent = Ember.TextField.extend({ 
-      classNames: ['focus-input'], 
- 
-      becomeFocused: function() { 
-        this.$().focus(); 
-      }.on('didInsertElement'), 
- 
-      keyDown: function(e) { 
-        var _this = this 
-        var number = e.keyCode 
-        var editor = this.get('editor') 
-        var action = { 
-          8: 'backspace', 
-          9: 'indent', 
-          39: 'right', 
-          37: 'left', 
-          38: 'up', 
-          40: 'down', 
-          13: 'enter' 
-        }[number]; 
- 
-        if (action) { 
-          console.log(action) 
-          editor[action]() 
-          return false 
-        } else { 
-          Ember.run.next(function() { 
-            editor.type(_this.get('value')) 
-            _this.set('value', '') 
-          }) 
-        } 
-      } 
-    }); 
- 
-    App.ApplicationRoute = Ember.Route.extend({ 
-      model: function() { 
-        return [ 
-          {string: 'hello', kind: 'prose'},  
-          {string: 'world', kind: 'prose'} 
-        ] 
-      } 
-    }) 
- 
-  }) 
- 
- 
-</script> 
- 
-</html> 
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Narrative</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<script type="text/x-handlebars">
+  {{narrative-editor model=model}}
+</script>
+
+<script src="/libs/jquery.js"></script>
+<script src="/libs/handlebars.js"></script>
+<script src="/libs/ember.js"></script>
+<script src="/libs/lodash.js"></script>
+<script data-main="editor" src="/libs/require.js"></script>
+
+<script>
+
+
+  require(['editor'], function(editor){
+
+    App = Ember.Application.create();
+    App.NarrativeEditorComponent = Ember.Component.extend(editor)
+    Cursor = new function(){}
+
+    distanceFromBottomToCursor = function() {
+      var cursorEl = $('.cursor')[0]
+      if (cursorEl) {
+        return window.innerHeight - cursorEl.getBoundingClientRect().bottom
+      }
+    }
+
+    App.FocusInputComponent = Ember.TextField.extend({
+      classNames: ['focus-input'],
+
+      becomeFocused: function() {
+        this.$().focus();
+      }.on('didInsertElement'),
+
+      keyDown: function(e) {
+        var _this = this
+        var number = e.keyCode
+        var editor = this.get('editor')
+        var action = {
+          8: 'backspace',
+          9: 'indent',
+          39: 'right',
+          37: 'left',
+          38: 'up',
+          40: 'down',
+          13: 'enter'
+        }[number];
+
+        if (action) {
+          console.log(action)
+          editor[action]()
+          return false
+        } else {
+          Ember.run.next(function() {
+            editor.type(_this.get('value'))
+            _this.set('value', '')
+          })
+        }
+      }
+    });
+
+    App.ApplicationRoute = Ember.Route.extend({
+      model: function() {
+        return [
+          {string: 'hello', kind: 'prose'}, 
+          {string: 'world', kind: 'prose'}
+        ]
+      }
+    })
+
+  })
+
+
+</script>
+
+</html>

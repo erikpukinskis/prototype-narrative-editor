@@ -1,7 +1,10 @@
 define([], function() {
-  indent = function(string) {
+  indent = function(string, offset) {
+    offset = offset || 0
+    indent.depth = indent.depth + offset
     var indentation = new Array(indent.depth)
-    console.log(indentation.join("    ") + string);
+    console.log(indentation.join("    ") + string)
+    indent.depth = indent.depth - offset
   }
   indent.depth = 1
   indent.in = function() {

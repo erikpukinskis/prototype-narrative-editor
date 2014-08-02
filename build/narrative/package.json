@@ -1,12 +1,12 @@
-{ 
-  "name": "narrative", 
-  "version": "0.2.1", 
-  "dependencies": { 
-    "express": "*", 
-    "ejs": "*", 
-    "underscore": "*" 
-  }, 
-  "engines": { 
-    "node": "*" 
-  } 
-} 
+{
+  "name": "narrative",
+  "version": "0.2.1",
+  "dependencies": {
+    "express": "*",
+    "ejs": "*",
+    "underscore": "*"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
