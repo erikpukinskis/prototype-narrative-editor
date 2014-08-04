@@ -7,23 +7,32 @@ Reads, writes, and moves files. In `folder.js`:
       var fs = require('fs')
 
       return {
-        write: function(filename, content) {
-          var path = '../narrative-build/'
-          if (!fs.existsSync(path)) {
-            fs.mkdirSync(path)
+        parts: function(path) {
+          var match = path.match(/^(.*)\/([^\/]*)$/)
+          if (!match) {
+            return {dir: '.', filename: path}
+          } else {
+            return {dir: match[1], filename: match[2]}
           }
-          fs.writeFileSync(path + filename, content)
+        },
+        write: function(path, content) {
+          var dir = this.parts(path).dir
+          if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir)
+          }
+          indent('writing ' + path, 1)
+          fs.writeFileSync(path, content)
         },
         read: function(filename) {
           if (fs.existsSync(filename)) {
             return fs.readFileSync(filename).toString()
           }
         },
-        copy: function(filename, destination) {
-          var path = destination + '/' + filename
-          indent('copying ' + filename + ' to ' + destination)
-          fs.createReadStream(filename).pipe(fs.createWriteStream(path))
+        copy: function(path, destination) {
+          var parts = this.parts(path)
+          var destinationPath = destination + '/' + parts.filename
+          indent('copying ' + parts.filename + ' to ' + destination, 1)
+          fs.createReadStream(path).pipe(fs.createWriteStream(destinationPath))
         }
       }  
     })
-

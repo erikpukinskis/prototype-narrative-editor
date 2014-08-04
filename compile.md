@@ -38,7 +38,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
           block.lines.push(line);
         }
 
-        if(block.writing) {
+        if (block.writing) {
           blocks.push(block);
         }
 
@@ -55,7 +55,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
           var hasBackticks = !!matches
 
           if (inCode) {
-            block.source = block.lines.join(" \n").replace(/(^|\n)    /g, "$1")
+            block.source = block.lines.join("\n").replace(/( *^| *\n)    /g, "$1")
           }
           if (inAComment && hasBackticks) {
             filenameLastSeen = matches[1]
@@ -69,11 +69,10 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
       }
 
       compile = function(name, callback) {
-        var source = folder.read(name + '.md')
+        var source = folder.read('./' + name + '.md')
         if (!source) { throw new Error(name + '.md not found.')}
-        indent('Compiling ' + name)
         var blocks = getBlocks(source)
-        indent('Compile found ', blocks.length, ' blocks')
+        indent('Compiled ' + name + ' to ' + blocks.length + ' blocks')
         analyze(blocks)
         callback(blocks)
       }

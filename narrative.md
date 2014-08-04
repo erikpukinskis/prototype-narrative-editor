@@ -8,10 +8,7 @@ Next up
 
 Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Figure out why the server and editor deps are blank
- - [X] Load Ember etc with requirejs
- - [X] Get narrative generating
- - [ ] Get builder generating
+ - [X] Get builder generating
  - [ ] Narrative saving client side
  - [ ] Server reload
  - [ ] Type Narrative into itself
@@ -38,7 +35,7 @@ Let's make a server! We'll put it in `narrative.js`:
 
     requirejs = require('requirejs')
 
-    requirejs(['server'], function(server) {
+    requirejs(['server', 'require'], function(server) {
       console.log('hola!')
       server.use(server.static('.'))
 

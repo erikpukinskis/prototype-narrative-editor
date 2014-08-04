@@ -12,15 +12,16 @@ We need something that looks at the narratives and figures out which other narra
       var name = process.argv[2]
       console.log('\n|||| |  |   |    |     |      |       |        |         |         '+name+'\n')
       build(name)
-    })
+    }, function(error) { throw(error) })
 
 Needs some packages. `package.json`:
 
     {
-      "name": "narrative",
-      "version": "0.0.1",
+      "name": "narrative-builder",
+      "version": "0.0.2",
       "dependencies": {
-        "requirejs": "*"
+        "requirejs": "*",
+        "underscore": "*"
       },
       "engines": {
         "node": "*"

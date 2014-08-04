@@ -5,55 +5,81 @@ Reads a narrative and does what it's told. In `build.js`:
 
     define(['folder', 'compile', 'underscore', 'indent'], function(folder, compile, underscore, indent) {
       var _ = underscore
-      recompile = function(names) {
-        indent('Rebuilding library (' + names + ':')
-        _(names).forEach(function(name) {
-          compile.andRun(name)
-        })
-      }
 
-      saveNarratives = function(narratives) { 
-        indent('Writing depdencies...')
+      function isCode(block) { return block.kind == 'code' }
+      function hasFilename(block) { return !!block.filename }
+      function isSource(block) { return isCode(block) && hasFilename(block) }
+
+      function getDependencies(name, callback) {
+        var dependencies = []
+
+        function searchBlocks(blocks) {
+          var code = _(blocks).filter(isCode)
+          indent(code.length + ' are code blocks')
+          _(code).each(searchBlock)
+
+        }
+
+        function searchBlock(block) {
+          var pattern = /(define|require(js)?) *\( *\[.*/g
+          var match = block.source.match(pattern)
+          _(match).each(searchLine)
+        }
+
+        function searchLine(line) {
+          function unquote(quoted) { return quoted.replace(/'/g, "") }
+
+          var commaSeparated = line.match(/\[(.*)\]/)[1]
+          var deps = commaSeparated.split(', ').map(unquote)
+
+          indent('Found some dependencies! ' + deps)
+
+          _(deps).each(addDep)
+        }
+
+        function addDep(dep) {
+          if (_(dependencies).contains(dep)) {
+            indent(dep + ' is already in deps. Not adding.')
+          } else {
+            dependencies.push(dep)
+            indent('Added ' + dep + ' to the dependencies (' + dependencies + ')')
+          }
+        }
+
+        indent('Getting dependencies for ' + name + ':')
         indent.in()
-        narratives.forEach(function(narrative) {
-          var source = narrative.selfLoadingSource
-          filename = narrative.name + '.js'
-          indent(filename)
-          folder.write(filename, source)
-        })
+        compile(name, searchBlocks)
         indent.out()
+        callback(dependencies)
       }
 
-      saveFile = function(block) {
-        folder.write(block.filename, block.source)
+      function saveFiles(name, destination) {
+        indent('Saving ' + name + ' files to ' + destination)
+        compile(name, function(blocks) {
+          var source = _(blocks).filter(isSource)
+          indent(source.length + ' are source')
+          _(source).each(function(block) {
+              folder.write(destination + '/' + block.filename, block.source)
+          })
+        })
       }
 
       return build = function(name, callback) {
         indent('Building ' + name)
+        indent.in()
+        buildPath = 'build/' + name
 
-        compile(name, function(blocks) {
+        getDependencies(name, function(deps) {
+          deps.push(name)
+          indent("DONE! deps are " + deps)
 
-          indent('Writing files...')
-          indent.in()
-          blocks.forEach(function(block) {
-            if ((block.kind == 'code') && block.filename) {
-              indent(block.filename)
-              saveFile(block)
-            }
+          _(deps).each(function(narrative) {
+            indent('Saving files for ' + narrative + ':')
+            indent.in()
+            saveFiles(narrative, 'build/' + name)
+            indent.out()
           })
-          indent.out()
-
-          // TODO: Why do we do this again? When you figure it out, rename
-          // these methods so they are self explanatory.
-          // recompile(library.list())
-
-          _(['annotate', 'indent']).each(function(name) {
-            folder.copy(name+'.js', '../narrative-build')
-          })
-          folder.copy(name+'.md', '../narrative-build')
-          console.log("Look in ../narrative-build/ for your stuff!");
-          if (callback) { callback() }
         })
-
-      }  
+        indent.out()
+      }
     })
