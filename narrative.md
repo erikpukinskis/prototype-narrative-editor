@@ -217,6 +217,9 @@ The first is `package.json`, which describes the various things running the serv
         "ejs": "*",
         "underscore": "*"
       },
+      "devDependencies": {
+        "requirejs": "*"
+      },
       "engines": {
         "node": "*"
       }

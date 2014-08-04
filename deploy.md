@@ -6,30 +6,25 @@ You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nod
   git clone https://github.com/erikpukinskis/narrative.git
   cd narrative
 
-That will put you into a folder that has this very document (README.md) and the a file called compile.js, which was generated from the [compiler.md](compiler.md) narrative¹.
+That will put you into a folder that has this document and all of the narratives you'll need. It also has a pre-built narrative builder in build/builder. In order to build narrative, run:
 
-That narrative will actually read a narrative file, and write out a javascript file that can actually be run on your computer to start the server! You do that like this:
+  node build/builder/builder.js narrative
 
-  node builder.js narrative; node builder.js server; node builder.js editor
+That will write all the files described in [narrative.md](narrative.md) into build/narrative. It also builds into there all of the other narratives that narrative depends on. So now if you type:
 
-That also will spit out all the files described in the narrative. So now if you type:
+  ls build/narrative
 
-  ls ../narrative-build
-
-... you'll see styles.css, edit.html, and all of the other files we described above! Neat! 
-
-
+... you'll see styles.css, edit.html, and all of the other files! Neat! 
 
 In order to start the server you just do:
 
-  cd ../narrative-build
+  cd build/narrative
   npm install
-  npm install express underscore requirejs
   foreman start
 
-Now open up [http://localhost:5000](http://localhost:5000) in your web browser and you should see your copy of this narrative! Cool! That's a legit web server running on your computer.
+Now open up [http://localhost:5000](http://localhost:5000) in your web browser and you should see the editor! Cool! That's a legit web server running on your computer.
 
-Try changing some text in the README.md and running through the process again, starting at the builder.js step. Reload your browser and you should see your changes!
+Try changing some code in the narrative.md and running through the process again, starting at the builder.js step. Reload your browser and you should see your changes!
 
 Putting it on the intarwebs
 ---------------------------
