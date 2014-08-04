@@ -16,24 +16,24 @@ Running it on your own computer
 
 You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer. Then open a terminal and run:
 
-  git clone https://github.com/erikpukinskis/narrative.git
-  cd narrative
+    git clone https://github.com/erikpukinskis/narrative.git
+    cd narrative
 
 That will put you into a folder that has this document and all of the narratives you'll need. It also has a pre-built narrative builder in build/builder. In order to build narrative, run:
 
-  node build/builder/builder.js narrative
+    node build/builder/builder.js narrative
 
 That will write all the files described in [narrative.md](narrative.md) into build/narrative. It also builds into there all of the other narratives that narrative depends on. So now if you type:
 
-  ls build/narrative
+    ls build/narrative
 
 ... you'll see styles.css, edit.html, and all of the other files! Neat! 
 
 In order to start the server you just do:
 
-  cd build/narrative
-  npm install
-  foreman start
+    cd build/narrative
+    npm install
+    foreman start
 
 Now open up [http://localhost:5000](http://localhost:5000) in your web browser and you should see the editor! Cool! That's a legit web server running on your computer.
 
