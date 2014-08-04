@@ -1,14 +1,15 @@
 Narrative
 =========
 
+A tool for writing code in a literary way, "narratives". Includes a web-based editor, a compiler that can run the narratives and a bit of deployment framework. Working towards an integrated host.
+
 Next up
 -------
 
 Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Get requirejs to give me a stack trace
- - [X] Get dependencies
- - [X] Compile dependencies
+ - [X] Make dependencies compile into narrative folder
+ - [ ] Load Ember with requirejs
  - [ ] Get narrative generating
  - [ ] Get builder generating
  - [ ] Narrative saving client side
@@ -17,17 +18,16 @@ Requirejs is working, but there's some stuff to clean up to get back to feature 
 
 And that'll be 0.3.0.
 
-This is a web app.
-------------------
-
-It just serves this one page that you're reading right now. What's kind of neat is that this page describes everything that has to happen for it to exist on the internet. 
-
-What's really neat is that this page also contains everything it needs to create a complete working copy of itself. All it needs is a human to run a few commands to help it along.
-
-Here's how it works.
+Backlog
+-------
+ - [ ] getDependencies should go straight to searchLine. We should just join the blocks together into a string in build
+ - [ ] make getDependencies its own module that just takes a string
+ - [ ] Do something to break up code blocks into different parts. Maybe make prose indentable. Maybe just design things so that it works. Maybe use other commands besides "write this file"
+ - [ ] don't have entire function bodies be wrapped in a compile block. Just pass the blocks or whatever. Pass a string if you can.
 
 The Server
 ----------
+
 
 First off, this document is written in a filed called narrative.md. It's written in a language called Markdown. You can see that file [here](https://raw.githubusercontent.com/erikpukinskis/narrative/master/narrative.md).
 
@@ -37,7 +37,7 @@ Let's make a server! We'll put it in `narrative.js`:
 
     requirejs = require('requirejs')
 
-    requirejs(['server', 'editor'], function(server, editor) {
+    requirejs(['server'], function(server) {
       console.log('hola!')
       server.use(server.static('.'))
 
