@@ -9,8 +9,8 @@ Next up
 Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [X] Figure out why the server and editor deps are blank
- - [ ] Load Ember etc with requirejs
- - [ ] Get narrative generating
+ - [X] Load Ember etc with requirejs
+ - [X] Get narrative generating
  - [ ] Get builder generating
  - [ ] Narrative saving client side
  - [ ] Server reload
@@ -214,7 +214,7 @@ The first is `package.json`, which describes the various things running the serv
 
     {
       "name": "narrative",
-      "version": "0.2.1",
+      "version": "0.2.3",
       "dependencies": {
         "express": "*",
         "ejs": "*",
