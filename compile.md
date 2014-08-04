@@ -68,7 +68,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         })
       }
 
-      compile = function(name, callback) {
+      return compile = function(name, callback) {
         var source = folder.read('./' + name + '.md')
         if (!source) { throw new Error(name + '.md not found.')}
         var blocks = getBlocks(source)
@@ -76,19 +76,4 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         analyze(blocks)
         callback(blocks)
       }
-
-      compile.andRun = function(name, callback) {
-        console.log('andRunning')
-        compile(name, function(blocks) {      
-          blocks.forEach(function(block) {
-            if (block.unassigned) {
-              console.log('evaling ', block.source.split("\n")[0])
-              eval(block.source)
-            }
-          })
-          callback(blocks)
-        })
-      }
-
-      return compile
     })
