@@ -10,18 +10,20 @@
   {{narrative-editor model=model}}
 </script>
 
-<script src="/libs/jquery.js"></script>
-<script src="/libs/handlebars.js"></script>
-<script src="/libs/ember.js"></script>
-<script src="/libs/lodash.js"></script>
-<script data-main="editor" src="/libs/require.js"></script>
+<script src="require.js"></script>
+<script data-main="editor" src="require.js"></script>
+<script data-main="ember" src="require.js"></script>
+<script data-main="editor" src="require.js"></script>
+<script data-main="jquery" src="require.js"></script>
+<script data-main="handlebars" src="require.js"></script>
+<script data-main="underscore" src="require.js"></script>
 
 <script>
 
 
-  require(['editor'], function(editor){
-
-    App = Ember.Application.create();
+  require(['editor', 'ember', 'jquery', 'handlebars', 'underscore'], function(editor, ember){
+    var Ember = ember
+    App = Ember.Application.create()
     App.NarrativeEditorComponent = Ember.Component.extend(editor)
     Cursor = new function(){}
 

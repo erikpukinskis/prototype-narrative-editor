@@ -8,8 +8,8 @@ Next up
 
 Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Make dependencies compile into narrative folder
- - [ ] Load Ember with requirejs
+ - [X] Figure out why the server and editor deps are blank
+ - [ ] Load Ember etc with requirejs
  - [ ] Get narrative generating
  - [ ] Get builder generating
  - [ ] Narrative saving client side
@@ -24,6 +24,7 @@ Backlog
  - [ ] make getDependencies its own module that just takes a string
  - [ ] Do something to break up code blocks into different parts. Maybe make prose indentable. Maybe just design things so that it works. Maybe use other commands besides "write this file"
  - [ ] don't have entire function bodies be wrapped in a compile block. Just pass the blocks or whatever. Pass a string if you can.
+ - [ ] Automatically compile dependencies of dependencies so narrative doesn't have to require Ember and such
 
 The Server
 ----------
@@ -65,18 +66,20 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       {{narrative-editor model=model}}
     </script>
 
-    <script src="/libs/jquery.js"></script>
-    <script src="/libs/handlebars.js"></script>
-    <script src="/libs/ember.js"></script>
-    <script src="/libs/lodash.js"></script>
-    <script data-main="editor" src="/libs/require.js"></script>
+    <script src="require.js"></script>
+    <script data-main="editor" src="require.js"></script>
+    <script data-main="ember" src="require.js"></script>
+    <script data-main="editor" src="require.js"></script>
+    <script data-main="jquery" src="require.js"></script>
+    <script data-main="handlebars" src="require.js"></script>
+    <script data-main="underscore" src="require.js"></script>
 
     <script>
 
 
-      require(['editor'], function(editor){
-
-        App = Ember.Application.create();
+      require(['editor', 'ember', 'jquery', 'handlebars', 'underscore'], function(editor, ember){
+        var Ember = ember
+        App = Ember.Application.create()
         App.NarrativeEditorComponent = Ember.Component.extend(editor)
         Cursor = new function(){}
 

@@ -73,7 +73,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         if (!source) { throw new Error(name + '.md not found.')}
         indent('Compiling ' + name)
         var blocks = getBlocks(source)
-        console.log('returning', blocks.length, 'blocks')
+        indent('Compile found ', blocks.length, ' blocks')
         analyze(blocks)
         callback(blocks)
       }
