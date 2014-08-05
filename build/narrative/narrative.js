@@ -1,6 +1,6 @@
 requirejs = require('requirejs')
 
-requirejs(['server'], function(server) {
+requirejs(['server', 'require'], function(server) {
   console.log('hola!')
   server.use(server.static('.'))
 
