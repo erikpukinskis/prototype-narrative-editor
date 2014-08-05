@@ -33,14 +33,19 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Let's make a server! We'll put it in `narrative.js`:
 
-    requirejs = require('requirejs')
+    var requirejs = require('requirejs')
 
     requirejs(['server', 'require'], function(server) {
-      console.log('hola!')
       server.use(server.static('.'))
 
       server.get('/', function(xxxx, response) {
         response.sendfile('./edit.html')
+      })
+
+      server.post('/narratives', function(request, response) {
+        console.log(request.body.name)
+        console.log(request.body.lines)
+        response.json({ok: 'yup'})
       })
     })
 
@@ -66,7 +71,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <script src="require.js"></script>
     <script data-main="editor" src="require.js"></script>
     <script data-main="ember" src="require.js"></script>
-    <script data-main="editor" src="require.js"></script>
     <script data-main="jquery" src="require.js"></script>
     <script data-main="handlebars" src="require.js"></script>
     <script data-main="underscore" src="require.js"></script>
@@ -74,7 +78,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <script>
 
 
-      require(['editor', 'ember', 'jquery', 'handlebars', 'underscore'], function(editor, ember){
+      require(['editor', 'ember', 'underscore', 'jquery', 'handlebars'], function(editor, ember){
         var Ember = ember
         App = Ember.Application.create()
         App.NarrativeEditorComponent = Ember.Component.extend(editor)
@@ -121,17 +125,28 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           }
         });
 
+        App.ApplicationController = Ember.Controller.extend({
+          save: function() {
+            var _this = this
+            if (this.timeout) { clearTimeout(this.timeout) }
+            this.timeout = setTimeout(function() {
+              $.post('/narratives', {
+                name: 'narrative',
+                lines: _this.get('model')
+              })
+            }, 3000)
+          }.observes('model.@each.string')
+        })
+
         App.ApplicationRoute = Ember.Route.extend({
           model: function() {
             return [
-              {string: 'hello', kind: 'prose'}, 
-              {string: 'world', kind: 'prose'}
+              {string: '', kind: 'prose'}, 
             ]
           }
         })
 
       })
-
 
     </script>
 
@@ -215,7 +230,8 @@ The first is `package.json`, which describes the various things running the serv
       "dependencies": {
         "express": "*",
         "ejs": "*",
-        "underscore": "*"
+        "underscore": "*",
+        "body-parser": "*"
       },
       "devDependencies": {
         "requirejs": "*"

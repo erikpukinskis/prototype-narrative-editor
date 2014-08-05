@@ -13,7 +13,6 @@
 <script src="require.js"></script>
 <script data-main="editor" src="require.js"></script>
 <script data-main="ember" src="require.js"></script>
-<script data-main="editor" src="require.js"></script>
 <script data-main="jquery" src="require.js"></script>
 <script data-main="handlebars" src="require.js"></script>
 <script data-main="underscore" src="require.js"></script>
@@ -21,7 +20,7 @@
 <script>
 
 
-  require(['editor', 'ember', 'jquery', 'handlebars', 'underscore'], function(editor, ember){
+  require(['editor', 'ember', 'underscore', 'jquery', 'handlebars'], function(editor, ember){
     var Ember = ember
     App = Ember.Application.create()
     App.NarrativeEditorComponent = Ember.Component.extend(editor)
@@ -68,17 +67,28 @@
       }
     });
 
+    App.ApplicationController = Ember.Controller.extend({
+      save: function() {
+        var _this = this
+        if (this.timeout) { clearTimeout(this.timeout) }
+        this.timeout = setTimeout(function() {
+          $.post('/narratives', {
+            name: 'narrative',
+            lines: _this.get('model')
+          })
+        }, 3000)
+      }.observes('model.@each.string')
+    })
+
     App.ApplicationRoute = Ember.Route.extend({
       model: function() {
         return [
-          {string: 'hello', kind: 'prose'}, 
-          {string: 'world', kind: 'prose'}
+          {string: '', kind: 'prose'}, 
         ]
       }
     })
 
   })
-
 
 </script>
 

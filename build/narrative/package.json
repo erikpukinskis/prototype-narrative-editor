@@ -4,7 +4,8 @@
   "dependencies": {
     "express": "*",
     "ejs": "*",
-    "underscore": "*"
+    "underscore": "*",
+    "body-parser": "*"
   },
   "devDependencies": {
     "requirejs": "*"
