@@ -39,11 +39,12 @@ Here's a `server`:
       var servers = {}
 
       function restart(name, freshlyBuiltServer) {
+        var port = 3001
         if(servers[name]) { 
           servers[name].close()
           delete servers[name]
         }
-        freshlyBuiltServer.start()
+        freshlyBuiltServer.start(port)
         servers[name] = freshlyBuiltServer
       }
 
@@ -102,7 +103,9 @@ Then we need a javascript file that starts the server. We'll put it in `narrativ
 
     var requirejs = require('requirejs')
 
-    requirejs('definition')
+    requirejs('server', function(server) {
+      server.start(process.env.PORT)
+    })
 
 
 We're giving it to the [library](library.md) to hold on to (don't trust myself with that!). It needs one other narrative from the library in order to work: [Express](express.md), a web server. 

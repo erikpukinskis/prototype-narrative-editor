@@ -7,7 +7,7 @@ This repository contains two projects mixed together:
 
 **Narrative**, the tool for editing and running software narratives, described in [narrative.md](narrative.md).
 
-**Builder**, the tool that reads a narrative and does what's described. That's in [builder.md](builder.md).
+**Builder**, the tool that reads a narrative and compiles it into a form that can be deployed to Heroku. That's in [builder.md](builder.md).
 
 But there are a bunch of other interesting narratives in here too. Everything that ends in .md is a narrative of some sort, although many of them are just javascript with a title and a description. So far.
 

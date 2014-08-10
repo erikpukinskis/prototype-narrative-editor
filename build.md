@@ -1,7 +1,7 @@
 Build
 -----
 
-Reads a narrative and does what it's told. In `build.js`:
+Reads a narrative and writes files to deploy to heroku. In `build.js`:
 
     define(['folder', 'compile', 'underscore', 'indent'], function(folder, compile, underscore, indent) {
       var _ = underscore

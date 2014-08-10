@@ -26,7 +26,7 @@ This `server.js` is what you use to set up an Express/Node server:
         })
       })
 
-      Server.prototype.start = function() { 
+      Server.prototype.start = function(port) { 
         this.app.listen(port, function() {
           console.log("Listening on " + port);
         })
