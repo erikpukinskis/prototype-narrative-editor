@@ -8,12 +8,13 @@ Next up
 
 Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Get builder generating
- - [ ] Narrative saving client side
- - [ ] Server reload
+ - [ ] Get server to run
+ - [ ] Get hello world to run on the same server as narrative
+ - [ ] Add a static asset
+ - [ ] Add a dependency on a different narrative
  - [ ] Type Narrative into itself
 
-And that'll be 0.3.0.
+And that'll be 0.3.0, "Self hosting without touching the filesystem".
 
 Backlog
 -------
