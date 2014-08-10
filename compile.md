@@ -9,6 +9,36 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         return !!string.match(pattern);
       }
 
+      Compiled = function(blocks, run, test) {
+        this.blocks = blocks
+
+        eachBlock = function(filter) {
+          return function(callback) {
+            _(blocks).filter(filter).eachBlock(callback)
+          }
+        }
+
+        this.each = {
+          source: eachBlock(isSource)
+
+          code: eachBlock(isCode)
+
+          test: eachBlock(isTest)
+        }
+        
+        this.test = function(callback) {
+          var results = _(this.tests).map(function(test) {
+            return test(instance)
+          })
+          return results
+        }
+
+        this.tests = _(blocks).chain().filter(isTest).map(function(block) {
+          return function(instance) {
+            eval(block.source)(instance)
+          }
+        })
+
       getBlocks = function(content) {
         var block = {lines: []};
         var blocks = [];
@@ -69,11 +99,19 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
       }
 
       return compile = function(name, callback) {
+
         var source = folder.read('./' + name + '.md')
         if (!source) { throw new Error(name + '.md not found.')}
         var blocks = getBlocks(source)
         indent('Compiled ' + name + ' to ' + blocks.length + ' blocks')
         analyze(blocks)
-        callback(blocks)
+        blocks.
+
+        blocks.isSource = isSource
+        blocks.is
+        test = function() {
+          blocks.tests
+        }
+        callback(new Compiled(blocks, )) 
       }
     })

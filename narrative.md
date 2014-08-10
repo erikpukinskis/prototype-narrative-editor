@@ -22,6 +22,7 @@ Backlog
  - [ ] Do something to break up code blocks into different parts. Maybe make prose indentable. Maybe just design things so that it works. Maybe use other commands besides "write this file"
  - [ ] don't have entire function bodies in Build be wrapped in a compile block. Just pass the blocks or whatever. Pass a string if you can.
  - [ ] Automatically compile dependencies of dependencies so narrative doesn't have to require Ember and such
+ - [ ] Make enter key not mess with indentation (so we can do inline prose)
 
 The Server
 ----------
@@ -31,11 +32,38 @@ First off, this document is written in a filed called narrative.md. It's written
 
 In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
-Let's make a server! We'll put it in `narrative.js`:
+Here's a `server`:
 
-    var requirejs = require('requirejs')
+    define('narrative', ['server', 'documents', 'build', 'require', 'migrate'], function(server, documents, build, tests) {
+      var servers = {}
 
-    requirejs(['server', 'require'], function(server) {
+      function restart(name, freshlyBuiltServer) {
+        if(servers[name]) { 
+          servers[name].close()
+          delete servers[name]
+        }
+        freshlyBuiltServer.start()
+        servers[name] = freshlyBuiltServer
+      }
+
+      function evalDependencies(compiled) {
+        build.getDependencies(compiled.blocks, function(deps) {
+          _(deps).each(function(dep) {
+            compile(dep, function(compiled) {
+              _(compiled.blocks.definitions).each(function(block) {
+                eval(block.source)
+              })
+            })
+          })
+        })
+      }
+
+      function runTests(compiled, buildServer) {
+        return _(compiled.blocks.tests).map(function(test) {
+          return test(buildServer())
+        })        
+      }
+
       server.use(server.static('.'))
 
       server.get('/', function(xxxx, response) {
@@ -43,11 +71,38 @@ Let's make a server! We'll put it in `narrative.js`:
       })
 
       server.post('/narratives', function(request, response) {
-        console.log(request.body.name)
-        console.log(request.body.lines)
-        response.json({ok: 'yup'})
+        var name = request.body.name
+
+        documents.set(name, request.pick('body', 'lines')
+
+        compile(name, function(compiled) {
+          var block = compiled.blocks.servers()[0]
+
+          evalDependencies(compiled)
+
+          saveStaticFileToPostgres(compiled.blocks.files)
+
+          var buildServer = eval(block.source)
+
+          restart(name, buildServer())
+
+          response.status(ok = 200).send()
+
+          broadcast.notify('build/' + name)
+
+          var results = runTests(compiled, buildServer)
+
+          broadcast.notify('tests/' + name, results)
+        })
       })
     })
+
+Then we need a javascript file that starts the server. We'll put it in `narrative.js`:
+
+    var requirejs = require('requirejs')
+
+    requirejs('definition')
+
 
 We're giving it to the [library](library.md) to hold on to (don't trust myself with that!). It needs one other narrative from the library in order to work: [Express](express.md), a web server. 
 

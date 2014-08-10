@@ -13,12 +13,18 @@ Reads a narrative and does what it's told. In `build.js`:
       function getDependencies(name, callback) {
         var dependencies = []
 
-        function searchBlocks(blocks) {
-          var code = _(blocks).filter(isCode)
-          indent(code.length + ' are code blocks')
-          _(code).each(searchBlock)
-
-        }
+        // We should refactor this so it's just a dependencies function
+        // that returns the dependencies and we just keep unioning them
+        // in out compile function down there. I.e
+        // 
+        // compile(name, function(compiled) {
+        //   var dependencies = []
+        //   compiled.each.code(function(block) { 
+        //     var moreDeps = searchBlock(block)
+        //     dependencies = _(dependencies).union(moreDeps)
+        //   })
+        //   return dependencies
+        // })
 
         function searchBlock(block) {
           var pattern = /(define|require(js)?) *\( *\[.*/g
@@ -48,23 +54,23 @@ Reads a narrative and does what it's told. In `build.js`:
 
         indent('Getting dependencies for ' + name + ':')
         indent.in()
-        compile(name, searchBlocks)
+        compile(name, function(compiled) {
+          compiled.each.code(searchBlock)
+        })
         indent.out()
         callback(dependencies)
       }
 
-      function saveFiles(name, destination) {
-        indent('Saving ' + name + ' files to ' + destination)
-        compile(name, function(blocks) {
-          var source = _(blocks).filter(isSource)
-          indent(source.length + ' are source')
-          _(source).each(function(block) {
-              folder.write(destination + '/' + block.filename, block.source)
-          })
+      saveFiles = function(name, destination) {
+        compile(name, function(compiled) {
+          compiled.each.source(function(block)) {
+            folder.write(destination + '/' + block.filename, block.source)
+          }
+          callback(compiled)
         })
       }
 
-      return build = function(name, callback) {
+      build = function(name, callback) {
         indent('Building ' + name)
         indent.in()
         buildPath = 'build/' + name
@@ -82,4 +88,8 @@ Reads a narrative and does what it's told. In `build.js`:
         })
         indent.out()
       }
+
+      // This should be its own module
+      build.getDependencies = getDependencies
+      return build
     })

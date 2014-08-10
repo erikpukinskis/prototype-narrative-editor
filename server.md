@@ -5,6 +5,7 @@ This `server.js` is what you use to set up an Express/Node server:
 
     define(['body-parser'], function(bodyParser) {
       var express = require("express")
+    var port = Number(port || 5000)
 
       Server = function() {
         var _this = this
@@ -23,7 +24,9 @@ This `server.js` is what you use to set up an Express/Node server:
             next()
           }
         })
+      })
 
+      Server.prototype.start = function() { 
         this.app.listen(port, function() {
           console.log("Listening on " + port);
         })
