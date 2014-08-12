@@ -12,6 +12,8 @@ There's some stuff to clean up to get back to feature parity with 0.2.0.
  - [ ] Get hello world to run on the same server as narrative
  - [ ] Add a static asset
  - [ ] Add a dependency on a different narrative
+ - [ ] Type in Folder
+ - [ ] Type in all the other deps
  - [ ] Type Narrative into itself
 
 And that'll be 0.3.0, "Self hosting without touching the filesystem".
@@ -61,8 +63,8 @@ Here's a `server`:
       }
 
       function runTests(compiled, buildServer) {
-        return _(compiled.blocks.tests).map(function(test) {
-          return test(buildServer())
+        return _(compiled.blocks.tests).map(function(runTest) {
+          return runTest(buildServer())
         })        
       }
 
@@ -75,7 +77,7 @@ Here's a `server`:
       server.post('/narratives', function(request, response) {
         var name = request.body.name
 
-        documents.set(name, request.pick('body', 'lines')
+        documents.set(name, request.pick('body', 'lines'))
 
         compile(name, function(compiled) {
           var block = compiled.blocks.servers()[0]
@@ -97,6 +99,14 @@ Here's a `server`:
           broadcast.notify('tests/' + name, results)
         })
       })
+    })
+
+> Note that in order to parse that we need to recognize server declarations in the Narrative compiler. The reason this is special is we need to know how to plug in to the narrative without actually running foreman on the filesystem. So in our POST after the compile we can just eval the funcs and then eval the server.
+
+At this point we'd want to be talking about the tests for that. We'd do that with a `test` command followed by the test function:
+
+    define(function(narrative) {
+      return {passed: false, message: "We haven't written any tests yet"}
     })
 
 Then we need a javascript file that starts the server. We'll put it in `narrative.js`:

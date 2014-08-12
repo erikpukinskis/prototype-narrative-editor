@@ -82,6 +82,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         var filenameLastSeen = null
 
         blocks.forEach(function(block) {
+          // TODO: This needs to also identify server and test blocks now.
           var inAComment = block.kind == 'comment'
           var inCode = !inAComment
           var matches = block.lines.join('').match(/`([^`]+)`/)
