@@ -33,11 +33,14 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
           return results
         }
 
-        this.tests = _(blocks).chain().filter(isTest).map(function(block) {
-          return function(instance) {
+        var testBlocks = _(blocks).chain().filter(isTest)
+        this.tests = testBlocks.map(function(block) {
+          function runTest(instance) {
             eval(block.source)(instance)
           }
+          return runTest
         })
+      }
 
       getBlocks = function(content) {
         var block = {lines: []};
@@ -75,7 +78,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         return blocks;
       }
 
-      analyze = function(blocks) {
+      extractFilenamesAndSource = function(blocks) {
         var filenameLastSeen = null
 
         blocks.forEach(function(block) {
@@ -104,14 +107,9 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         if (!source) { throw new Error(name + '.md not found.')}
         var blocks = getBlocks(source)
         indent('Compiled ' + name + ' to ' + blocks.length + ' blocks')
-        analyze(blocks)
-        blocks.
 
-        blocks.isSource = isSource
-        blocks.is
-        test = function() {
-          blocks.tests
-        }
-        callback(new Compiled(blocks, )) 
+        extractFilenamesAndSource(blocks)
+
+        callback(new Compiled(blocks)) 
       }
     })
