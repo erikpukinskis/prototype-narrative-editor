@@ -1,12 +1,12 @@
 Narrative
 =========
 
-A tool for writing code in a literary way, "narratives". Includes a web-based editor, a compiler that can run the narratives and a bit of deployment framework. Working towards an integrated host.
+A tool for writing code in a literary way, "narratives". Includes a web-based editor, a compiler that can run the narratives and a bit of deployment framework, and an integrated host.
 
 Next up
 -------
 
-Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
+There's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [ ] Get server to run
  - [ ] Get hello world to run on the same server as narrative
