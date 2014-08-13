@@ -37,7 +37,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's a `server`:
 
-    define('narrative', ['server', 'documents', 'build', 'require', 'migrate'], function(server, documents, build, tests) {
+    define('narrative', ['server', 'documents', 'build', 'require', 'migrate'], function(server, documents, build) {
       var servers = {}
 
       function restart(name, freshlyBuiltServer) {
@@ -60,12 +60,6 @@ Here's a `server`:
             })
           })
         })
-      }
-
-      function runTests(compiled, buildServer) {
-        return _(compiled.blocks.tests).map(function(runTest) {
-          return runTest(buildServer())
-        })        
       }
 
       server.use(server.static('.'))
@@ -91,23 +85,11 @@ Here's a `server`:
           restart(name, buildServer())
 
           response.status(ok = 200).send()
-
-          broadcast.notify('build/' + name)
-
-          var results = runTests(compiled, buildServer)
-
-          broadcast.notify('tests/' + name, results)
         })
       })
     })
 
 > Note that in order to parse that we need to recognize server declarations in the Narrative compiler. The reason this is special is we need to know how to plug in to the narrative without actually running foreman on the filesystem. So in our POST after the compile we can just eval the funcs and then eval the server.
-
-At this point we'd want to be talking about the tests for that. We'd do that with a `test` command followed by the test function:
-
-    define(function(narrative) {
-      return {passed: false, message: "We haven't written any tests yet"}
-    })
 
 Then we need a javascript file that starts the server. We'll put it in `narrative.js`:
 

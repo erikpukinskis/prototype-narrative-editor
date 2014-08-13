@@ -9,7 +9,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         return !!string.match(pattern);
       }
 
-      Compiled = function(blocks, run, test) {
+      Compiled = function(blocks, run) {
         this.blocks = blocks
 
         eachBlock = function(filter) {
@@ -22,26 +22,8 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
           source: eachBlock(isSource)
 
           code: eachBlock(isCode)
-
-          test: eachBlock(isTest)
         }
         
-        var testBlocks = _(blocks).chain().filter(isTest)
-
-        this.tests = testBlocks.map(function(block) {
-          function runTest(instance) {
-            eval(block.source)(instance)
-          }
-          return runTest
-        })
-
-        this.test = function(callback) {
-          var results = _(this.tests).map(function(test) {
-            return test(instance)
-          })
-          return results
-        }
-
       }
 
       getBlocks = function(content) {
@@ -84,7 +66,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         var filenameLastSeen = null
 
         blocks.forEach(function(block) {
-          // TODO: This needs to also identify server and test blocks now.
+          // TODO: This needs to also identify server blocks now.
           var inAComment = block.kind == 'comment'
           var inCode = !inAComment
           var matches = block.lines.join('').match(/`([^`]+)`/)
