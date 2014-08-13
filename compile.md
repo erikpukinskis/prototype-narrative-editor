@@ -26,6 +26,15 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
           test: eachBlock(isTest)
         }
         
+        var testBlocks = _(blocks).chain().filter(isTest)
+
+        this.tests = testBlocks.map(function(block) {
+          function runTest(instance) {
+            eval(block.source)(instance)
+          }
+          return runTest
+        })
+
         this.test = function(callback) {
           var results = _(this.tests).map(function(test) {
             return test(instance)
@@ -33,13 +42,6 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
           return results
         }
 
-        var testBlocks = _(blocks).chain().filter(isTest)
-        this.tests = testBlocks.map(function(block) {
-          function runTest(instance) {
-            eval(block.source)(instance)
-          }
-          return runTest
-        })
       }
 
       getBlocks = function(content) {
