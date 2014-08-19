@@ -35,7 +35,12 @@ Let's make a server! We'll put it in `narrative.js`:
 
     var requirejs = require('requirejs')
 
-    requirejs(['server', 'require'], function(server) {
+    requirejs(['server', 'documents', 'chain', 'require', 'indent'], function(server, documents) {
+      console.log('setting')
+      documents.set()
+      documents.get('pepper', function () {
+        console.log('back from peppering!')
+      })
       server.use(server.static('.'))
 
       server.get('/', function(xxxx, response) {
@@ -43,9 +48,8 @@ Let's make a server! We'll put it in `narrative.js`:
       })
 
       server.post('/narratives', function(request, response) {
-        console.log(request.body.name)
-        console.log(request.body.lines)
-        response.json({ok: 'yup'})
+        function ok() { response.json({ok: true}) }
+        documents.set(request.body.name, {lines: request.body.lines}, ok)
       })
     })
 
@@ -231,7 +235,9 @@ The first is `package.json`, which describes the various things running the serv
         "express": "*",
         "ejs": "*",
         "underscore": "*",
-        "body-parser": "*"
+        "body-parser": "*",
+        "knex": "*",
+        "pg": "*"
       },
       "devDependencies": {
         "requirejs": "*"
