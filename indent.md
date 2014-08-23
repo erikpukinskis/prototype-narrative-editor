@@ -6,14 +6,14 @@ Keeps track of how far in you're indented so when you print stuff out it's a lit
     define([], function() {
       function isInteger(n) { return parseInt(n) === n };
 
-      indent = function(string, offset) {
-        if (!isInteger(offset)) { offset = 0 }
-        offset = offset || 0
-        indent.depth = indent.depth + offset
+      indent = function() {
+        function toArray(obj) {
+          return [].slice.call(obj)
+        }
+        var string = toArray(arguments).join()
         var indents = Math.max(1, indent.depth)
         var indentation = new Array(indents)
         console.log(indentation.join(' ') + string)
-        indent.depth = indent.depth - offset
       }
       indent.depth = 1
       indent.in = function() {
