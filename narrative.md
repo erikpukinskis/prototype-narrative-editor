@@ -36,14 +36,8 @@ Let's make a server! We'll put it in `narrative.js`:
     var requirejs = require('requirejs')
 
     requirejs(['server', 'documents', 'chain', 'require', 'indent'], function(server, documents) {
-      console.log('setting')
-      documents.set('ham', 'bone', function() {
-        console.log('set it!')
-        documents.get('pepper', function (stuff) {
-          console.log('back from peppering!')
-          console.log('stuff', stuff)
-        })
-      })
+      documents.test()
+      
       server.use(server.static('.'))
 
       server.get('/', function(xxxx, response) {
