@@ -1,0 +1,1178 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'knex' ]
+2 info using npm@1.2.14
+3 info using node@v0.10.0
+4 verbose read json /Users/erik/projects/nrtv/narrative/package.json
+5 verbose read json /Users/erik/projects/nrtv/narrative/node_modules/express/package.json
+6 verbose read json /Users/erik/projects/nrtv/narrative/node_modules/node-postgres-hstore/package.json
+7 verbose read json /Users/erik/projects/nrtv/narrative/node_modules/pretty-print/package.json
+8 verbose read json /Users/erik/projects/nrtv/narrative/node_modules/requirejs/package.json
+9 verbose read json /Users/erik/projects/nrtv/narrative/node_modules/underscore/package.json
+10 verbose read json /Users/erik/projects/nrtv/narrative/package.json
+11 verbose cache add [ 'knex', null ]
+12 verbose cache add name=undefined spec="knex" args=["knex",null]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: 'knex',
+13 verbose parsed url   path: 'knex',
+13 verbose parsed url   href: 'knex' }
+14 silly lockFile ab59b290-knex knex
+15 verbose lock knex /Users/erik/.npm/ab59b290-knex.lock
+16 silly lockFile ab59b290-knex knex
+17 silly lockFile ab59b290-knex knex
+18 verbose addNamed [ 'knex', '' ]
+19 verbose addNamed [ null, '' ]
+20 silly lockFile c7bf951c-knex knex@
+21 verbose lock knex@ /Users/erik/.npm/c7bf951c-knex.lock
+22 silly addNameRange { name: 'knex', range: '', hasData: false }
+23 verbose url raw knex
+24 verbose url resolving [ 'https://registry.npmjs.org/', './knex' ]
+25 verbose url resolved https://registry.npmjs.org/knex
+26 info trying registry request attempt 1 at 00:56:04
+27 verbose etag "AD5JVKB2V83XG4ZZ7V1DCR2JP"
+28 http GET https://registry.npmjs.org/knex
+29 http 304 https://registry.npmjs.org/knex
+30 silly registry.get cb [ 304,
+30 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:03 GMT',
+30 silly registry.get     server: 'Apache',
+30 silly registry.get     via: '1.1 varnish',
+30 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:56:03 GMT',
+30 silly registry.get     'cache-control': 'max-age=60',
+30 silly registry.get     etag: '"AD5JVKB2V83XG4ZZ7V1DCR2JP"',
+30 silly registry.get     'x-served-by': 'cache-lax1425-LAX',
+30 silly registry.get     'x-cache': 'HIT',
+30 silly registry.get     'x-cache-hits': '1',
+30 silly registry.get     'x-timer': 'S1407916563.875929,VS0,VE0',
+30 silly registry.get     vary: 'Accept',
+30 silly registry.get     'content-length': '0',
+30 silly registry.get     'keep-alive': 'timeout=10, max=50',
+30 silly registry.get     connection: 'Keep-Alive' } ]
+31 verbose etag knex from cache
+32 silly addNameRange number 2 { name: 'knex', range: '', hasData: true }
+33 silly addNameRange versions [ 'knex',
+33 silly addNameRange   [ '0.0.0',
+33 silly addNameRange     '0.0.1',
+33 silly addNameRange     '0.0.2',
+33 silly addNameRange     '0.0.3',
+33 silly addNameRange     '0.0.5',
+33 silly addNameRange     '0.1.0',
+33 silly addNameRange     '0.1.1',
+33 silly addNameRange     '0.1.2',
+33 silly addNameRange     '0.1.3',
+33 silly addNameRange     '0.1.4',
+33 silly addNameRange     '0.1.5',
+33 silly addNameRange     '0.1.6',
+33 silly addNameRange     '0.1.7',
+33 silly addNameRange     '0.1.8',
+33 silly addNameRange     '0.2.0',
+33 silly addNameRange     '0.2.1',
+33 silly addNameRange     '0.2.2',
+33 silly addNameRange     '0.2.3',
+33 silly addNameRange     '0.2.4',
+33 silly addNameRange     '0.2.5',
+33 silly addNameRange     '0.2.6',
+33 silly addNameRange     '0.4.0',
+33 silly addNameRange     '0.4.1',
+33 silly addNameRange     '0.4.2',
+33 silly addNameRange     '0.2.7-alpha',
+33 silly addNameRange     '0.4.3',
+33 silly addNameRange     '0.4.4',
+33 silly addNameRange     '0.4.5',
+33 silly addNameRange     '0.4.6',
+33 silly addNameRange     '0.4.7',
+33 silly addNameRange     '0.4.8',
+33 silly addNameRange     '0.4.9',
+33 silly addNameRange     '0.4.10',
+33 silly addNameRange     '0.4.11',
+33 silly addNameRange     '0.4.12',
+33 silly addNameRange     '0.4.13',
+33 silly addNameRange     '0.5.0',
+33 silly addNameRange     '0.5.1',
+33 silly addNameRange     '0.5.2',
+33 silly addNameRange     '0.5.3',
+33 silly addNameRange     '0.5.4',
+33 silly addNameRange     '0.5.5',
+33 silly addNameRange     '0.5.6',
+33 silly addNameRange     '0.5.7',
+33 silly addNameRange     '0.5.8',
+33 silly addNameRange     '0.5.9',
+33 silly addNameRange     '0.5.10',
+33 silly addNameRange     '0.5.11',
+33 silly addNameRange     '0.5.12',
+33 silly addNameRange     '0.5.13',
+33 silly addNameRange     '0.5.14',
+33 silly addNameRange     '0.5.15',
+33 silly addNameRange     '0.6.0',
+33 silly addNameRange     '0.6.1',
+33 silly addNameRange     '0.6.2',
+33 silly addNameRange     '0.6.3',
+33 silly addNameRange     '0.6.4',
+33 silly addNameRange     '0.6.5',
+33 silly addNameRange     '0.6.6',
+33 silly addNameRange     '0.6.7',
+33 silly addNameRange     '0.6.8',
+33 silly addNameRange     '0.6.9',
+33 silly addNameRange     '0.6.10',
+33 silly addNameRange     '0.6.11',
+33 silly addNameRange     '0.6.12',
+33 silly addNameRange     '0.6.13',
+33 silly addNameRange     '0.6.14',
+33 silly addNameRange     '0.6.15',
+33 silly addNameRange     '0.6.16',
+33 silly addNameRange     '0.6.17',
+33 silly addNameRange     '0.6.18',
+33 silly addNameRange     '0.6.19',
+33 silly addNameRange     '0.6.20',
+33 silly addNameRange     '0.6.21',
+33 silly addNameRange     '0.6.22' ] ]
+34 verbose addNamed [ 'knex', '0.6.22' ]
+35 verbose addNamed [ '0.6.22', '0.6.22' ]
+36 silly lockFile 230573c5-knex-0-6-22 knex@0.6.22
+37 verbose lock knex@0.6.22 /Users/erik/.npm/230573c5-knex-0-6-22.lock
+38 verbose read json /Users/erik/.npm/knex/0.6.22/package/package.json
+39 silly lockFile 230573c5-knex-0-6-22 knex@0.6.22
+40 silly lockFile 230573c5-knex-0-6-22 knex@0.6.22
+41 silly lockFile c7bf951c-knex knex@
+42 silly lockFile c7bf951c-knex knex@
+43 silly resolved [ { name: 'knex',
+43 silly resolved     version: '0.6.22',
+43 silly resolved     description: 'A batteries-included SQL query & schema builder for Postgres, MySQL and SQLite3 and the Browser',
+43 silly resolved     main: 'knex.js',
+43 silly resolved     directories: { test: 'test' },
+43 silly resolved     dependencies:
+43 silly resolved      { minimist: '~0.0.9',
+43 silly resolved        bluebird: '1.2.x',
+43 silly resolved        chalk: '^0.4.0',
+43 silly resolved        commander: '^2.2.0',
+43 silly resolved        interpret: '^0.3.2',
+43 silly resolved        liftoff: '^0.11.0',
+43 silly resolved        semver: '^2.3.0',
+43 silly resolved        tildify: '^0.2.0',
+43 silly resolved        'generic-pool-redux': '~0.1.0',
+43 silly resolved        inherits: '~2.0.1',
+43 silly resolved        lodash: '~2.4.0',
+43 silly resolved        mkdirp: '^0.5.0',
+43 silly resolved        'readable-stream': '^1.1.12' },
+43 silly resolved     devDependencies:
+43 silly resolved      { through: '^2.3.4',
+43 silly resolved        browserify: '^4.0.0',
+43 silly resolved        gulp: '^3.6.2',
+43 silly resolved        'gulp-bump': '^0.1.8',
+43 silly resolved        'gulp-git': '^0.4.2',
+43 silly resolved        'gulp-shell': '^0.2.5',
+43 silly resolved        chai: '^1.9.1',
+43 silly resolved        'chai-as-promised': '^4.1.0',
+43 silly resolved        jshint: '~2.5.1',
+43 silly resolved        mocha: '^1.20.0',
+43 silly resolved        mysql: '^2.3.1',
+43 silly resolved        'node-uuid': '~1.4.0',
+43 silly resolved        pg: '^3.2.0',
+43 silly resolved        'pg-query-stream': '^0.6.0',
+43 silly resolved        rimraf: '2.x',
+43 silly resolved        sinon: '^1.10.0',
+43 silly resolved        'sinon-chai': '^2.5.0',
+43 silly resolved        sqlite3: '^2.2.3',
+43 silly resolved        mariasql: '~0.1.21',
+43 silly resolved        mysql2: '~0.12.1',
+43 silly resolved        istanbul: '~0.2.11',
+43 silly resolved        coveralls: '~2.10.0' },
+43 silly resolved     scripts:
+43 silly resolved      { build: 'gulp build',
+43 silly resolved        test: 'istanbul --config=test/.istanbul.yml cover _mocha -- --check-leaks -t 5000 -b -R spec test/index.js',
+43 silly resolved        coveralls: 'cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js',
+43 silly resolved        jshint: 'jshint knex.js lib/*',
+43 silly resolved        'release:patch': 'npm run jshint && npm test && gulp build && gulp bump --type patch && gulp release',
+43 silly resolved        'release:minor': 'npm run jshint && npm test && gulp build && gulp bump --type minor && gulp release' },
+43 silly resolved     bin: { knex: './lib/bin/cli.js' },
+43 silly resolved     repository: { type: 'git', url: 'https://github.com/tgriesser/knex.git' },
+43 silly resolved     keywords: [ 'sql', 'query', 'postgresql', 'mysql', 'sqlite3' ],
+43 silly resolved     author: { name: 'Tim Griesser', url: 'https://github.com/tgriesser' },
+43 silly resolved     files:
+43 silly resolved      [ 'README.md',
+43 silly resolved        'lib/*',
+43 silly resolved        'browser/*',
+43 silly resolved        'gulpfile.js',
+43 silly resolved        'knex.js',
+43 silly resolved        'LICENSE' ],
+43 silly resolved     license: 'MIT',
+43 silly resolved     readme: '# [knex.js](http://knexjs.org) [![Build Status](https://travis-ci.org/tgriesser/knex.png?branch=master)](https://travis-ci.org/tgriesser/knex) [![Coverage Status](https://coveralls.io/repos/tgriesser/knex/badge.png?branch=master)](https://coveralls.io/r/tgriesser/knex?branch=master)\n\nA SQL query builder that is flexible, portable, and fun to use!\n\nA batteries-included, multi-dialect (MySQL, PostgreSQL, SQLite3, WebSQL) query builder for\nNode.js and the Browser, featuring:\n\n- [transactions](http://knexjs.org/#Transactions)\n- [connection pooling](http://knexjs.org/#Installation-pooling)\n- [streaming queries](http://knexjs.org/#Interfaces-Streams)\n- both a [promise](http://knexjs.org/#Interfaces-Promises) and [callback](http://knexjs.org/#Interfaces-Callbacks) API\n- a [thorough test suite](https://travis-ci.org/tgriesser/knex)\n- the ability to [run in the Browser](http://knexjs.org/#Installation-browser)\n\n[Read the full documentation to get started!](http://knexjs.org)\n\nFor support and questions, join the #bookshelf channel on freenode IRC\n\nFor an Object Relational Mapper, see: http://bookshelfjs.org\n\n## Examples\n\nWe have several examples [on the website](http://knexjs.org). Here is the first one to get you started:\n\n```js\nvar knex = require(\'knex\')({\n  dialect: \'mysql\',\n  connection: process.env.DB_CONNECTION_STRING\n});\n\n// Create a table\nknex.schema.createTable(\'users\', function(table) {\n  table.increments(\'id\');\n  table.string(\'user_name\');\n})\n\n// ...and another\n.createTable(\'accounts\', function(table) {\n  table.increments(\'id\');\n  table.string(\'account_name\');\n  table.integer(\'user_id\').unsigned().references(\'users.id\');\n})\n\n// Then query the table...\n.then(function() {\n  return knex.insert({user_name: \'Tim\'}).into(\'users\');\n})\n\n// ...and using the insert id, insert into the other table.\n.then(function(rows) {\n  return knex.table(\'accounts\').insert({account_name: \'knex\', user_id: knex.rows[0]});\n});\n\n// Query both of the rows.\n.then(function() {\n  return knex(\'users\')\n    .join(\'accounts\', \'accounts.id\')\n    .select(\'users.user_name as user\', \'accounts.account_name as account\');\n})\n\n// .map over the results\n.map(function(row) {\n  console.log(row);\n})\n\n// Finally, add a .catch handler for the promise chain\n.catch(function(e) {\n  console.error(e);\n});\n```\n',
+43 silly resolved     readmeFilename: 'README.md',
+43 silly resolved     _id: 'knex@0.6.22',
+43 silly resolved     _from: 'knex@' } ]
+44 info install knex@0.6.22 into /Users/erik/projects/nrtv/narrative
+45 info installOne knex@0.6.22
+46 verbose from cache /Users/erik/.npm/knex/0.6.22/package/package.json
+47 info /Users/erik/projects/nrtv/narrative/node_modules/knex unbuild
+48 verbose read json /Users/erik/projects/nrtv/narrative/node_modules/knex/package.json
+49 verbose tar unpack /Users/erik/.npm/knex/0.6.22/package.tgz
+50 silly lockFile ec831e0f-nrtv-narrative-node-modules-knex /Users/erik/projects/nrtv/narrative/node_modules/knex
+51 verbose lock /Users/erik/projects/nrtv/narrative/node_modules/knex /Users/erik/.npm/ec831e0f-nrtv-narrative-node-modules-knex.lock
+52 silly lockFile ce94bc33-erik-npm-knex-0-6-22-package-tgz /Users/erik/.npm/knex/0.6.22/package.tgz
+53 verbose lock /Users/erik/.npm/knex/0.6.22/package.tgz /Users/erik/.npm/ce94bc33-erik-npm-knex-0-6-22-package-tgz.lock
+54 silly gunzTarPerm modes [ '755', '644' ]
+55 silly gunzTarPerm extractEntry package.json
+56 silly gunzTarPerm extractEntry README.md
+57 silly gunzTarPerm extractEntry LICENSE
+58 silly gunzTarPerm extractEntry gulpfile.js
+59 silly gunzTarPerm extractEntry knex.js
+60 silly gunzTarPerm extractEntry browser/deps.js
+61 silly gunzTarPerm extractEntry browser/knex.js
+62 silly gunzTarPerm extractEntry browser/websql.js
+63 silly gunzTarPerm extractEntry lib/utils.js
+64 silly gunzTarPerm extractEntry lib/transaction.js
+65 silly gunzTarPerm extractEntry lib/formatter.js
+66 silly gunzTarPerm extractEntry lib/helpers.js
+67 silly gunzTarPerm extractEntry lib/interface.js
+68 silly gunzTarPerm extractEntry lib/runner.js
+69 silly gunzTarPerm extractEntry lib/client.js
+70 silly gunzTarPerm extractEntry lib/promise.js
+71 silly gunzTarPerm extractEntry lib/raw.js
+72 silly gunzTarPerm extractEntry lib/pool.js
+73 silly gunzTarPerm extractEntry lib/query/builder.js
+74 silly gunzTarPerm extractEntry lib/query/compiler.js
+75 silly gunzTarPerm extractEntry lib/query/joinclause.js
+76 silly gunzTarPerm extractEntry lib/query/methods.js
+77 silly gunzTarPerm extractEntry lib/migrate/index.js
+78 silly gunzTarPerm extractEntry lib/migrate/methods.js
+79 silly gunzTarPerm extractEntry lib/migrate/migrate-stub.js
+80 silly gunzTarPerm extractEntry lib/migrate/stub/coffee.stub
+81 silly gunzTarPerm extractEntry lib/migrate/stub/js.stub
+82 silly gunzTarPerm extractEntry lib/migrate/stub/knexfile-coffee.stub
+83 silly gunzTarPerm extractEntry lib/migrate/stub/knexfile-js.stub
+84 silly gunzTarPerm extractEntry lib/migrate/stub/ls.stub
+85 silly gunzTarPerm extractEntry lib/schema/builder.js
+86 silly gunzTarPerm extractEntry lib/schema/columnbuilder.js
+87 silly gunzTarPerm extractEntry lib/schema/columncompiler.js
+88 silly gunzTarPerm extractEntry lib/schema/compiler.js
+89 silly gunzTarPerm extractEntry lib/schema/index.js
+90 silly gunzTarPerm extractEntry lib/schema/methods.js
+91 silly gunzTarPerm extractEntry lib/schema/tablebuilder.js
+92 silly gunzTarPerm extractEntry lib/schema/tablecompiler.js
+93 silly gunzTarPerm extractEntry lib/schema/viewbuilder.js
+94 silly gunzTarPerm extractEntry lib/schema/viewcompiler.js
+95 silly gunzTarPerm extractEntry lib/dialects/maria/index.js
+96 silly gunzTarPerm extractEntry lib/dialects/maria/runner.js
+97 silly gunzTarPerm extractEntry lib/dialects/mysql/formatter.js
+98 silly gunzTarPerm extractEntry lib/dialects/mysql/index.js
+99 silly gunzTarPerm extractEntry lib/dialects/mysql/migrator.js
+100 silly gunzTarPerm extractEntry lib/dialects/mysql/pool.js
+101 silly gunzTarPerm extractEntry lib/dialects/mysql/query.js
+102 silly gunzTarPerm extractEntry lib/dialects/mysql/raw.js
+103 silly gunzTarPerm extractEntry lib/dialects/mysql/runner.js
+104 silly gunzTarPerm extractEntry lib/dialects/mysql/string.js
+105 silly gunzTarPerm extractEntry lib/dialects/mysql/transaction.js
+106 silly gunzTarPerm extractEntry lib/dialects/mysql/schema/column.js
+107 silly gunzTarPerm extractEntry lib/dialects/mysql/schema/index.js
+108 silly gunzTarPerm extractEntry lib/dialects/mysql/schema/schema.js
+109 silly gunzTarPerm extractEntry lib/dialects/mysql/schema/table.js
+110 silly gunzTarPerm extractEntry lib/dialects/mysql2/index.js
+111 silly gunzTarPerm extractEntry lib/dialects/mysql2/runner.js
+112 silly gunzTarPerm extractEntry lib/dialects/postgres/formatter.js
+113 silly gunzTarPerm extractEntry lib/dialects/postgres/index.js
+114 silly gunzTarPerm extractEntry lib/dialects/postgres/migrator.js
+115 silly gunzTarPerm extractEntry lib/dialects/postgres/pool.js
+116 silly gunzTarPerm extractEntry lib/dialects/postgres/query.js
+117 silly gunzTarPerm extractEntry lib/dialects/postgres/raw.js
+118 silly gunzTarPerm extractEntry lib/dialects/postgres/runner.js
+119 silly gunzTarPerm extractEntry lib/dialects/postgres/transaction.js
+120 silly gunzTarPerm extractEntry lib/dialects/postgres/utils.js
+121 silly gunzTarPerm extractEntry lib/dialects/postgres/schema/column.js
+122 silly gunzTarPerm extractEntry lib/dialects/postgres/schema/index.js
+123 silly gunzTarPerm extractEntry lib/dialects/postgres/schema/schema.js
+124 silly gunzTarPerm extractEntry lib/dialects/postgres/schema/table.js
+125 silly gunzTarPerm extractEntry lib/dialects/sqlite3/formatter.js
+126 silly gunzTarPerm extractEntry lib/dialects/sqlite3/index.js
+127 silly gunzTarPerm extractEntry lib/dialects/sqlite3/migrator.js
+128 silly gunzTarPerm extractEntry lib/dialects/sqlite3/pool.js
+129 silly gunzTarPerm extractEntry lib/dialects/sqlite3/query.js
+130 silly gunzTarPerm extractEntry lib/dialects/sqlite3/raw.js
+131 silly gunzTarPerm extractEntry lib/dialects/sqlite3/runner.js
+132 silly gunzTarPerm extractEntry lib/dialects/sqlite3/transaction.js
+133 silly gunzTarPerm extractEntry lib/dialects/sqlite3/schema/column.js
+134 silly gunzTarPerm extractEntry lib/dialects/sqlite3/schema/ddl.js
+135 silly gunzTarPerm extractEntry lib/dialects/sqlite3/schema/index.js
+136 silly gunzTarPerm extractEntry lib/dialects/sqlite3/schema/schema.js
+137 silly gunzTarPerm extractEntry lib/dialects/sqlite3/schema/table.js
+138 silly gunzTarPerm extractEntry lib/dialects/websql/index.js
+139 silly gunzTarPerm extractEntry lib/dialects/websql/runner.js
+140 silly gunzTarPerm extractEntry lib/bin/cli.js
+141 verbose read json /Users/erik/projects/nrtv/narrative/node_modules/knex/package.json
+142 silly lockFile ec831e0f-nrtv-narrative-node-modules-knex /Users/erik/projects/nrtv/narrative/node_modules/knex
+143 silly lockFile ec831e0f-nrtv-narrative-node-modules-knex /Users/erik/projects/nrtv/narrative/node_modules/knex
+144 silly lockFile ce94bc33-erik-npm-knex-0-6-22-package-tgz /Users/erik/.npm/knex/0.6.22/package.tgz
+145 silly lockFile ce94bc33-erik-npm-knex-0-6-22-package-tgz /Users/erik/.npm/knex/0.6.22/package.tgz
+146 info preinstall knex@0.6.22
+147 verbose from cache /Users/erik/projects/nrtv/narrative/node_modules/knex/package.json
+148 verbose readDependencies using package.json deps
+149 verbose from cache /Users/erik/projects/nrtv/narrative/node_modules/knex/package.json
+150 verbose readDependencies using package.json deps
+151 verbose cache add [ 'minimist@~0.0.9', null ]
+152 verbose cache add name=undefined spec="minimist@~0.0.9" args=["minimist@~0.0.9",null]
+153 verbose parsed url { protocol: null,
+153 verbose parsed url   slashes: null,
+153 verbose parsed url   auth: null,
+153 verbose parsed url   host: null,
+153 verbose parsed url   port: null,
+153 verbose parsed url   hostname: null,
+153 verbose parsed url   hash: null,
+153 verbose parsed url   search: null,
+153 verbose parsed url   query: null,
+153 verbose parsed url   pathname: 'minimist@~0.0.9',
+153 verbose parsed url   path: 'minimist@~0.0.9',
+153 verbose parsed url   href: 'minimist@~0.0.9' }
+154 verbose cache add name="minimist" spec="~0.0.9" args=["minimist","~0.0.9"]
+155 verbose parsed url { protocol: null,
+155 verbose parsed url   slashes: null,
+155 verbose parsed url   auth: null,
+155 verbose parsed url   host: null,
+155 verbose parsed url   port: null,
+155 verbose parsed url   hostname: null,
+155 verbose parsed url   hash: null,
+155 verbose parsed url   search: null,
+155 verbose parsed url   query: null,
+155 verbose parsed url   pathname: '~0.0.9',
+155 verbose parsed url   path: '~0.0.9',
+155 verbose parsed url   href: '~0.0.9' }
+156 verbose addNamed [ 'minimist', '~0.0.9' ]
+157 verbose addNamed [ null, '>=0.0.9- <0.1.0-' ]
+158 silly lockFile 5704eb56-minimist-0-0-9 minimist@~0.0.9
+159 verbose lock minimist@~0.0.9 /Users/erik/.npm/5704eb56-minimist-0-0-9.lock
+160 verbose cache add [ 'bluebird@1.2.x', null ]
+161 verbose cache add name=undefined spec="bluebird@1.2.x" args=["bluebird@1.2.x",null]
+162 verbose parsed url { protocol: null,
+162 verbose parsed url   slashes: null,
+162 verbose parsed url   auth: null,
+162 verbose parsed url   host: null,
+162 verbose parsed url   port: null,
+162 verbose parsed url   hostname: null,
+162 verbose parsed url   hash: null,
+162 verbose parsed url   search: null,
+162 verbose parsed url   query: null,
+162 verbose parsed url   pathname: 'bluebird@1.2.x',
+162 verbose parsed url   path: 'bluebird@1.2.x',
+162 verbose parsed url   href: 'bluebird@1.2.x' }
+163 verbose cache add name="bluebird" spec="1.2.x" args=["bluebird","1.2.x"]
+164 verbose parsed url { protocol: null,
+164 verbose parsed url   slashes: null,
+164 verbose parsed url   auth: null,
+164 verbose parsed url   host: null,
+164 verbose parsed url   port: null,
+164 verbose parsed url   hostname: null,
+164 verbose parsed url   hash: null,
+164 verbose parsed url   search: null,
+164 verbose parsed url   query: null,
+164 verbose parsed url   pathname: '1.2.x',
+164 verbose parsed url   path: '1.2.x',
+164 verbose parsed url   href: '1.2.x' }
+165 verbose addNamed [ 'bluebird', '1.2.x' ]
+166 verbose addNamed [ null, '>=1.2.0- <1.3.0-' ]
+167 silly lockFile 9e5a4bb8-bluebird-1-2-x bluebird@1.2.x
+168 verbose lock bluebird@1.2.x /Users/erik/.npm/9e5a4bb8-bluebird-1-2-x.lock
+169 verbose cache add [ 'chalk@^0.4.0', null ]
+170 verbose cache add name=undefined spec="chalk@^0.4.0" args=["chalk@^0.4.0",null]
+171 verbose parsed url { protocol: null,
+171 verbose parsed url   slashes: null,
+171 verbose parsed url   auth: null,
+171 verbose parsed url   host: null,
+171 verbose parsed url   port: null,
+171 verbose parsed url   hostname: null,
+171 verbose parsed url   hash: null,
+171 verbose parsed url   search: null,
+171 verbose parsed url   query: null,
+171 verbose parsed url   pathname: 'chalk@^0.4.0',
+171 verbose parsed url   path: 'chalk@^0.4.0',
+171 verbose parsed url   href: 'chalk@^0.4.0' }
+172 verbose cache add name="chalk" spec="^0.4.0" args=["chalk","^0.4.0"]
+173 verbose parsed url { protocol: null,
+173 verbose parsed url   slashes: null,
+173 verbose parsed url   auth: null,
+173 verbose parsed url   host: null,
+173 verbose parsed url   port: null,
+173 verbose parsed url   hostname: null,
+173 verbose parsed url   hash: null,
+173 verbose parsed url   search: null,
+173 verbose parsed url   query: null,
+173 verbose parsed url   pathname: '^0.4.0',
+173 verbose parsed url   path: '^0.4.0',
+173 verbose parsed url   href: '^0.4.0' }
+174 verbose addNamed [ 'chalk', '^0.4.0' ]
+175 verbose addNamed [ null, null ]
+176 silly lockFile b2f4396d-chalk-0-4-0 chalk@^0.4.0
+177 verbose lock chalk@^0.4.0 /Users/erik/.npm/b2f4396d-chalk-0-4-0.lock
+178 silly addNameRange { name: 'minimist', range: '>=0.0.9- <0.1.0-', hasData: false }
+179 silly addNameRange { name: 'bluebird', range: '>=1.2.0- <1.3.0-', hasData: false }
+180 verbose cache add [ 'commander@^2.2.0', null ]
+181 verbose cache add name=undefined spec="commander@^2.2.0" args=["commander@^2.2.0",null]
+182 verbose parsed url { protocol: null,
+182 verbose parsed url   slashes: null,
+182 verbose parsed url   auth: null,
+182 verbose parsed url   host: null,
+182 verbose parsed url   port: null,
+182 verbose parsed url   hostname: null,
+182 verbose parsed url   hash: null,
+182 verbose parsed url   search: null,
+182 verbose parsed url   query: null,
+182 verbose parsed url   pathname: 'commander@^2.2.0',
+182 verbose parsed url   path: 'commander@^2.2.0',
+182 verbose parsed url   href: 'commander@^2.2.0' }
+183 verbose cache add name="commander" spec="^2.2.0" args=["commander","^2.2.0"]
+184 verbose parsed url { protocol: null,
+184 verbose parsed url   slashes: null,
+184 verbose parsed url   auth: null,
+184 verbose parsed url   host: null,
+184 verbose parsed url   port: null,
+184 verbose parsed url   hostname: null,
+184 verbose parsed url   hash: null,
+184 verbose parsed url   search: null,
+184 verbose parsed url   query: null,
+184 verbose parsed url   pathname: '^2.2.0',
+184 verbose parsed url   path: '^2.2.0',
+184 verbose parsed url   href: '^2.2.0' }
+185 verbose addNamed [ 'commander', '^2.2.0' ]
+186 verbose addNamed [ null, null ]
+187 silly lockFile 2507b88a-commander-2-2-0 commander@^2.2.0
+188 verbose lock commander@^2.2.0 /Users/erik/.npm/2507b88a-commander-2-2-0.lock
+189 verbose cache add [ 'interpret@^0.3.2', null ]
+190 verbose cache add name=undefined spec="interpret@^0.3.2" args=["interpret@^0.3.2",null]
+191 verbose parsed url { protocol: null,
+191 verbose parsed url   slashes: null,
+191 verbose parsed url   auth: null,
+191 verbose parsed url   host: null,
+191 verbose parsed url   port: null,
+191 verbose parsed url   hostname: null,
+191 verbose parsed url   hash: null,
+191 verbose parsed url   search: null,
+191 verbose parsed url   query: null,
+191 verbose parsed url   pathname: 'interpret@^0.3.2',
+191 verbose parsed url   path: 'interpret@^0.3.2',
+191 verbose parsed url   href: 'interpret@^0.3.2' }
+192 verbose cache add name="interpret" spec="^0.3.2" args=["interpret","^0.3.2"]
+193 verbose parsed url { protocol: null,
+193 verbose parsed url   slashes: null,
+193 verbose parsed url   auth: null,
+193 verbose parsed url   host: null,
+193 verbose parsed url   port: null,
+193 verbose parsed url   hostname: null,
+193 verbose parsed url   hash: null,
+193 verbose parsed url   search: null,
+193 verbose parsed url   query: null,
+193 verbose parsed url   pathname: '^0.3.2',
+193 verbose parsed url   path: '^0.3.2',
+193 verbose parsed url   href: '^0.3.2' }
+194 verbose addNamed [ 'interpret', '^0.3.2' ]
+195 verbose addNamed [ null, null ]
+196 silly lockFile e5ecc112-interpret-0-3-2 interpret@^0.3.2
+197 verbose lock interpret@^0.3.2 /Users/erik/.npm/e5ecc112-interpret-0-3-2.lock
+198 verbose cache add [ 'liftoff@^0.11.0', null ]
+199 verbose cache add name=undefined spec="liftoff@^0.11.0" args=["liftoff@^0.11.0",null]
+200 verbose parsed url { protocol: null,
+200 verbose parsed url   slashes: null,
+200 verbose parsed url   auth: null,
+200 verbose parsed url   host: null,
+200 verbose parsed url   port: null,
+200 verbose parsed url   hostname: null,
+200 verbose parsed url   hash: null,
+200 verbose parsed url   search: null,
+200 verbose parsed url   query: null,
+200 verbose parsed url   pathname: 'liftoff@^0.11.0',
+200 verbose parsed url   path: 'liftoff@^0.11.0',
+200 verbose parsed url   href: 'liftoff@^0.11.0' }
+201 verbose cache add name="liftoff" spec="^0.11.0" args=["liftoff","^0.11.0"]
+202 verbose parsed url { protocol: null,
+202 verbose parsed url   slashes: null,
+202 verbose parsed url   auth: null,
+202 verbose parsed url   host: null,
+202 verbose parsed url   port: null,
+202 verbose parsed url   hostname: null,
+202 verbose parsed url   hash: null,
+202 verbose parsed url   search: null,
+202 verbose parsed url   query: null,
+202 verbose parsed url   pathname: '^0.11.0',
+202 verbose parsed url   path: '^0.11.0',
+202 verbose parsed url   href: '^0.11.0' }
+203 verbose addNamed [ 'liftoff', '^0.11.0' ]
+204 verbose addNamed [ null, null ]
+205 silly lockFile 3c1466f9-liftoff-0-11-0 liftoff@^0.11.0
+206 verbose lock liftoff@^0.11.0 /Users/erik/.npm/3c1466f9-liftoff-0-11-0.lock
+207 verbose cache add [ 'semver@^2.3.0', null ]
+208 verbose cache add name=undefined spec="semver@^2.3.0" args=["semver@^2.3.0",null]
+209 verbose parsed url { protocol: null,
+209 verbose parsed url   slashes: null,
+209 verbose parsed url   auth: null,
+209 verbose parsed url   host: null,
+209 verbose parsed url   port: null,
+209 verbose parsed url   hostname: null,
+209 verbose parsed url   hash: null,
+209 verbose parsed url   search: null,
+209 verbose parsed url   query: null,
+209 verbose parsed url   pathname: 'semver@^2.3.0',
+209 verbose parsed url   path: 'semver@^2.3.0',
+209 verbose parsed url   href: 'semver@^2.3.0' }
+210 verbose cache add name="semver" spec="^2.3.0" args=["semver","^2.3.0"]
+211 verbose parsed url { protocol: null,
+211 verbose parsed url   slashes: null,
+211 verbose parsed url   auth: null,
+211 verbose parsed url   host: null,
+211 verbose parsed url   port: null,
+211 verbose parsed url   hostname: null,
+211 verbose parsed url   hash: null,
+211 verbose parsed url   search: null,
+211 verbose parsed url   query: null,
+211 verbose parsed url   pathname: '^2.3.0',
+211 verbose parsed url   path: '^2.3.0',
+211 verbose parsed url   href: '^2.3.0' }
+212 verbose addNamed [ 'semver', '^2.3.0' ]
+213 verbose addNamed [ null, null ]
+214 silly lockFile 85d2d02f-semver-2-3-0 semver@^2.3.0
+215 verbose lock semver@^2.3.0 /Users/erik/.npm/85d2d02f-semver-2-3-0.lock
+216 info addNameTag [ 'chalk', '^0.4.0' ]
+217 info addNameTag [ 'commander', '^2.2.0' ]
+218 info addNameTag [ 'interpret', '^0.3.2' ]
+219 info addNameTag [ 'liftoff', '^0.11.0' ]
+220 verbose cache add [ 'tildify@^0.2.0', null ]
+221 verbose cache add name=undefined spec="tildify@^0.2.0" args=["tildify@^0.2.0",null]
+222 verbose parsed url { protocol: null,
+222 verbose parsed url   slashes: null,
+222 verbose parsed url   auth: null,
+222 verbose parsed url   host: null,
+222 verbose parsed url   port: null,
+222 verbose parsed url   hostname: null,
+222 verbose parsed url   hash: null,
+222 verbose parsed url   search: null,
+222 verbose parsed url   query: null,
+222 verbose parsed url   pathname: 'tildify@^0.2.0',
+222 verbose parsed url   path: 'tildify@^0.2.0',
+222 verbose parsed url   href: 'tildify@^0.2.0' }
+223 verbose cache add name="tildify" spec="^0.2.0" args=["tildify","^0.2.0"]
+224 verbose parsed url { protocol: null,
+224 verbose parsed url   slashes: null,
+224 verbose parsed url   auth: null,
+224 verbose parsed url   host: null,
+224 verbose parsed url   port: null,
+224 verbose parsed url   hostname: null,
+224 verbose parsed url   hash: null,
+224 verbose parsed url   search: null,
+224 verbose parsed url   query: null,
+224 verbose parsed url   pathname: '^0.2.0',
+224 verbose parsed url   path: '^0.2.0',
+224 verbose parsed url   href: '^0.2.0' }
+225 verbose addNamed [ 'tildify', '^0.2.0' ]
+226 verbose addNamed [ null, null ]
+227 silly lockFile b2e10727-tildify-0-2-0 tildify@^0.2.0
+228 verbose lock tildify@^0.2.0 /Users/erik/.npm/b2e10727-tildify-0-2-0.lock
+229 verbose cache add [ 'generic-pool-redux@~0.1.0', null ]
+230 verbose cache add name=undefined spec="generic-pool-redux@~0.1.0" args=["generic-pool-redux@~0.1.0",null]
+231 verbose parsed url { protocol: null,
+231 verbose parsed url   slashes: null,
+231 verbose parsed url   auth: null,
+231 verbose parsed url   host: null,
+231 verbose parsed url   port: null,
+231 verbose parsed url   hostname: null,
+231 verbose parsed url   hash: null,
+231 verbose parsed url   search: null,
+231 verbose parsed url   query: null,
+231 verbose parsed url   pathname: 'generic-pool-redux@~0.1.0',
+231 verbose parsed url   path: 'generic-pool-redux@~0.1.0',
+231 verbose parsed url   href: 'generic-pool-redux@~0.1.0' }
+232 verbose cache add name="generic-pool-redux" spec="~0.1.0" args=["generic-pool-redux","~0.1.0"]
+233 verbose parsed url { protocol: null,
+233 verbose parsed url   slashes: null,
+233 verbose parsed url   auth: null,
+233 verbose parsed url   host: null,
+233 verbose parsed url   port: null,
+233 verbose parsed url   hostname: null,
+233 verbose parsed url   hash: null,
+233 verbose parsed url   search: null,
+233 verbose parsed url   query: null,
+233 verbose parsed url   pathname: '~0.1.0',
+233 verbose parsed url   path: '~0.1.0',
+233 verbose parsed url   href: '~0.1.0' }
+234 verbose addNamed [ 'generic-pool-redux', '~0.1.0' ]
+235 verbose addNamed [ null, '>=0.1.0- <0.2.0-' ]
+236 silly lockFile d4ba8d65-generic-pool-redux-0-1-0 generic-pool-redux@~0.1.0
+237 verbose lock generic-pool-redux@~0.1.0 /Users/erik/.npm/d4ba8d65-generic-pool-redux-0-1-0.lock
+238 verbose cache add [ 'inherits@~2.0.1', null ]
+239 verbose cache add name=undefined spec="inherits@~2.0.1" args=["inherits@~2.0.1",null]
+240 verbose parsed url { protocol: null,
+240 verbose parsed url   slashes: null,
+240 verbose parsed url   auth: null,
+240 verbose parsed url   host: null,
+240 verbose parsed url   port: null,
+240 verbose parsed url   hostname: null,
+240 verbose parsed url   hash: null,
+240 verbose parsed url   search: null,
+240 verbose parsed url   query: null,
+240 verbose parsed url   pathname: 'inherits@~2.0.1',
+240 verbose parsed url   path: 'inherits@~2.0.1',
+240 verbose parsed url   href: 'inherits@~2.0.1' }
+241 verbose cache add name="inherits" spec="~2.0.1" args=["inherits","~2.0.1"]
+242 verbose parsed url { protocol: null,
+242 verbose parsed url   slashes: null,
+242 verbose parsed url   auth: null,
+242 verbose parsed url   host: null,
+242 verbose parsed url   port: null,
+242 verbose parsed url   hostname: null,
+242 verbose parsed url   hash: null,
+242 verbose parsed url   search: null,
+242 verbose parsed url   query: null,
+242 verbose parsed url   pathname: '~2.0.1',
+242 verbose parsed url   path: '~2.0.1',
+242 verbose parsed url   href: '~2.0.1' }
+243 verbose addNamed [ 'inherits', '~2.0.1' ]
+244 verbose addNamed [ null, '>=2.0.1- <2.1.0-' ]
+245 silly lockFile 098ef39f-inherits-2-0-1 inherits@~2.0.1
+246 verbose lock inherits@~2.0.1 /Users/erik/.npm/098ef39f-inherits-2-0-1.lock
+247 verbose cache add [ 'lodash@~2.4.0', null ]
+248 verbose cache add name=undefined spec="lodash@~2.4.0" args=["lodash@~2.4.0",null]
+249 verbose parsed url { protocol: null,
+249 verbose parsed url   slashes: null,
+249 verbose parsed url   auth: null,
+249 verbose parsed url   host: null,
+249 verbose parsed url   port: null,
+249 verbose parsed url   hostname: null,
+249 verbose parsed url   hash: null,
+249 verbose parsed url   search: null,
+249 verbose parsed url   query: null,
+249 verbose parsed url   pathname: 'lodash@~2.4.0',
+249 verbose parsed url   path: 'lodash@~2.4.0',
+249 verbose parsed url   href: 'lodash@~2.4.0' }
+250 verbose cache add name="lodash" spec="~2.4.0" args=["lodash","~2.4.0"]
+251 verbose parsed url { protocol: null,
+251 verbose parsed url   slashes: null,
+251 verbose parsed url   auth: null,
+251 verbose parsed url   host: null,
+251 verbose parsed url   port: null,
+251 verbose parsed url   hostname: null,
+251 verbose parsed url   hash: null,
+251 verbose parsed url   search: null,
+251 verbose parsed url   query: null,
+251 verbose parsed url   pathname: '~2.4.0',
+251 verbose parsed url   path: '~2.4.0',
+251 verbose parsed url   href: '~2.4.0' }
+252 verbose addNamed [ 'lodash', '~2.4.0' ]
+253 verbose addNamed [ null, '>=2.4.0- <2.5.0-' ]
+254 silly lockFile d594f717-lodash-2-4-0 lodash@~2.4.0
+255 verbose lock lodash@~2.4.0 /Users/erik/.npm/d594f717-lodash-2-4-0.lock
+256 verbose cache add [ 'mkdirp@^0.5.0', null ]
+257 verbose cache add name=undefined spec="mkdirp@^0.5.0" args=["mkdirp@^0.5.0",null]
+258 verbose parsed url { protocol: null,
+258 verbose parsed url   slashes: null,
+258 verbose parsed url   auth: null,
+258 verbose parsed url   host: null,
+258 verbose parsed url   port: null,
+258 verbose parsed url   hostname: null,
+258 verbose parsed url   hash: null,
+258 verbose parsed url   search: null,
+258 verbose parsed url   query: null,
+258 verbose parsed url   pathname: 'mkdirp@^0.5.0',
+258 verbose parsed url   path: 'mkdirp@^0.5.0',
+258 verbose parsed url   href: 'mkdirp@^0.5.0' }
+259 verbose cache add name="mkdirp" spec="^0.5.0" args=["mkdirp","^0.5.0"]
+260 verbose parsed url { protocol: null,
+260 verbose parsed url   slashes: null,
+260 verbose parsed url   auth: null,
+260 verbose parsed url   host: null,
+260 verbose parsed url   port: null,
+260 verbose parsed url   hostname: null,
+260 verbose parsed url   hash: null,
+260 verbose parsed url   search: null,
+260 verbose parsed url   query: null,
+260 verbose parsed url   pathname: '^0.5.0',
+260 verbose parsed url   path: '^0.5.0',
+260 verbose parsed url   href: '^0.5.0' }
+261 verbose addNamed [ 'mkdirp', '^0.5.0' ]
+262 verbose addNamed [ null, null ]
+263 silly lockFile 0879e7d7-mkdirp-0-5-0 mkdirp@^0.5.0
+264 verbose lock mkdirp@^0.5.0 /Users/erik/.npm/0879e7d7-mkdirp-0-5-0.lock
+265 verbose cache add [ 'readable-stream@^1.1.12', null ]
+266 verbose cache add name=undefined spec="readable-stream@^1.1.12" args=["readable-stream@^1.1.12",null]
+267 verbose parsed url { protocol: null,
+267 verbose parsed url   slashes: null,
+267 verbose parsed url   auth: null,
+267 verbose parsed url   host: null,
+267 verbose parsed url   port: null,
+267 verbose parsed url   hostname: null,
+267 verbose parsed url   hash: null,
+267 verbose parsed url   search: null,
+267 verbose parsed url   query: null,
+267 verbose parsed url   pathname: 'readable-stream@^1.1.12',
+267 verbose parsed url   path: 'readable-stream@^1.1.12',
+267 verbose parsed url   href: 'readable-stream@^1.1.12' }
+268 verbose cache add name="readable-stream" spec="^1.1.12" args=["readable-stream","^1.1.12"]
+269 verbose parsed url { protocol: null,
+269 verbose parsed url   slashes: null,
+269 verbose parsed url   auth: null,
+269 verbose parsed url   host: null,
+269 verbose parsed url   port: null,
+269 verbose parsed url   hostname: null,
+269 verbose parsed url   hash: null,
+269 verbose parsed url   search: null,
+269 verbose parsed url   query: null,
+269 verbose parsed url   pathname: '^1.1.12',
+269 verbose parsed url   path: '^1.1.12',
+269 verbose parsed url   href: '^1.1.12' }
+270 verbose addNamed [ 'readable-stream', '^1.1.12' ]
+271 verbose addNamed [ null, null ]
+272 silly lockFile 4e39f090-readable-stream-1-1-12 readable-stream@^1.1.12
+273 verbose lock readable-stream@^1.1.12 /Users/erik/.npm/4e39f090-readable-stream-1-1-12.lock
+274 info addNameTag [ 'semver', '^2.3.0' ]
+275 info addNameTag [ 'tildify', '^0.2.0' ]
+276 silly addNameRange { name: 'generic-pool-redux',
+276 silly addNameRange   range: '>=0.1.0- <0.2.0-',
+276 silly addNameRange   hasData: false }
+277 silly addNameRange { name: 'inherits', range: '>=2.0.1- <2.1.0-', hasData: false }
+278 silly addNameRange { name: 'lodash', range: '>=2.4.0- <2.5.0-', hasData: false }
+279 info addNameTag [ 'mkdirp', '^0.5.0' ]
+280 info addNameTag [ 'readable-stream', '^1.1.12' ]
+281 verbose url raw minimist
+282 verbose url resolving [ 'https://registry.npmjs.org/', './minimist' ]
+283 verbose url resolved https://registry.npmjs.org/minimist
+284 info trying registry request attempt 1 at 00:56:04
+285 verbose etag "CQFVJEQ667X62OMCDEBQ4ETV0"
+286 http GET https://registry.npmjs.org/minimist
+287 verbose url raw chalk
+288 verbose url resolving [ 'https://registry.npmjs.org/', './chalk' ]
+289 verbose url resolved https://registry.npmjs.org/chalk
+290 info trying registry request attempt 1 at 00:56:04
+291 verbose etag "DOGQBJR6FT3D60SFRDA30107Y"
+292 http GET https://registry.npmjs.org/chalk
+293 verbose url raw bluebird
+294 verbose url resolving [ 'https://registry.npmjs.org/', './bluebird' ]
+295 verbose url resolved https://registry.npmjs.org/bluebird
+296 info trying registry request attempt 1 at 00:56:04
+297 verbose etag "9NC897IUSDB4D25MY0JRS0IGX"
+298 http GET https://registry.npmjs.org/bluebird
+299 verbose url raw commander
+300 verbose url resolving [ 'https://registry.npmjs.org/', './commander' ]
+301 verbose url resolved https://registry.npmjs.org/commander
+302 info trying registry request attempt 1 at 00:56:04
+303 verbose etag "DURP3HNO4ODTCN1F72LV11SM5"
+304 http GET https://registry.npmjs.org/commander
+305 verbose url raw interpret
+306 verbose url resolving [ 'https://registry.npmjs.org/', './interpret' ]
+307 verbose url resolved https://registry.npmjs.org/interpret
+308 info trying registry request attempt 1 at 00:56:04
+309 verbose etag "E4FUKXJXW749HYD5UQR800N0F"
+310 http GET https://registry.npmjs.org/interpret
+311 verbose url raw liftoff
+312 verbose url resolving [ 'https://registry.npmjs.org/', './liftoff' ]
+313 verbose url resolved https://registry.npmjs.org/liftoff
+314 info trying registry request attempt 1 at 00:56:04
+315 verbose etag "AC6LB6G8JAQ18HT4E7VLDAQD0"
+316 http GET https://registry.npmjs.org/liftoff
+317 verbose url raw tildify
+318 verbose url resolving [ 'https://registry.npmjs.org/', './tildify' ]
+319 verbose url resolved https://registry.npmjs.org/tildify
+320 info trying registry request attempt 1 at 00:56:04
+321 verbose etag "C9SNRMQLN8P44RH9CDFZNUZO4"
+322 http GET https://registry.npmjs.org/tildify
+323 verbose url raw semver
+324 verbose url resolving [ 'https://registry.npmjs.org/', './semver' ]
+325 verbose url resolved https://registry.npmjs.org/semver
+326 info trying registry request attempt 1 at 00:56:04
+327 verbose etag "84X3DLTVMGT6J4FAGBC989MRV"
+328 http GET https://registry.npmjs.org/semver
+329 verbose url raw generic-pool-redux
+330 verbose url resolving [ 'https://registry.npmjs.org/', './generic-pool-redux' ]
+331 verbose url resolved https://registry.npmjs.org/generic-pool-redux
+332 info trying registry request attempt 1 at 00:56:04
+333 verbose etag "343LSRMJE17M9D0TSDP2191R0"
+334 http GET https://registry.npmjs.org/generic-pool-redux
+335 verbose url raw inherits
+336 verbose url resolving [ 'https://registry.npmjs.org/', './inherits' ]
+337 verbose url resolved https://registry.npmjs.org/inherits
+338 info trying registry request attempt 1 at 00:56:04
+339 verbose etag "BCIWT1Q7RLZNUZRQ3GO6GVLNQ"
+340 http GET https://registry.npmjs.org/inherits
+341 verbose url raw lodash
+342 verbose url resolving [ 'https://registry.npmjs.org/', './lodash' ]
+343 verbose url resolved https://registry.npmjs.org/lodash
+344 info trying registry request attempt 1 at 00:56:04
+345 verbose etag "9DC257MH1YJWIXH1IBEITZRJY"
+346 http GET https://registry.npmjs.org/lodash
+347 verbose url raw mkdirp
+348 verbose url resolving [ 'https://registry.npmjs.org/', './mkdirp' ]
+349 verbose url resolved https://registry.npmjs.org/mkdirp
+350 info trying registry request attempt 1 at 00:56:04
+351 verbose etag "F17Q7UKYGSABJTXY4YCL38IZK"
+352 http GET https://registry.npmjs.org/mkdirp
+353 verbose url raw readable-stream
+354 verbose url resolving [ 'https://registry.npmjs.org/', './readable-stream' ]
+355 verbose url resolved https://registry.npmjs.org/readable-stream
+356 info trying registry request attempt 1 at 00:56:04
+357 verbose etag "AADJKQWZYXLR1KLSV1SVRLP4R"
+358 http GET https://registry.npmjs.org/readable-stream
+359 http 304 https://registry.npmjs.org/minimist
+360 silly registry.get cb [ 304,
+360 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+360 silly registry.get     server: 'Apache',
+360 silly registry.get     via: '1.1 varnish',
+360 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:55:50 GMT',
+360 silly registry.get     'cache-control': 'max-age=60',
+360 silly registry.get     etag: '"CQFVJEQ667X62OMCDEBQ4ETV0"',
+360 silly registry.get     'x-served-by': 'cache-lax1428-LAX',
+360 silly registry.get     'x-cache': 'HIT',
+360 silly registry.get     'x-cache-hits': '3',
+360 silly registry.get     'x-timer': 'S1407916564.464929,VS0,VE0',
+360 silly registry.get     vary: 'Accept',
+360 silly registry.get     'content-length': '0',
+360 silly registry.get     'keep-alive': 'timeout=10, max=50',
+360 silly registry.get     connection: 'Keep-Alive' } ]
+361 verbose etag minimist from cache
+362 silly addNameRange number 2 { name: 'minimist', range: '>=0.0.9- <0.1.0-', hasData: true }
+363 silly addNameRange versions [ 'minimist',
+363 silly addNameRange   [ '0.0.0',
+363 silly addNameRange     '0.0.1',
+363 silly addNameRange     '0.0.2',
+363 silly addNameRange     '0.0.3',
+363 silly addNameRange     '0.0.4',
+363 silly addNameRange     '0.0.5',
+363 silly addNameRange     '0.0.6',
+363 silly addNameRange     '0.0.7',
+363 silly addNameRange     '0.0.8',
+363 silly addNameRange     '0.0.9',
+363 silly addNameRange     '0.0.10',
+363 silly addNameRange     '0.1.0',
+363 silly addNameRange     '0.2.0',
+363 silly addNameRange     '1.0.0',
+363 silly addNameRange     '1.1.0' ] ]
+364 verbose addNamed [ 'minimist', '0.0.10' ]
+365 verbose addNamed [ '0.0.10', '0.0.10' ]
+366 silly lockFile 92f0553b-minimist-0-0-10 minimist@0.0.10
+367 verbose lock minimist@0.0.10 /Users/erik/.npm/92f0553b-minimist-0-0-10.lock
+368 verbose read json /Users/erik/.npm/minimist/0.0.10/package/package.json
+369 silly lockFile 92f0553b-minimist-0-0-10 minimist@0.0.10
+370 silly lockFile 92f0553b-minimist-0-0-10 minimist@0.0.10
+371 silly lockFile 5704eb56-minimist-0-0-9 minimist@~0.0.9
+372 silly lockFile 5704eb56-minimist-0-0-9 minimist@~0.0.9
+373 http 304 https://registry.npmjs.org/chalk
+374 silly registry.get cb [ 304,
+374 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+374 silly registry.get     server: 'Apache',
+374 silly registry.get     via: '1.1 varnish',
+374 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:55:41 GMT',
+374 silly registry.get     'cache-control': 'max-age=60',
+374 silly registry.get     etag: '"DOGQBJR6FT3D60SFRDA30107Y"',
+374 silly registry.get     'x-served-by': 'cache-lax1425-LAX',
+374 silly registry.get     'x-cache': 'HIT',
+374 silly registry.get     'x-cache-hits': '3',
+374 silly registry.get     'x-timer': 'S1407916564.471850,VS0,VE0',
+374 silly registry.get     vary: 'Accept',
+374 silly registry.get     'content-length': '0',
+374 silly registry.get     'keep-alive': 'timeout=10, max=50',
+374 silly registry.get     connection: 'Keep-Alive' } ]
+375 verbose etag chalk from cache
+376 silly lockFile b2f4396d-chalk-0-4-0 chalk@^0.4.0
+377 silly lockFile b2f4396d-chalk-0-4-0 chalk@^0.4.0
+378 verbose about to build /Users/erik/projects/nrtv/narrative/node_modules/knex
+379 info /Users/erik/projects/nrtv/narrative/node_modules/knex unbuild
+380 verbose from cache /Users/erik/projects/nrtv/narrative/node_modules/knex/package.json
+381 info preuninstall knex@0.6.22
+382 info uninstall knex@0.6.22
+383 verbose true,/Users/erik/projects/nrtv/narrative/node_modules,/Users/erik/projects/nrtv/narrative/node_modules unbuild knex@0.6.22
+384 verbose /Users/erik/projects/nrtv/narrative/node_modules/.bin,[object Object] binRoot
+385 info postuninstall knex@0.6.22
+386 http 304 https://registry.npmjs.org/bluebird
+387 silly registry.get cb [ 304,
+387 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+387 silly registry.get     server: 'Apache',
+387 silly registry.get     via: '1.1 varnish',
+387 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:56:04 GMT',
+387 silly registry.get     'cache-control': 'max-age=60',
+387 silly registry.get     etag: '"9NC897IUSDB4D25MY0JRS0IGX"',
+387 silly registry.get     'x-served-by': 'cache-lax1424-LAX',
+387 silly registry.get     'x-cache': 'HIT',
+387 silly registry.get     'x-cache-hits': '1',
+387 silly registry.get     'x-timer': 'S1407916564.507035,VS0,VE0',
+387 silly registry.get     vary: 'Accept',
+387 silly registry.get     'content-length': '0',
+387 silly registry.get     'keep-alive': 'timeout=10, max=50',
+387 silly registry.get     connection: 'Keep-Alive' } ]
+388 verbose etag bluebird from cache
+389 http 304 https://registry.npmjs.org/commander
+390 silly registry.get cb [ 304,
+390 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+390 silly registry.get     server: 'Apache',
+390 silly registry.get     via: '1.1 varnish',
+390 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:56:04 GMT',
+390 silly registry.get     'cache-control': 'max-age=60',
+390 silly registry.get     etag: '"DURP3HNO4ODTCN1F72LV11SM5"',
+390 silly registry.get     'x-served-by': 'cache-lax1430-LAX',
+390 silly registry.get     'x-cache': 'HIT',
+390 silly registry.get     'x-cache-hits': '1',
+390 silly registry.get     'x-timer': 'S1407916564.509579,VS0,VE0',
+390 silly registry.get     vary: 'Accept',
+390 silly registry.get     'content-length': '0',
+390 silly registry.get     'keep-alive': 'timeout=10, max=50',
+390 silly registry.get     connection: 'Keep-Alive' } ]
+391 verbose etag commander from cache
+392 http 304 https://registry.npmjs.org/interpret
+393 silly registry.get cb [ 304,
+393 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+393 silly registry.get     server: 'Apache',
+393 silly registry.get     via: '1.1 varnish',
+393 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:56:04 GMT',
+393 silly registry.get     'cache-control': 'max-age=60',
+393 silly registry.get     etag: '"E4FUKXJXW749HYD5UQR800N0F"',
+393 silly registry.get     'x-served-by': 'cache-lax1429-LAX',
+393 silly registry.get     'x-cache': 'HIT',
+393 silly registry.get     'x-cache-hits': '1',
+393 silly registry.get     'x-timer': 'S1407916564.512787,VS0,VE0',
+393 silly registry.get     vary: 'Accept',
+393 silly registry.get     'content-length': '0',
+393 silly registry.get     'keep-alive': 'timeout=10, max=50',
+393 silly registry.get     connection: 'Keep-Alive' } ]
+394 verbose etag interpret from cache
+395 silly lockFile 2507b88a-commander-2-2-0 commander@^2.2.0
+396 silly lockFile 2507b88a-commander-2-2-0 commander@^2.2.0
+397 silly addNameRange number 2 { name: 'bluebird', range: '>=1.2.0- <1.3.0-', hasData: true }
+398 silly addNameRange versions [ 'bluebird',
+398 silly addNameRange   [ '0.7.1-1',
+398 silly addNameRange     '0.7.1-2',
+398 silly addNameRange     '0.7.1-3',
+398 silly addNameRange     '0.7.1-4',
+398 silly addNameRange     '0.7.1-5',
+398 silly addNameRange     '0.7.2-0',
+398 silly addNameRange     '0.7.3-0',
+398 silly addNameRange     '0.7.4-0',
+398 silly addNameRange     '0.7.4-1',
+398 silly addNameRange     '0.7.5-0',
+398 silly addNameRange     '0.7.6-0',
+398 silly addNameRange     '0.7.7-0',
+398 silly addNameRange     '0.7.7-1',
+398 silly addNameRange     '0.7.8-0',
+398 silly addNameRange     '0.7.8-1',
+398 silly addNameRange     '0.7.9-0',
+398 silly addNameRange     '0.7.9-1',
+398 silly addNameRange     '0.7.10-0',
+398 silly addNameRange     '0.7.10-1',
+398 silly addNameRange     '0.7.11-0',
+398 silly addNameRange     '0.7.12-0',
+398 silly addNameRange     '0.7.12-1',
+398 silly addNameRange     '0.7.12-2',
+398 silly addNameRange     '0.8.0-0',
+398 silly addNameRange     '0.8.0-1',
+398 silly addNameRange     '0.8.0-2',
+398 silly addNameRange     '0.8.0-3',
+398 silly addNameRange     '0.8.1-0',
+398 silly addNameRange     '0.8.2-0',
+398 silly addNameRange     '0.8.2-1',
+398 silly addNameRange     '0.8.2-2',
+398 silly addNameRange     '0.8.3-0',
+398 silly addNameRange     '0.8.3-1',
+398 silly addNameRange     '0.8.3-2',
+398 silly addNameRange     '0.8.3-3',
+398 silly addNameRange     '0.8.4-0',
+398 silly addNameRange     '0.8.4-1',
+398 silly addNameRange     '0.8.5-0',
+398 silly addNameRange     '0.8.5-1',
+398 silly addNameRange     '0.9.0-0',
+398 silly addNameRange     '0.9.1-0',
+398 silly addNameRange     '0.9.1-1',
+398 silly addNameRange     '0.9.2-0',
+398 silly addNameRange     '0.9.2-1',
+398 silly addNameRange     '0.9.3-0',
+398 silly addNameRange     '0.9.4-0',
+398 silly addNameRange     '0.9.4-1',
+398 silly addNameRange     '0.9.5-0',
+398 silly addNameRange     '0.9.6-0',
+398 silly addNameRange     '0.9.7-0',
+398 silly addNameRange     '0.9.8-0',
+398 silly addNameRange     '0.9.9-0',
+398 silly addNameRange     '0.9.10-0',
+398 silly addNameRange     '0.9.10-1',
+398 silly addNameRange     '0.9.11-0',
+398 silly addNameRange     '0.9.11-1',
+398 silly addNameRange     '0.10.0-0',
+398 silly addNameRange     '0.10.0-1',
+398 silly addNameRange     '0.10.1-0',
+398 silly addNameRange     '0.10.2-0',
+398 silly addNameRange     '0.10.2-1',
+398 silly addNameRange     '0.10.3-0',
+398 silly addNameRange     '0.10.4-0',
+398 silly addNameRange     '0.10.4-1',
+398 silly addNameRange     '0.10.5-0',
+398 silly addNameRange     '0.10.6-0',
+398 silly addNameRange     '0.10.7-0',
+398 silly addNameRange     '0.10.8-0',
+398 silly addNameRange     '0.10.9-0',
+398 silly addNameRange     '0.10.9-1',
+398 silly addNameRange     '0.10.10-0',
+398 silly addNameRange     '0.10.11-0',
+398 silly addNameRange     '0.10.11-1',
+398 silly addNameRange     '0.10.11-2',
+398 silly addNameRange     '0.10.11-4',
+398 silly addNameRange     '0.10.12-0',
+398 silly addNameRange     '0.10.13-0',
+398 silly addNameRange     '0.10.13-1',
+398 silly addNameRange     '0.10.14-0',
+398 silly addNameRange     '0.11.0-0',
+398 silly addNameRange     '0.11.1-0',
+398 silly addNameRange     '0.11.2-0',
+398 silly addNameRange     '0.11.3-0',
+398 silly addNameRange     '0.11.4-0',
+398 silly addNameRange     '0.11.4-1',
+398 silly addNameRange     '0.11.5-0',
+398 silly addNameRange     '0.11.5-1',
+398 silly addNameRange     '0.11.6-0',
+398 silly addNameRange     '1.0.0',
+398 silly addNameRange     '1.0.1',
+398 silly addNameRange     '1.0.2',
+398 silly addNameRange     '1.0.3',
+398 silly addNameRange     '1.0.4',
+398 silly addNameRange     '1.0.5',
+398 silly addNameRange     '1.0.7',
+398 silly addNameRange     '1.0.8',
+398 silly addNameRange     '1.1.0',
+398 silly addNameRange     '1.1.1',
+398 silly addNameRange     '1.2.0',
+398 silly addNameRange     '1.2.1',
+398 silly addNameRange     '1.2.2',
+398 silly addNameRange     '1.2.3',
+398 silly addNameRange     '1.2.4',
+398 silly addNameRange     '2.0.2',
+398 silly addNameRange     '2.0.3',
+398 silly addNameRange     '2.0.4',
+398 silly addNameRange     '2.0.5',
+398 silly addNameRange     '2.0.6',
+398 silly addNameRange     '2.0.7',
+398 silly addNameRange     '2.1.1',
+398 silly addNameRange     '2.1.2',
+398 silly addNameRange     '2.1.3',
+398 silly addNameRange     '2.2.0',
+398 silly addNameRange     '2.2.1',
+398 silly addNameRange     '2.2.2' ] ]
+399 verbose addNamed [ 'bluebird', '1.2.4' ]
+400 verbose addNamed [ '1.2.4', '1.2.4' ]
+401 silly lockFile 215ce01e-bluebird-1-2-4 bluebird@1.2.4
+402 verbose lock bluebird@1.2.4 /Users/erik/.npm/215ce01e-bluebird-1-2-4.lock
+403 silly lockFile e5ecc112-interpret-0-3-2 interpret@^0.3.2
+404 silly lockFile e5ecc112-interpret-0-3-2 interpret@^0.3.2
+405 verbose read json /Users/erik/.npm/bluebird/1.2.4/package/package.json
+406 http 304 https://registry.npmjs.org/liftoff
+407 silly registry.get cb [ 304,
+407 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+407 silly registry.get     server: 'Apache',
+407 silly registry.get     via: '1.1 varnish',
+407 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:56:04 GMT',
+407 silly registry.get     'cache-control': 'max-age=60',
+407 silly registry.get     etag: '"AC6LB6G8JAQ18HT4E7VLDAQD0"',
+407 silly registry.get     'x-served-by': 'cache-lax1428-LAX',
+407 silly registry.get     'x-cache': 'HIT',
+407 silly registry.get     'x-cache-hits': '1',
+407 silly registry.get     'x-timer': 'S1407916564.556112,VS0,VE0',
+407 silly registry.get     vary: 'Accept',
+407 silly registry.get     'content-length': '0',
+407 silly registry.get     'keep-alive': 'timeout=10, max=49',
+407 silly registry.get     connection: 'Keep-Alive' } ]
+408 verbose etag liftoff from cache
+409 http 304 https://registry.npmjs.org/tildify
+410 silly registry.get cb [ 304,
+410 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+410 silly registry.get     server: 'Apache',
+410 silly registry.get     via: '1.1 varnish',
+410 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:56:04 GMT',
+410 silly registry.get     'cache-control': 'max-age=60',
+410 silly registry.get     etag: '"C9SNRMQLN8P44RH9CDFZNUZO4"',
+410 silly registry.get     'x-served-by': 'cache-lax1425-LAX',
+410 silly registry.get     'x-cache': 'HIT',
+410 silly registry.get     'x-cache-hits': '1',
+410 silly registry.get     'x-timer': 'S1407916564.559533,VS0,VE0',
+410 silly registry.get     vary: 'Accept',
+410 silly registry.get     'content-length': '0',
+410 silly registry.get     'keep-alive': 'timeout=10, max=49',
+410 silly registry.get     connection: 'Keep-Alive' } ]
+411 verbose etag tildify from cache
+412 http 304 https://registry.npmjs.org/semver
+413 silly registry.get cb [ 304,
+413 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+413 silly registry.get     server: 'Apache',
+413 silly registry.get     via: '1.1 varnish',
+413 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:56:04 GMT',
+413 silly registry.get     'cache-control': 'max-age=60',
+413 silly registry.get     etag: '"84X3DLTVMGT6J4FAGBC989MRV"',
+413 silly registry.get     'x-served-by': 'cache-lax1424-LAX',
+413 silly registry.get     'x-cache': 'HIT',
+413 silly registry.get     'x-cache-hits': '1',
+413 silly registry.get     'x-timer': 'S1407916564.564920,VS0,VE0',
+413 silly registry.get     vary: 'Accept',
+413 silly registry.get     'content-length': '0',
+413 silly registry.get     'keep-alive': 'timeout=10, max=49',
+413 silly registry.get     connection: 'Keep-Alive' } ]
+414 verbose etag semver from cache
+415 http 304 https://registry.npmjs.org/generic-pool-redux
+416 silly registry.get cb [ 304,
+416 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+416 silly registry.get     server: 'Apache',
+416 silly registry.get     via: '1.1 varnish',
+416 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:56:04 GMT',
+416 silly registry.get     'cache-control': 'max-age=60',
+416 silly registry.get     etag: '"343LSRMJE17M9D0TSDP2191R0"',
+416 silly registry.get     'x-served-by': 'cache-lax1430-LAX',
+416 silly registry.get     'x-cache': 'HIT',
+416 silly registry.get     'x-cache-hits': '1',
+416 silly registry.get     'x-timer': 'S1407916564.567080,VS0,VE0',
+416 silly registry.get     vary: 'Accept',
+416 silly registry.get     'content-length': '0',
+416 silly registry.get     'keep-alive': 'timeout=10, max=49',
+416 silly registry.get     connection: 'Keep-Alive' } ]
+417 verbose etag generic-pool-redux from cache
+418 http 304 https://registry.npmjs.org/inherits
+419 silly registry.get cb [ 304,
+419 silly registry.get   { date: 'Wed, 13 Aug 2014 07:56:04 GMT',
+419 silly registry.get     server: 'Apache',
+419 silly registry.get     via: '1.1 varnish',
+419 silly registry.get     'last-modified': 'Wed, 13 Aug 2014 07:55:27 GMT',
+419 silly registry.get     'cache-control': 'max-age=60',
+419 silly registry.get     etag: '"BCIWT1Q7RLZNUZRQ3GO6GVLNQ"',
+419 silly registry.get     'x-served-by': 'cache-lax1429-LAX',
+419 silly registry.get     'x-cache': 'HIT',
+419 silly registry.get     'x-cache-hits': '3',
+419 silly registry.get     'x-timer': 'S1407916564.578232,VS0,VE0',
+419 silly registry.get     vary: 'Accept',
+419 silly registry.get     'content-length': '0',
+419 silly registry.get     'keep-alive': 'timeout=10, max=49',
+419 silly registry.get     connection: 'Keep-Alive' } ]
+420 verbose etag inherits from cache
+421 silly lockFile 215ce01e-bluebird-1-2-4 bluebird@1.2.4
+422 silly lockFile 215ce01e-bluebird-1-2-4 bluebird@1.2.4
+423 silly lockFile 9e5a4bb8-bluebird-1-2-x bluebird@1.2.x
+424 silly lockFile 9e5a4bb8-bluebird-1-2-x bluebird@1.2.x
+425 silly lockFile b2e10727-tildify-0-2-0 tildify@^0.2.0
+426 silly lockFile b2e10727-tildify-0-2-0 tildify@^0.2.0
+427 silly lockFile 85d2d02f-semver-2-3-0 semver@^2.3.0
+428 silly lockFile 85d2d02f-semver-2-3-0 semver@^2.3.0
+429 silly lockFile 3c1466f9-liftoff-0-11-0 liftoff@^0.11.0
+430 silly lockFile 3c1466f9-liftoff-0-11-0 liftoff@^0.11.0
+431 silly addNameRange number 2 { name: 'generic-pool-redux',
+431 silly addNameRange   range: '>=0.1.0- <0.2.0-',
+431 silly addNameRange   hasData: true }
+432 silly addNameRange versions [ 'generic-pool-redux', [ '0.1.0' ] ]
+433 verbose addNamed [ 'generic-pool-redux', '0.1.0' ]
+434 verbose addNamed [ '0.1.0', '0.1.0' ]
+435 silly lockFile c1fec17f-generic-pool-redux-0-1-0 generic-pool-redux@0.1.0
+436 verbose lock generic-pool-redux@0.1.0 /Users/erik/.npm/c1fec17f-generic-pool-redux-0-1-0.lock
+437 error Error: No compatible version found: chalk@'^0.4.0'
+437 error Valid install targets:
+437 error ["0.1.0","0.1.1","0.2.0","0.2.1","0.3.0","0.4.0","0.5.0","0.5.1"]
+437 error     at installTargetsError (/usr/local/lib/node_modules/npm/lib/cache.js:682:10)
+437 error     at /usr/local/lib/node_modules/npm/lib/cache.js:597:10
+437 error     at saved (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/get.js:138:7)
+437 error     at Object.oncomplete (fs.js:93:15)
+438 error If you need help, you may report this log at:
+438 error     <http://github.com/isaacs/npm/issues>
+438 error or email it to:
+438 error     <npm-@googlegroups.com>
+439 error System Darwin 13.2.0
+440 error command "node" "/usr/local/bin/npm" "install" "knex"
+441 error cwd /Users/erik/projects/nrtv/narrative
+442 error node -v v0.10.0
+443 error npm -v 1.2.14
+444 verbose exit [ 1, true ]

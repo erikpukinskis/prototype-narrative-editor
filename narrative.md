@@ -62,6 +62,8 @@ Here's a `server`:
         })
       }
 
+      documents.test()
+      
       server.use(server.static('.'))
 
       server.get('/', function(xxxx, response) {
@@ -84,8 +86,11 @@ Here's a `server`:
 
           restart(name, buildServer())
 
+          documents.set(request.body.name, {lines: request.body.lines}, ok)
+          
           response.status(ok = 200).send()
         })
+
       })
     })
 
@@ -282,7 +287,9 @@ The first is `package.json`, which describes the various things running the serv
         "express": "*",
         "ejs": "*",
         "underscore": "*",
-        "body-parser": "*"
+        "body-parser": "*",
+        "knex": "*",
+        "pg": "*"
       },
       "devDependencies": {
         "requirejs": "*"
