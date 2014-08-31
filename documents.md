@@ -92,11 +92,14 @@ Lulzzzzz.
         }
 
         function createTable(callback) {
+          var drop = "DROP TABLE documents"
+
           var create = "CREATE TABLE IF NOT EXISTS documents ( \
             id serial PRIMARY KEY, \
             key varchar, \
-            value hstore \
+            value text \
           )"
+          console.log('create query is', create)
           _docs.query(create, function(err, result) {
             callback()
           })
@@ -104,15 +107,15 @@ Lulzzzzz.
 
         this.test = function() {
           var select = database.select('*').from('documents').toQuery()
-          var insert = database('documents').insert({key:'todd'}).toQuery()
-          console.log('insert query is', insert)
-          _docs.query(insert, function(err,data) {
-            console.log('insert is ', data)
+          var insert = database('documents').insert({key:'bill and', value: 'ted'}).toQuery()
+          console.log('the query is', select)
+          _docs.query(select, function(err,data) {
+            console.log('insert returned ', data)
             console.log('err is ', err)
 
-            _docs.query(select, function(data) {
-              console.log('select is', data.rows.slice(53,100))
-            })
+            // _docs.query(select, function(data) {
+            //   console.log('select is', data.rows.slice(53,100))
+            // })
           })
         }
 
