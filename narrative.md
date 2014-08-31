@@ -35,9 +35,9 @@ First off, this document is written in a filed called narrative.md. It's written
 
 In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
-Here's a `server`:
+Here's `center.js` of this story:
 
-    define('narrative', ['server', 'documents', 'build', 'require', 'migrate'], function(server, documents, build) {
+    define(['server', 'documents', 'build', 'require', 'folder', 'compile'], function(server, documents, build) {
       var servers = {}
 
       function restart(name, freshlyBuiltServer) {
@@ -87,21 +87,21 @@ Here's a `server`:
           restart(name, buildServer())
 
           documents.set(request.body.name, {lines: request.body.lines}, ok)
-          
+
           response.status(ok = 200).send()
         })
 
       })
     })
 
-> Note that in order to parse that we need to recognize server declarations in the Narrative compiler. The reason this is special is we need to know how to plug in to the narrative without actually running foreman on the filesystem. So in our POST after the compile we can just eval the funcs and then eval the server.
+> Note that in order to parse that we need to recognize center declarations in the Narrative compiler. The reason this is special is we need to know how to plug in to the narrative without actually running foreman on the filesystem. So in our POST after the compile we can just eval the funcs and then eval the server.
 
 Then we need a javascript file that starts the server. We'll put it in `narrative.js`:
 
     var requirejs = require('requirejs')
 
-    requirejs('server', function(server) {
-      server.start(process.env.PORT)
+    requirejs(['center'], function(center) {
+      center.start(process.env.PORT)
     })
 
 

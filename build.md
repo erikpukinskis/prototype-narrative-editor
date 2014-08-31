@@ -2,7 +2,7 @@ Build
 -----
 
 Reads a narrative and writes files to deploy to heroku. In `build.js`:
-
+  
     define(['folder', 'compile', 'underscore', 'indent'], function(folder, compile, underscore, indent) {
       var _ = underscore
 
@@ -63,9 +63,9 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
 
       saveFiles = function(name, destination) {
         compile(name, function(compiled) {
-          compiled.each.source(function(block)) {
+          compiled.each.source(function(block) {
             folder.write(destination + '/' + block.filename, block.source)
-          }
+          })
           callback(compiled)
         })
       }
@@ -80,6 +80,7 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
           indent("DONE! deps are " + deps)
 
           _(deps).each(function(narrative) {
+            if (narrative == 'center') { console.log('skipping center'); return }
             indent('Saving files for ' + narrative + ':')
             indent.in()
             saveFiles(narrative, 'build/' + name)

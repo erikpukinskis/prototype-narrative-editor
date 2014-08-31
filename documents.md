@@ -95,9 +95,12 @@ Lulzzzzz.
           var create = "CREATE TABLE IF NOT EXISTS documents ( \
             id serial PRIMARY KEY, \
             key varchar, \
-            value hstore \
+            value text \
           )"
+          console.log('about to create the table:', create)
           _docs.query(create, function(err, result) {
+            console.log('result of create is', result)
+            console.log('err is ', err)
             callback()
           })
         }

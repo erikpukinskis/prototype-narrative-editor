@@ -19,8 +19,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         }
 
         this.each = {
-          source: eachBlock(isSource)
-
+          source: eachBlock(isSource),
           code: eachBlock(isCode)
         }
         
@@ -66,7 +65,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         var filenameLastSeen = null
 
         blocks.forEach(function(block) {
-          // TODO: This needs to also identify server blocks now.
+          // TODO: This needs to also identify center blocks now.
           var inAComment = block.kind == 'comment'
           var inCode = !inAComment
           var matches = block.lines.join('').match(/`([^`]+)`/)

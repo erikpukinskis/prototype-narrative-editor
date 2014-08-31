@@ -24,7 +24,7 @@ This `server.js` is what you use to set up an Express/Node server:
             next()
           }
         })
-      })
+      }
 
       Server.prototype.start = function(port) { 
         this.app.listen(port, function() {
