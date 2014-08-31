@@ -33,13 +33,7 @@ But now the table creating code doesn't seem to work.
 
 Lulzzzzz.
 
-    define(['chain', 'knex', 'pg', 'indent'], function(chain, knex, pg, indent) {
-
-      var url = process.env.DATABASE_URL || 'postgres://erik:@localhost/data'
-
-      var database = require('knex')({
-        client: 'pg'
-      })
+    define(['chain', 'database', 'pg', 'indent', 'database'], function(chain, knex, pg, indent, database) {
 
       Documents = function() {
         _docs = this

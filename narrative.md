@@ -35,7 +35,7 @@ Let's make a server! We'll put it in `narrative.js`:
 
     var requirejs = require('requirejs')
 
-    requirejs(['server', 'documents', 'chain', 'require', 'indent'], function(server, documents) {
+    requirejs(['server', 'documents', 'chain', 'require', 'indent', 'database'], function(server, documents) {
       documents.test()
       
       server.use(server.static('.'))
