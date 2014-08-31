@@ -44,8 +44,25 @@ Let's make a server! We'll put it in `narrative.js`:
         response.sendfile('./edit.html')
       })
 
+      server.get('/narratives/narrative', function(xxxx, response) {
+        documents.get('narrative', function(document) {
+          console.log('got', document)
+          document = document || {
+            name: 'narrative',
+            lines: [
+              {string: '', kind: 'prose'}, 
+            ]
+          }
+
+          response.json(document)
+        })
+      })
+
       server.post('/narratives', function(request, response) {
-        function ok() { response.json({ok: true}) }
+        function ok(count) { 
+          console.log('wrote', count, 'to', request.body.name)
+          response.json({ok: true, saved: count}) 
+        }
         documents.set(request.body.name, {lines: request.body.lines}, ok)
       })
     })
@@ -66,7 +83,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     </head>
 
     <script type="text/x-handlebars">
-      {{narrative-editor model=model}}
+      {{narrative-editor model=model.lines}}
     </script>
 
     <script src="require.js"></script>
@@ -133,17 +150,15 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             this.timeout = setTimeout(function() {
               $.post('/narratives', {
                 name: 'narrative',
-                lines: _this.get('model')
+                lines: _this.get('model.lines')
               })
             }, 3000)
-          }.observes('model.@each.string')
+          }.observes('model.lines.@each.string')
         })
 
         App.ApplicationRoute = Ember.Route.extend({
           model: function() {
-            return [
-              {string: '', kind: 'prose'}, 
-            ]
+            return Ember.$.getJSON('/narratives/narrative')
           }
         })
 
