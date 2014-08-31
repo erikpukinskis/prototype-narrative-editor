@@ -33,77 +33,10 @@ But now the table creating code doesn't seem to work.
 
 Lulzzzzz.
 
-    define(['chain', 'database', 'pg', 'indent', 'database'], function(chain, knex, pg, indent, database) {
+    define(['database'], function(database) {
 
       Documents = function() {
         _docs = this
-
-        _docs.query = function(query, callback) {
-
-          if (!_docs.client) {
-            return connect(function() {
-              _docs.query(query, callback) // retry
-            })
-          }
-
-          if (!callback) {
-            throw new Error('Tried to run query ' + query + ' without providing a callback')
-          }
-
-          // console.log('%% query', query)
-          _docs.client.query(query, function(err, result) {
-            callback(result)
-          })
-        }
-
-        var waitingForConnect = [];
-
-        function connect(callback) {
-          if (_docs.client) {
-            return callback() 
-          }
-
-          waitingForConnect.push(callback)
-
-          if (waitingForConnect.length > 1) { return }
-
-          function callWaitingBack() {
-            waitingForConnect.forEach(function(waitingCallback) { 
-              waitingCallback() 
-            })
-          }
-
-          chain(hookUpPostgres, dropTable, createTable, callWaitingBack)
-        }
-
-
-        function hookUpPostgres(callback) {
-          pg.connect(process.env.DATABASE_URL, function(err, client) {
-            if (!_docs.client) { // in case another thread comes back first
-              _docs.client = client
-            }
-            callback()
-          })
-        }
-
-        function makeQueryFunction(query) {
-          return function(callback) {
-            _docs.query(query, callback)
-          }
-        }
-
-        function dropTable(callback) {
-          _docs.query("DROP TABLE documents", callback)
-        }
-
-        function createTable(callback) {
-          var create = "CREATE TABLE IF NOT EXISTS documents ( \
-            id serial PRIMARY KEY, \
-            key varchar, \
-            value text \
-          )"
-          _docs.query(create, callback)
-        }
 
         _docs.test = function() {
           _docs.set('i am', 'lost', function(rowCount) {
@@ -121,24 +54,24 @@ Lulzzzzz.
         }
 
         _docs.set = function(key, value, callback) {
-          var update = database('documents')
+          var update = database.table('documents')
             .where({key: key})
             .update({value: value})
             .toQuery()
 
-          var insert = database('documents').insert({key:key, value: value}).toQuery()
+          var insert = database.table('documents').insert({key:key, value: value}).toQuery()
 
           _docs.get(key, function(found) {
             var query = found ? update : insert
-            _docs.query(query, function(data) {
+            database.query(query, function(data) {
               callback(data && data.rowCount)
             })
           })
         }
         
         _docs.get = function(key, callback) {
-          var select = database.select('*').from('documents').where({key: key}).toQuery()
-          _docs.query(select, function(data) {
+          var select = database.table('*').from('documents').where({key: key}).toQuery()
+          database.query(select, function(data) {
             callback(data.rows[0] && data.rows[0].value)
           })
         }
