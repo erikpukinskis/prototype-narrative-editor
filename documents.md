@@ -120,7 +120,7 @@ Lulzzzzz.
         }
 
         this.set = function(key, value, callback) {
-          var insert = database('documents').insert({key:'bill and', value: 'ted'}).toQuery()
+          var insert = database('documents').insert({key:key, value: value}).toQuery()
           _docs.query(insert, function(data) {
             callback(data.rowCount)
           })
