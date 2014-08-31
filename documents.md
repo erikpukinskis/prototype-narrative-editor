@@ -111,31 +111,27 @@ Lulzzzzz.
         }
 
         this.test = function() {
-          var select = database.select('*').from('documents').toQuery()
-          var insert = database('documents').insert({key:'bill and', value: 'ted'}).toQuery()
-          var query = insert
-          console.log('the query is', query)
-          _docs.query(query, function(data) {
-            console.log('inserted', data.rowCount)
-
-            _docs.query(select, function(data) {
-              console.log('found', data.rows)
+          _docs.set('a', 'b', function(rowCount) {
+            console.log('inserted', rowCount)
+            _docs.get('a', function(rows) {
+              console.log('found', rows)
             })
           })
         }
 
-        //this.set = function(key, value, callback) {
-        //  var insert = database.insert({key: key, value: value}).into('documents').toQuery()
-        //  console.log('Sending insert query')
-        //  _docs.query(insert, callback)
-        //}
-        //
-        //this.get = function(key, callback) {
-        //  var select = database.select('*').from('documents').toQuery()
-        //  console.log('database', database)
-        //  indent('select is...' + select)
-        //  this.query(select, callback)
-        //}
+        this.set = function(key, value, callback) {
+          var insert = database('documents').insert({key:'bill and', value: 'ted'}).toQuery()
+          _docs.query(insert, function(data) {
+            callback(data.rowCount)
+          })
+        }
+        
+        this.get = function(key, callback) {
+          var select = database.select('*').from('documents').toQuery()
+          _docs.query(select, function(data) {
+            callback(data.rows)
+          })
+        }
       }
 
       return new Documents()
