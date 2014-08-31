@@ -127,9 +127,9 @@ Lulzzzzz.
         }
         
         this.get = function(key, callback) {
-          var select = database.select('*').from('documents').toQuery()
+          var select = database.select('*').from('documents').where({key: key}).toQuery()
           _docs.query(select, function(data) {
-            callback(data.rows)
+            callback(data.rows[0].value)
           })
         }
       }
