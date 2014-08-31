@@ -78,7 +78,7 @@ Lulzzzzz.
             })
           }
 
-          chain(hookUpPostgres, createTable, callWaitingBack)
+          chain(hookUpPostgres, dropTable, createTable, callWaitingBack)
         }
 
 
@@ -91,31 +91,36 @@ Lulzzzzz.
           })
         }
 
-        function createTable(callback) {
-          var drop = "DROP TABLE documents"
+        function makeQueryFunction(query) {
+          return function(callback) {
+            _docs.query(query, callback)
+          }
+        }
 
+        function dropTable(callback) {
+          _docs.query("DROP TABLE documents", callback)
+        }
+
+        function createTable(callback) {
           var create = "CREATE TABLE IF NOT EXISTS documents ( \
             id serial PRIMARY KEY, \
             key varchar, \
             value text \
           )"
-          console.log('create query is', create)
-          _docs.query(create, function(err, result) {
-            callback()
-          })
+          _docs.query(create, callback)
         }
 
         this.test = function() {
           var select = database.select('*').from('documents').toQuery()
           var insert = database('documents').insert({key:'bill and', value: 'ted'}).toQuery()
-          console.log('the query is', select)
-          _docs.query(select, function(err,data) {
-            console.log('insert returned ', data)
-            console.log('err is ', err)
+          var query = insert
+          console.log('the query is', query)
+          _docs.query(query, function(data) {
+            console.log('inserted', data.rowCount)
 
-            // _docs.query(select, function(data) {
-            //   console.log('select is', data.rows.slice(53,100))
-            // })
+            _docs.query(select, function(data) {
+              console.log('found', data.rows)
+            })
           })
         }
 
