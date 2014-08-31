@@ -36,17 +36,13 @@ Lulzzzzz.
     define(['database'], function(database) {
 
       function set(key, value, callback) {
-        var update = database.table('documents')
-          .where({key: key})
-          .update({value: value})
-          .toQuery()
-
-        var insert = database.table('documents').insert({key:key, value: value}).toQuery()
+        var update = "UPDATE documents SET value = '" + JSON.stringify(value) + "'"
+        var insert = "insert into documents (key, value) values ('i am', '" + JSON.stringify(value) + "')"
 
         get(key, function(found) {
           var query = found ? update : insert
           database.query(query, function(data) {
-            callback(data && data.rowCount)
+            callback(JSON.parse(data && data.rowCount))
           })
         })
       }
@@ -59,14 +55,14 @@ Lulzzzzz.
       }
 
       function test() {
-        set('i am', 'lost', function(rowCount) {
+        set('i am', {is: 'lost'}, function(rowCount) {
           console.log('inserted', rowCount)
           get('i am', function(value) {
-            console.log('data says i am', value)
-            set('i am', 'found', function(rowCount) {
+            console.log('data says i am', value.is)
+            set('i am', {is: 'found'}, function(rowCount) {
               console.log('inserted', rowCount)
               get('i am', function(value) {
-                console.log('now it says i am', value)
+                console.log('now it says i am', value.is)
               })
             })
           })

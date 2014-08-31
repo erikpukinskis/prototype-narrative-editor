@@ -46,7 +46,7 @@ A wrapper for knex with an upsert extension. `database.js`
         var create = "CREATE TABLE IF NOT EXISTS documents ( \
           id serial PRIMARY KEY, \
           key varchar, \
-          value text \
+          value json \
         )"
         query(create, callback)
       }
@@ -69,6 +69,7 @@ A wrapper for knex with an upsert extension. `database.js`
 
         // console.log('%% query', queryString)
         client.query(queryString, function(err, result) {
+          if(err) { throw new Error(queryString + ' // ' + err) }
           callback(result)
         })
       }
