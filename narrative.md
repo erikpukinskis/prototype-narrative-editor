@@ -8,8 +8,7 @@ Next up
 
 Requirejs is working, but there's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Get builder generating
- - [ ] Narrative saving client side
+ - [X] Narrative saving client side
  - [ ] Server reload
  - [ ] Type Narrative into itself
 
