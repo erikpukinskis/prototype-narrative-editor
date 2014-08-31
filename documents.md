@@ -38,7 +38,7 @@ Lulzzzzz.
       Documents = function() {
         _docs = this
 
-        this.query = function(query, callback) {
+        _docs.query = function(query, callback) {
 
           if (!_docs.client) {
             return connect(function() {
@@ -50,6 +50,7 @@ Lulzzzzz.
             throw new Error('Tried to run query ' + query + ' without providing a callback')
           }
 
+          // console.log('%% query', query)
           _docs.client.query(query, function(err, result) {
             callback(result)
           })
@@ -104,26 +105,41 @@ Lulzzzzz.
           _docs.query(create, callback)
         }
 
-        this.test = function() {
-          _docs.set('a', 'b', function(rowCount) {
+        _docs.test = function() {
+          _docs.set('i am', 'lost', function(rowCount) {
             console.log('inserted', rowCount)
-            _docs.get('a', function(rows) {
-              console.log('found', rows)
+            _docs.get('i am', function(value) {
+              console.log('data says i am', value)
+              _docs.set('i am', 'found', function(rowCount) {
+                console.log('inserted', rowCount)
+                _docs.get('i am', function(value) {
+                  console.log('now it says i am', value)
+                })
+              })
             })
           })
         }
 
-        this.set = function(key, value, callback) {
+        _docs.set = function(key, value, callback) {
+          var update = database('documents')
+            .where({key: key})
+            .update({value: value})
+            .toQuery()
+
           var insert = database('documents').insert({key:key, value: value}).toQuery()
-          _docs.query(insert, function(data) {
-            callback(data.rowCount)
+
+          _docs.get(key, function(found) {
+            var query = found ? update : insert
+            _docs.query(query, function(data) {
+              callback(data && data.rowCount)
+            })
           })
         }
         
-        this.get = function(key, callback) {
+        _docs.get = function(key, callback) {
           var select = database.select('*').from('documents').where({key: key}).toQuery()
           _docs.query(select, function(data) {
-            callback(data.rows[0].value)
+            callback(data.rows[0] && data.rows[0].value)
           })
         }
       }
