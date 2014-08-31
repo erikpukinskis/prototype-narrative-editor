@@ -8,6 +8,7 @@ Next up
 
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
+ - [X] Narrative saving client side
  - [ ] Get server to run
  - [ ] Get hello world to run on the same server as narrative
  - [ ] Add a static asset
@@ -40,6 +41,10 @@ Here's `center.js` of this story:
     define(['server', 'documents', 'build', 'require', 'folder', 'compile'], function(server, documents, build) {
       var servers = {}
 
+      documents.test()
+      
+      server.use(server.static('.'))
+
       function restart(name, freshlyBuiltServer) {
         var port = 3001
         if(servers[name]) { 
@@ -62,12 +67,22 @@ Here's `center.js` of this story:
         })
       }
 
-      documents.test()
-      
-      server.use(server.static('.'))
-
       server.get('/', function(xxxx, response) {
         response.sendfile('./edit.html')
+      })
+
+      server.get('/narratives/narrative', function(xxxx, response) {
+        documents.get('narrative', function(document) {
+          console.log('got', document)
+          document = document || {
+            name: 'narrative',
+            lines: [
+              {string: '', kind: 'prose'}, 
+            ]
+          }
+
+          response.json(document)
+        })
       })
 
       server.post('/narratives', function(request, response) {
@@ -86,12 +101,14 @@ Here's `center.js` of this story:
 
           restart(name, buildServer())
 
-          documents.set(request.body.name, {lines: request.body.lines}, ok)
-
-          response.status(ok = 200).send()
+          documents.set(request.body.name, {lines: request.body.lines}, function(count) {
+            console.log('wrote', count, 'to', request.body.name)
+            response.json({ok: true, saved: count}) 
+          })
         })
-
       })
+
+      return server
     })
 
 > Note that in order to parse that we need to recognize center declarations in the Narrative compiler. The reason this is special is we need to know how to plug in to the narrative without actually running foreman on the filesystem. So in our POST after the compile we can just eval the funcs and then eval the server.
@@ -121,7 +138,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     </head>
 
     <script type="text/x-handlebars">
-      {{narrative-editor model=model}}
+      {{narrative-editor model=model.lines}}
     </script>
 
     <script src="require.js"></script>
@@ -188,17 +205,15 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             this.timeout = setTimeout(function() {
               $.post('/narratives', {
                 name: 'narrative',
-                lines: _this.get('model')
+                lines: _this.get('model.lines')
               })
             }, 3000)
-          }.observes('model.@each.string')
+          }.observes('model.lines.@each.string')
         })
 
         App.ApplicationRoute = Ember.Route.extend({
           model: function() {
-            return [
-              {string: '', kind: 'prose'}, 
-            ]
+            return Ember.$.getJSON('/narratives/narrative')
           }
         })
 
@@ -282,7 +297,7 @@ The first is `package.json`, which describes the various things running the serv
 
     {
       "name": "narrative",
-      "version": "0.2.3",
+      "version": "0.2.5",
       "dependencies": {
         "express": "*",
         "ejs": "*",

@@ -1347,5 +1347,4 @@ Underscore
       }
     }).call(this);
 
-    console.log("\n\nSetting underscore to " + _)
     define(function() { return _ })
