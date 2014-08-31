@@ -35,48 +35,44 @@ Lulzzzzz.
 
     define(['database'], function(database) {
 
-      Documents = function() {
-        _docs = this
+      function set(key, value, callback) {
+        var update = database.table('documents')
+          .where({key: key})
+          .update({value: value})
+          .toQuery()
 
-        _docs.test = function() {
-          _docs.set('i am', 'lost', function(rowCount) {
-            console.log('inserted', rowCount)
-            _docs.get('i am', function(value) {
-              console.log('data says i am', value)
-              _docs.set('i am', 'found', function(rowCount) {
-                console.log('inserted', rowCount)
-                _docs.get('i am', function(value) {
-                  console.log('now it says i am', value)
-                })
+        var insert = database.table('documents').insert({key:key, value: value}).toQuery()
+
+        get(key, function(found) {
+          var query = found ? update : insert
+          database.query(query, function(data) {
+            callback(data && data.rowCount)
+          })
+        })
+      }
+
+      function get (key, callback) {
+        var select = database.table('*').from('documents').where({key: key}).toQuery()
+        database.query(select, function(data) {
+          callback(data.rows[0] && data.rows[0].value)
+        })
+      }
+
+      function test() {
+        set('i am', 'lost', function(rowCount) {
+          console.log('inserted', rowCount)
+          get('i am', function(value) {
+            console.log('data says i am', value)
+            set('i am', 'found', function(rowCount) {
+              console.log('inserted', rowCount)
+              get('i am', function(value) {
+                console.log('now it says i am', value)
               })
             })
           })
-        }
-
-        _docs.set = function(key, value, callback) {
-          var update = database.table('documents')
-            .where({key: key})
-            .update({value: value})
-            .toQuery()
-
-          var insert = database.table('documents').insert({key:key, value: value}).toQuery()
-
-          _docs.get(key, function(found) {
-            var query = found ? update : insert
-            database.query(query, function(data) {
-              callback(data && data.rowCount)
-            })
-          })
-        }
-        
-        _docs.get = function(key, callback) {
-          var select = database.table('*').from('documents').where({key: key}).toQuery()
-          database.query(select, function(data) {
-            callback(data.rows[0] && data.rows[0].value)
-          })
-        }
+        })
       }
 
-      return new Documents()
+      return {get: get, set: set, test: test}
     })
 
