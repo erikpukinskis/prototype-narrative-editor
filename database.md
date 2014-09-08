@@ -56,6 +56,7 @@ A wrapper for knex with an upsert extension. `database.js`
       }
 
       function query(queryString, callback) {
+        // console.log('callback is', callback)
 
         if (!client) {
           return connect(function() {
@@ -70,6 +71,7 @@ A wrapper for knex with an upsert extension. `database.js`
         // console.log('%% query', queryString)
         client.query(queryString, function(err, result) {
           if(err) { throw new Error(queryString + ' // ' + err) }
+          // console.log('and now', callback)
           callback(result)
         })
       }

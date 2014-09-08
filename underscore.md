@@ -1348,3 +1348,7 @@ Underscore
     }).call(this);
 
     define(function() { return _ })
+
+    define('pick', function(obj) {
+      console.log('picking')
+    })

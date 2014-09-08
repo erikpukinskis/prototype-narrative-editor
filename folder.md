@@ -20,7 +20,7 @@ Reads, writes, and moves files. In `folder.js`:
           if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir)
           }
-          indent('writing ' + path, 1)
+          indent('writing ' + path)
           fs.writeFileSync(path, content)
         },
         read: function(filename) {

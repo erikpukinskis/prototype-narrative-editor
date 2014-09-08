@@ -38,7 +38,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'require', 'folder', 'compile'], function(server, documents, build) {
+    define(['server', 'documents', 'build', 'underscore', 'require', 'folder', 'compile'], function(server, documents, build, underscore) {
       var servers = {}
 
       documents.test()
@@ -72,8 +72,9 @@ Here's `center.js` of this story:
       })
 
       server.get('/narratives/narrative', function(xxxx, response) {
+        console.log('[GET] client is asking for narrative. looking in db.')
         documents.get('narrative', function(document) {
-          console.log('got', document)
+          console.log('looking in the db for narrative, found ' + document)
           document = document || {
             name: 'narrative',
             lines: [
@@ -81,35 +82,33 @@ Here's `center.js` of this story:
             ]
           }
 
+          console.log('sending document with ' + document.lines.length + ' lines')
           response.json(document)
         })
       })
 
       server.post('/narratives', function(request, response) {
         var name = request.body.name
+        console.log('[POST] saving ' + request.body.name + ' to the db')
 
-        documents.set(name, request.pick('body', 'lines'))
+        documents.set(name, _(request.body).pick('lines', 'name'), function() {
 
-        compile(name, function(compiled) {
-          var block = compiled.blocks.servers()[0]
-
-          evalDependencies(compiled)
-
-          saveStaticFileToPostgres(compiled.blocks.files)
-
-          var buildServer = eval(block.source)
-
-          restart(name, buildServer())
-
-          documents.set(request.body.name, {lines: request.body.lines}, function(count) {
-            console.log('wrote', count, 'to', request.body.name)
-            response.json({ok: true, saved: count}) 
+          compile(name, function(compiled) {
+            console.log('looking for servers....')
+            var block = compiled.each.server(function(block) {
+              console.log('compiled '+name+' and got server:'+block)
+              var buildServer = eval(block.source)
+              restart(name, buildServer())
+              response.json({ok: true})
+            })
           })
         })
       })
 
       return server
     })
+
+At this point we need to 
 
 > Note that in order to parse that we need to recognize center declarations in the Narrative compiler. The reason this is special is we need to know how to plug in to the narrative without actually running foreman on the filesystem. So in our POST after the compile we can just eval the funcs and then eval the server.
 

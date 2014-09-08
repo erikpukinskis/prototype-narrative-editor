@@ -2,15 +2,9 @@ Build
 -----
 
 Reads a narrative and writes files to deploy to heroku. In `build.js`:
-  
-    define(['folder', 'compile', 'underscore', 'indent'], function(folder, compile, underscore, indent) {
-      var _ = underscore
 
-      function isCode(block) { return block.kind == 'code' }
-      function hasFilename(block) { return !!block.filename }
-      function isSource(block) { return isCode(block) && hasFilename(block) }
-
-      function getDependencies(name, callback) {
+    define('getdependencies', ['compile', 'underscore', 'indent'], function(compile, _, indent) {
+      return function (name, callback) {
         var dependencies = []
 
         // We should refactor this so it's just a dependencies function
@@ -44,25 +38,32 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
         }
 
         function addDep(dep) {
-          if (_(dependencies).contains(dep)) {
-            indent(dep + ' is already in deps. Not adding.')
-          } else {
+          if (!_(dependencies).contains(dep)) {
             dependencies.push(dep)
-            indent('Added ' + dep + ' to the dependencies (' + dependencies + ')')
           }
         }
 
-        indent('Getting dependencies for ' + name + ':')
+        indent('Getting dependencies for ' + name + '. About to compile:')
         indent.in()
         compile(name, function(compiled) {
+          indent.out()
           compiled.each.code(searchBlock)
+          console.log("we're probably ending up here, right?")
+          indent('### calling back with ' + dependencies.length + '  dependencies')
+          callback(dependencies)
         })
-        indent.out()
-        callback(dependencies)
+        indent("done with getDeps block, hopefully ###'ing later")
       }
+    })
 
-      saveFiles = function(name, destination) {
+
+
+    define(['folder', 'compile', 'underscore', 'indent', 'getdependencies'], function(folder, compile, underscore, indent, getDependencies) {
+      var _ = underscore
+
+      saveFiles = function(name, destination, callback) {
         compile(name, function(compiled) {
+          // indent('-> compiled: '+ compiled)
           compiled.each.source(function(block) {
             folder.write(destination + '/' + block.filename, block.source)
           })
@@ -76,17 +77,33 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
         buildPath = 'build/' + name
 
         getDependencies(name, function(deps) {
+          // What's going on? This never returns.
           deps.push(name)
           indent("DONE! deps are " + deps)
 
+          var done = []
           _(deps).each(function(narrative) {
-            if (narrative == 'center') { console.log('skipping center'); return }
-            indent('Saving files for ' + narrative + ':')
+
+            function tryToFinish() {
+              done.push(narrative)
+              if (done.length == deps.length) {
+                indent("  -;-;-;-;-;-;-   Done with " + narrative)
+                callback()
+              }
+            }
+
+            if (narrative == 'center') { 
+              console.log('skipping center')
+              return tryToFinish()
+            }
+
             indent.in()
-            saveFiles(narrative, 'build/' + name)
+            saveFiles(narrative, 'build/' + name, tryToFinish)
             indent.out()
           })
         })
+
+        folder.copy(name + '.md', buildPath)
         indent.out()
       }
 

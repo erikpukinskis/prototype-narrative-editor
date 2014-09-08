@@ -3,7 +3,16 @@ Compiler
 
 Reads a narrative, breaks it into blocks, and figures out what kinds of blocks they are. In `compile.js`:
 
-    define(['folder'], function(folder) {
+    define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
+      function isCode(block) { return block.kind == 'code' }
+      function hasFilename(block) { return !!block.filename }
+      function isSource(block) { return isCode(block) && hasFilename(block) }
+      function isServer(block) { 
+        var answer = block.filename == 'center.js' ? 'it is' : 'it is not'
+        console.log('checking if '+block.filename+' is a server. '+answer)
+        return block.filename == 'center.js' 
+      }
+
       startsWith = function(string, pattern) {
         var pattern = new RegExp("^" + pattern);
         return !!string.match(pattern);
@@ -14,13 +23,18 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
 
         eachBlock = function(filter) {
           return function(callback) {
-            _(blocks).filter(filter).eachBlock(callback)
+            var _callback = callback
+            var filtered = _(blocks).chain()
+              .filter(filter)
+              .each(_callback)
+              .value()
           }
         }
 
         this.each = {
           source: eachBlock(isSource),
-          code: eachBlock(isCode)
+          code: eachBlock(isCode),
+          server: eachBlock(isServer)
         }
         
       }
@@ -86,14 +100,26 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
       }
 
       return compile = function(name, callback) {
+        // indent('Compiling ' + name + ". Trying to grab it from the db....")
 
-        var source = folder.read('./' + name + '.md')
-        if (!source) { throw new Error(name + '.md not found.')}
-        var blocks = getBlocks(source)
-        indent('Compiled ' + name + ' to ' + blocks.length + ' blocks')
+        documents.get(name, function(narrative) {
+          indent("pulled out", narrative ? JSON.stringify(narrative, null, 2) : 'NOTHING!' + ' from the db')
+          var source
+          if (narrative) {
+            source = narrative.lines.join("\n")
+          } else {
+            // indent('looking on hd for ./' + name + '.md')
+            source = folder.read('./' + name + '.md')
+          }
+          if (!source) { throw new Error(name + ' not found in documents or in a .md file.')}
+          var blocks = getBlocks(source)
+          indent('Compiled ' + name + ' to ' + blocks.length + ' blocks')
 
-        extractFilenamesAndSource(blocks)
+          extractFilenamesAndSource(blocks)
 
-        callback(new Compiled(blocks)) 
+          callback(new Compiled(blocks)) 
+
+        })
+
       }
     })

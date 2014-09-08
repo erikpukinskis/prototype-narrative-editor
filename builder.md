@@ -8,10 +8,13 @@ Here's what needs to happen.
 We need something that looks at the narratives and figures out which other narratives we're going to need. Maybe that can just be a lib of its own. The goal here is to be able to do 'build narrative' and all of the right shit goes into the folder.
 
     requirejs = require('requirejs')
-    requirejs(['build', 'compile', 'folder', 'indent'], function(build) {
+    requirejs(['build', 'compile', 'folder', 'indent', 'documents', 'database', 'chain'], function(build) {
       var name = process.argv[2]
       console.log('\n|||| |  |   |    |     |      |       |        |         |         '+name+'\n')
-      build(name)
+      build(name, function() {
+        console.log('ya we DID it!')
+        process.exit()
+      })
     }, function(error) { throw(error) })
 
 Needs some packages. `package.json`:
@@ -21,7 +24,9 @@ Needs some packages. `package.json`:
       "version": "0.0.2",
       "dependencies": {
         "requirejs": "*",
-        "underscore": "*"
+        "underscore": "*",
+        "pg": "*",
+        "knex": "*"
       },
       "engines": {
         "node": "*"
