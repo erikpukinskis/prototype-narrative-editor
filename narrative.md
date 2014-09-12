@@ -38,7 +38,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'underscore', 'require', 'folder', 'compile'], function(server, documents, build, underscore) {
+    define(['server', 'documents', 'build', 'underscore', 'require', 'folder', 'compile', 'database', 'chain', 'indent'], function(server, documents, build, underscore) {
       var servers = {}
 
       documents.test()
