@@ -8,8 +8,9 @@ Next up
 
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Narrative saving client side
- - [ ] Get server to run
+ - [X] Get server to run
+ - [ ] Have getDependencies use source
+ - [ ] Figure out why server isn't compiling
  - [ ] Get hello world to run on the same server as narrative
  - [ ] Add a static asset
  - [ ] Add a dependency on a different narrative
@@ -38,7 +39,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'underscore', 'require', 'folder', 'compile', 'database', 'chain', 'indent'], function(server, documents, build, underscore) {
+    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'require', 'folder', 'compile', 'database', 'chain', 'indent'], function(server, documents, build, underscore, getDependencies) {
       var servers = {}
 
       documents.test()
@@ -53,18 +54,6 @@ Here's `center.js` of this story:
         }
         freshlyBuiltServer.start(port)
         servers[name] = freshlyBuiltServer
-      }
-
-      function evalDependencies(compiled) {
-        build.getDependencies(compiled.blocks, function(deps) {
-          _(deps).each(function(dep) {
-            compile(dep, function(compiled) {
-              _(compiled.blocks.definitions).each(function(block) {
-                eval(block.source)
-              })
-            })
-          })
-        })
       }
 
       server.get('/', function(xxxx, response) {
@@ -90,10 +79,23 @@ Here's `center.js` of this story:
       server.post('/narratives', function(request, response) {
         var name = request.body.name
         console.log('[POST] saving ' + request.body.name + ' to the db')
+        var doc = _(request.body).pick('lines', 'name')
+        console.log("Got " + JSON.stringify(doc, null, 2) + "\n\n\n\nFrom " + JSON.stringify(request.body, null, 2))
+        console.log('keys are ', _(request).keys().join(','))
 
-        documents.set(name, _(request.body).pick('lines', 'name'), function() {
-
-          compile(name, function(compiled) {
+        documents.set(name, doc, function() {
+          var source
+          _(doc.lines).each(function(line) {
+            if (string) { 
+              source = source + "\n"
+            } else {
+              source = ""
+            }
+            source = source + line.string
+          })
+          
+          compile(source, function(compiled) {
+            console.log('compiled to ' + JSON.stringify(compiled, null, 2))
             console.log('looking for servers....')
             var block = compiled.each.server(function(block) {
               console.log('compiled '+name+' and got server:'+block)

@@ -99,27 +99,18 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         })
       }
 
-      return compile = function(name, callback) {
-        // indent('Compiling ' + name + ". Trying to grab it from the db....")
-
-        documents.get(name, function(narrative) {
-          indent("pulled out", narrative ? JSON.stringify(narrative, null, 2) : 'NOTHING!' + ' from the db')
-          var source
-          if (narrative) {
-            source = narrative.lines.join("\n")
-          } else {
-            // indent('looking on hd for ./' + name + '.md')
-            source = folder.read('./' + name + '.md')
-          }
-          if (!source) { throw new Error(name + ' not found in documents or in a .md file.')}
-          var blocks = getBlocks(source)
-          indent('Compiled ' + name + ' to ' + blocks.length + ' blocks')
-
-          extractFilenamesAndSource(blocks)
-
-          callback(new Compiled(blocks)) 
-
-        })
-
+      function summarize(source) {
+        return source.substr(0,40).split('\n').join(' ')        
       }
+
+      function compile(source, callback) {
+        var blocks = getBlocks(source)
+        indent('Compiled ' + summarize(source) + '... to ' + blocks.length + ' blocks')
+        extractFilenamesAndSource(blocks)
+        callback(new Compiled(blocks)) 
+      }
+
+      compile.summarize = summarize
+
+      return compile
     })
