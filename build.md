@@ -11,6 +11,10 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
         // indent('Compiling ' + name)
         source = folder.read('./' + name + '.md')
 
+        if (!source) {
+          indent("reading "+name+" ... got source:"+source)
+        }
+
         compile(source, function(compiled) {
           indent('-> compiled: '+ compiled)
           compiled.each.source(function(block) {

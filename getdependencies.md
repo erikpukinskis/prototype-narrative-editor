@@ -21,7 +21,7 @@ Get Dependencies
         // })
 
         function searchBlock(block) {
-          var pattern = /(define|require(js)?) *\( *\[.*/g
+          var pattern = /(define) *\( *\[.*/g
           var match = block.source.match(pattern)
           _(match).each(searchLine)
         }

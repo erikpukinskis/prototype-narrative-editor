@@ -9,8 +9,8 @@ Next up
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [X] Get server to run
- - [ ] Have getDependencies use source
- - [ ] Figure out why server isn't compiling
+ - [X] Have getDependencies use source
+ - [X] Figure out why server isn't compiling
  - [ ] Get hello world to run on the same server as narrative
  - [ ] Add a static asset
  - [ ] Add a dependency on a different narrative
@@ -19,6 +19,13 @@ There's some stuff to clean up to get back to feature parity with 0.2.0.
  - [ ] Type Narrative into itself
 
 And that'll be 0.3.0, "Self hosting without touching the filesystem".
+
+Maybe 0.4.0 can be:
+
+ - [ ] Split code blocks
+ - [ ] Indented comments
+ - [ ] Colors
+ - [ ] Actually make these narratives read well
 
 Backlog
 -------
@@ -39,10 +46,10 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'require', 'folder', 'compile', 'database', 'chain', 'indent'], function(server, documents, build, underscore, getDependencies) {
+    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'require', 'folder', 'database', 'chain', 'indent'], function(server, documents, build, underscore, getDependencies, compile) {
       var servers = {}
 
-      documents.test()
+      // documents.test()
       
       server.use(server.static('.'))
 
@@ -56,11 +63,22 @@ Here's `center.js` of this story:
         servers[name] = freshlyBuiltServer
       }
 
+      function docToSource(doc) {
+        var source = ''
+        _(doc.lines).each(function(line) {
+          if (source.length > 0) { source = source + "\n" }
+          var prefix = line.kind == 'code' ? '    ' : ''
+          source = source + prefix + line.string
+        })
+        console.log("made source:\n-------------\n"+source+"^^^^^^^^^^^^^^^^")
+        return source
+      }
+
       server.get('/', function(xxxx, response) {
         response.sendfile('./edit.html')
       })
 
-      server.get('/narratives/narrative', function(xxxx, response) {
+      server.get('/narratives/dingler', function(xxxx, response) {
         console.log('[GET] client is asking for narrative. looking in db.')
         documents.get('narrative', function(document) {
           console.log('looking in the db for narrative, found ' + document)
@@ -71,7 +89,7 @@ Here's `center.js` of this story:
             ]
           }
 
-          console.log('sending document with ' + document.lines.length + ' lines')
+          console.log('sending document', JSON.stringify(document, null, 2))
           response.json(document)
         })
       })
@@ -81,27 +99,22 @@ Here's `center.js` of this story:
         console.log('[POST] saving ' + request.body.name + ' to the db')
         var doc = _(request.body).pick('lines', 'name')
         console.log("Got " + JSON.stringify(doc, null, 2) + "\n\n\n\nFrom " + JSON.stringify(request.body, null, 2))
-        console.log('keys are ', _(request).keys().join(','))
 
         documents.set(name, doc, function() {
-          var source
-          _(doc.lines).each(function(line) {
-            if (string) { 
-              source = source + "\n"
-            } else {
-              source = ""
-            }
-            source = source + line.string
-          })
+          var source = docToSource(doc)
           
           compile(source, function(compiled) {
             console.log('compiled to ' + JSON.stringify(compiled, null, 2))
             console.log('looking for servers....')
             var block = compiled.each.server(function(block) {
               console.log('compiled '+name+' and got server:'+block)
-              var buildServer = eval(block.source)
-              restart(name, buildServer())
-              response.json({ok: true})
+              
+              var func = eval(block.source)
+              console.log('func is', func)
+              require([name], function(output) {
+                console.log("OK, loaded: ", output)
+                response.json({ok: true})
+              })
             })
           })
         })
@@ -205,7 +218,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             if (this.timeout) { clearTimeout(this.timeout) }
             this.timeout = setTimeout(function() {
               $.post('/narratives', {
-                name: 'narrative',
+                name: 'dingler',
                 lines: _this.get('model.lines')
               })
             }, 3000)
@@ -214,7 +227,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         App.ApplicationRoute = Ember.Route.extend({
           model: function() {
-            return Ember.$.getJSON('/narratives/narrative')
+            return Ember.$.getJSON('/narratives/dingler')
           }
         })
 
