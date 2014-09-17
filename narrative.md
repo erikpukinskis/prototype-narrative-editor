@@ -109,8 +109,9 @@ Here's `center.js` of this story:
             var block = compiled.each.server(function(block) {
               console.log('compiled '+name+' and got server:'+block)
               
-              var func = eval(block.source)
-              console.log('func is', func)
+              requirejs.undef(name)
+              eval(block.source)
+
               require([name], function(output) {
                 console.log("OK, loaded: ", output)
                 response.json({ok: true})
