@@ -44273,4 +44273,4 @@ Ember
 
     console.log("\n\n\n\n\n\n\nNOOOOOOOOOOOOO\n\n\n")
     console.log('ember handlebars is ' + Ember.Handlebars)
-    define('ember', function() { return Ember })
+    define('ember', ['jquery', 'handlebars'], function() { return Ember })

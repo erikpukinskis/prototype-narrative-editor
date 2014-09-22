@@ -49,7 +49,7 @@ Here's `center.js` of this story:
     define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'require', 'folder', 'database', 'chain', 'indent'], function(server, documents, build, underscore, getDependencies, compile) {
       var servers = {}
 
-      // documents.test()
+      documents.test()
       
       server.use(server.static('.'))
 
@@ -80,7 +80,7 @@ Here's `center.js` of this story:
 
       server.get('/narratives/dingler', function(xxxx, response) {
         console.log('[GET] client is asking for narrative. looking in db.')
-        documents.get('narrative', function(document) {
+        documents.get('dingler', function(document) {
           console.log('looking in the db for narrative, found ' + document)
           document = document || {
             name: 'narrative',
@@ -159,8 +159,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <script src="require.js"></script>
     <script data-main="editor" src="require.js"></script>
     <script data-main="ember" src="require.js"></script>
-    <script data-main="jquery" src="require.js"></script>
-    <script data-main="handlebars" src="require.js"></script>
     <script data-main="underscore" src="require.js"></script>
 
     <script>
