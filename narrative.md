@@ -8,10 +8,7 @@ Next up
 
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Get server to run
- - [X] Have getDependencies use source
- - [X] Figure out why server isn't compiling
- - [ ] Get hello world to run on the same server as narrative
+ - [X] Get hello world to run on the same server as narrative
  - [ ] Add a static asset
  - [ ] Add a dependency on a different narrative
  - [ ] Type in Folder
@@ -114,9 +111,11 @@ Here's `center.js` of this story:
               try {
                 eval(block.source)
 
-                require([name], function(output) {
+                requirejs([name], function(output) {
                   console.log("OK, loaded: ", output)
                   response.json({ok: true})
+                }, function() {
+                  console.log("There was an error.")
                 })
 
               } catch (e) {
