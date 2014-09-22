@@ -110,12 +110,19 @@ Here's `center.js` of this story:
               console.log('compiled '+name+' and got server:'+block)
               
               requirejs.undef(name)
-              eval(block.source)
 
-              require([name], function(output) {
-                console.log("OK, loaded: ", output)
-                response.json({ok: true})
-              })
+              try {
+                eval(block.source)
+
+                require([name], function(output) {
+                  console.log("OK, loaded: ", output)
+                  response.json({ok: true})
+                })
+
+              } catch (e) {
+                console.log(e)
+              }
+
             })
           })
         })
