@@ -43,7 +43,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'require', 'folder', 'database', 'chain', 'indent'], function(server, documents, build, underscore, getDependencies, compile) {
+    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent'], function(server, documents, build, underscore, getDependencies, compile, load) {
       var servers = {}
 
       documents.test()
@@ -101,27 +101,9 @@ Here's `center.js` of this story:
           var source = docToSource(doc)
           
           compile(source, function(compiled) {
-            console.log('compiled to ' + JSON.stringify(compiled, null, 2))
-            console.log('looking for servers....')
-            var block = compiled.each.server(function(block) {
-              console.log('compiled '+name+' and got server:'+block)
-              
-              requirejs.undef(name)
-
-              try {
-                eval(block.source)
-
-                requirejs([name], function(output) {
-                  console.log("OK, loaded: ", output)
-                  response.json({ok: true})
-                }, function() {
-                  console.log("There was an error.")
-                })
-
-              } catch (e) {
-                console.log(e)
-              }
-
+            load(name, compiled, function() {
+              console.log("OK, loaded.")
+              response.json({ok: true})
             })
           })
         })
