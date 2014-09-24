@@ -62,7 +62,7 @@ Documents
         console.log("BEING USED!")
         var pattern = /^\/documents\/([a-z\/.]+)$/
         var partsOfTheAddress = request.url.match(pattern)
-        if (!partsOfTheAddress) { doTheNextThing() }
+        if (!partsOfTheAddress) { return doTheNextThing() }
         var name = partsOfTheAddress[1]
         get(name, function(document) {
           response.send(document)

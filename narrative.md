@@ -77,7 +77,8 @@ Here's `center.js` of this story:
 
       server.use(documents.api)
 
-      server.get('/narratives/dingler', function(xxxx, response) {
+      server.get('/narratives/:name', function(request, response) {
+        console.log(request.params)
         console.log('[GET] client is asking for narrative. looking in db.')
         documents.get('dingler', function(document) {
           console.log('looking in the db for narrative, found ' + document)
