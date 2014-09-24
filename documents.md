@@ -17,7 +17,7 @@ Documents
           var query = found ? update : insert
           database.query(query, function(data) {
             console.log('+ set', data && data.rowCount, 'with', query)
-            callback(JSON.parse(data && data.rowCount))
+            if (callback) { callback(JSON.parse(data && data.rowCount)) }
           })
         })
       }
@@ -58,6 +58,17 @@ Documents
         })
       }
 
-      return {get: get, set: set, test: test}
+      var api = function(request, response, doTheNextThing) {
+        console.log("BEING USED!")
+        var pattern = /^\/documents\/([a-z\/.]+)$/
+        var partsOfTheAddress = request.url.match(pattern)
+        if (!partsOfTheAddress) { doTheNextThing() }
+        var name = partsOfTheAddress[1]
+        get(name, function(document) {
+          response.send(document)
+        })
+      }
+
+      return {get: get, set: set, test: test, api: api}
     })
 

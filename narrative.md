@@ -8,8 +8,8 @@ Next up
 
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Get hello world to run on the same server as narrative
- - [ ] Add a static asset
+ - [X] Add a static asset
+ - [ ] Save different narratives
  - [ ] Add a dependency on a different narrative
  - [ ] Type in Folder
  - [ ] Type in all the other deps
@@ -74,6 +74,8 @@ Here's `center.js` of this story:
       server.get('/', function(xxxx, response) {
         response.sendfile('./edit.html')
       })
+
+      server.use(documents.api)
 
       server.get('/narratives/dingler', function(xxxx, response) {
         console.log('[GET] client is asking for narrative. looking in db.')
