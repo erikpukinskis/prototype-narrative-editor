@@ -17,6 +17,8 @@ This goes in `editor.js`:
     }
 
     define(['ember', 'underscore'], function(ember, underscore) {
+      if (typeof window === 'undefined') { return }
+
       var _ = underscore
       return {
         template: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}'),

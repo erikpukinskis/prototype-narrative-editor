@@ -8,8 +8,7 @@ Next up
 
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Add a static asset
- - [ ] Save different narratives
+ - [X] Save different narratives
  - [ ] Add a dependency on a different narrative
  - [ ] Type in Folder
  - [ ] Type in all the other deps
@@ -43,7 +42,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent'], function(server, documents, build, underscore, getDependencies, compile, load) {
+    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor'], function(server, documents, build, underscore, getDependencies, compile, load) {
       var servers = {}
 
       documents.test()
@@ -71,23 +70,28 @@ Here's `center.js` of this story:
         return source
       }
 
-      server.get('/', function(xxxx, response) {
+      function editor(xxxx, response) {
         response.sendfile('./edit.html')
-      })
+      }
+
+      server.get('/', editor)
+
+      server.get('/:name', editor)
 
       server.use(documents.api)
 
       server.get('/narratives/:name', function(request, response) {
-        console.log(request.params)
-        console.log('[GET] client is asking for narrative. looking in db.')
-        documents.get('dingler', function(document) {
+        var name = request.params.name
+        console.log('[GET] client is asking for '+name+' narrative. looking in db.')
+        documents.get(name, function(document) {
           console.log('looking in the db for narrative, found ' + document)
+          if (document && !document.lines) { document = null }
           document = document || {
-            name: 'narrative',
             lines: [
               {string: '', kind: 'prose'}, 
             ]
           }
+          document.name = name
 
           console.log('sending document', JSON.stringify(document, null, 2))
           response.json(document)
@@ -143,7 +147,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         <link rel="stylesheet" href="styles.css" />
     </head>
 
-    <script type="text/x-handlebars">
+    <script type="text/x-handlebars" data-template-name="narrative">
       {{narrative-editor model=model.lines}}
     </script>
 
@@ -202,22 +206,31 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           }
         });
 
-        App.ApplicationController = Ember.Controller.extend({
+        App.NarrativeController = Ember.Controller.extend({
+          hi: function() {
+            return 'yup'
+          }.property('model'),
+
           save: function() {
             var _this = this
             if (this.timeout) { clearTimeout(this.timeout) }
             this.timeout = setTimeout(function() {
-              $.post('/narratives', {
-                name: 'dingler',
-                lines: _this.get('model.lines')
-              })
+              $.post('/narratives', _this.get('model'))
             }, 3000)
           }.observes('model.lines.@each.string')
         })
 
-        App.ApplicationRoute = Ember.Route.extend({
-          model: function() {
-            return Ember.$.getJSON('/narratives/dingler')
+        App.Router.reopen({
+          location: 'history'
+        })
+
+        App.Router.map(function() {
+          this.route("narrative", { path: "/:name" });
+        })
+
+        App.NarrativeRoute = Ember.Route.extend({
+          model: function(params) {
+            return Ember.$.getJSON('/narratives/' + params.name)
           }
         })
 
