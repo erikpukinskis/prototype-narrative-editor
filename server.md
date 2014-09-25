@@ -83,7 +83,7 @@ This `server.js` is what you use to set up an Express/Node server:
 
       test()
 
-      return new Server()
+      return Server
     })
 
 It boots up an express server with a catch-all route so that

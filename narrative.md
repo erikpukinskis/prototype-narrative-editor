@@ -9,7 +9,9 @@ Next up
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [X] Save different narratives
- - [ ] Add a dependency on a different narrative
+ - [X] Narrative that starts a server
+ - [ ] Stop old server when there's a new one
+ - [ ] Reload narrative when dependency is changed
  - [ ] Type in Folder
  - [ ] Type in all the other deps
  - [ ] Type Narrative into itself
@@ -43,21 +45,12 @@ In order for you to be reading a nicely formatted version of this document in yo
 Here's `center.js` of this story:
 
     define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor'], function(server, documents, build, underscore, getDependencies, compile, load) {
-      var servers = {}
+      Server = server
+      server = new Server()
 
       documents.test()
       
       server.use(server.static('.'))
-
-      function restart(name, freshlyBuiltServer) {
-        var port = 3001
-        if(servers[name]) { 
-          servers[name].close()
-          delete servers[name]
-        }
-        freshlyBuiltServer.start(port)
-        servers[name] = freshlyBuiltServer
-      }
 
       function docToSource(doc) {
         var source = ''
