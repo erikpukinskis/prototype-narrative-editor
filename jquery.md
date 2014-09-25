@@ -2,6 +2,9 @@ Jquery
 ------
 
 Industry standard DOM tools. `jquery.js`
+  
+    define(function() {
+    if (typeof window === 'undefined') { return }
 
     /*!
      * jQuery JavaScript Library v1.10.2
@@ -9792,3 +9795,6 @@ Industry standard DOM tools. `jquery.js`
     }
 
     })( window );
+
+    return jQuery
+    })

@@ -14,6 +14,8 @@ Ember
      */
 
 
+    define('ember', ['jquery', 'handlebars'], function() { 
+    if (typeof window === 'undefined') { return }
     (function() {
     /*global __fail__*/
 
@@ -44271,6 +44273,5 @@ Ember
 
     })();
 
-    console.log("\n\n\n\n\n\n\nNOOOOOOOOOOOOO\n\n\n")
-    console.log('ember handlebars is ' + Ember.Handlebars)
-    define('ember', ['jquery', 'handlebars'], function() { return Ember })
+    return Ember
+    })
