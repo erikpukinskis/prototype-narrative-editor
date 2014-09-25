@@ -3,13 +3,13 @@ Narrative
 
 Narrative lets you write code the way you'd write stories. It encourages you to break the different parts of a big application into self-contained, self-explanatory chunks, and arrange those chunks in sequence, like chapters in a book.
 
-This repository contains two projects mixed together:
+This repository contains a dozen or so different narratives that do everything from saving files to setting up a code editor in the web browser.
+
+Two of those narratives are special because they provide commands you can run on your computer:
 
 **Narrative**, the tool for editing and running software narratives, described in [narrative.md](narrative.md).
 
 **Builder**, the tool that reads a narrative and compiles it into a form that can be deployed to Heroku. That's in [builder.md](builder.md).
-
-But there are a bunch of other interesting narratives in here too. Everything that ends in .md is a narrative of some sort, although many of them are just javascript with a title and a description. So far.
 
 Running it on your own computer
 -------------------------------
