@@ -3,7 +3,7 @@ Express
 
 This `server.js` is what you use to set up an Express/Node server:
 
-    define(['body-parser', 'assert', 'underscore'], function(bodyParser, assert, _) {
+    define(['http', 'body-parser', 'assert', 'underscore'], function(http, bodyParser, assert, _) {
       var express = require("express")
       var port = Number(port || 5000)
 
@@ -52,8 +52,29 @@ This `server.js` is what you use to set up an Express/Node server:
       }
 
       Server.prototype.start = function(port) { 
-        this.app.listen(port, function() {
-          console.log("Listening on " + port);
+        this.sockets = sockets = []
+
+        this.server = http.createServer(this.app)
+        this.server.listen(port)
+
+        this.server.on('connection', function(socket) {
+          console.log('socket opened')
+          sockets.push(socket)
+          socket.setTimeout(4000)
+          socket.on('close', function () {
+            console.log('socket closed')
+            sockets.splice(sockets.indexOf(socket), 1)
+          })
+        })
+      }
+
+      Server.prototype.stop = function (callback) {
+        this.server.close(function () {
+          console.log('Server closed!')
+          callback()
+        })
+        this.sockets.forEach(function(socket) {
+          socket.destroy()
         })
       }
 
