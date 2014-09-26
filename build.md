@@ -31,33 +31,35 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
         var buildPath = 'build/' + name
         var source = folder.read(name + '.md')
 
-        getDependencies(source, function(deps) {
-          // What's going on? This never returns.
-          deps.push(name)
-          indent("DONE! deps are " + deps)
+        compile(source, function(compiled) {
+          getDependencies(compiled, function(deps) {
+            // What's going on? This never returns.
+            deps.push(name)
+            indent("DONE! deps are " + deps)
 
-          var done = []
-          _(deps).each(function(narrative) {
+            var done = []
+            _(deps).each(function(narrative) {
 
-            function tryToFinish() {
-              done.push(narrative)
-              if (done.length == deps.length) {
-                indent("  -;-;-;-;-;-;-   Done with " + narrative)
-                callback()
+              function tryToFinish() {
+                done.push(narrative)
+                if (done.length == deps.length) {
+                  indent("  -;-;-;-;-;-;-   Done with " + narrative)
+                  callback()
+                }
               }
-            }
 
-            if (narrative == 'center') { 
-              console.log('skipping center')
-              return tryToFinish()
-            }
+              if (narrative == 'center') { 
+                console.log('skipping center')
+                return tryToFinish()
+              }
 
-            indent.in()
-            saveFiles(narrative, 'build/' + name, tryToFinish)
-            indent.out()
+              indent.in()
+              saveFiles(narrative, 'build/' + name, tryToFinish)
+              indent.out()
+            })
           })
         })
-
+        
         folder.copy(name + '.md', buildPath)
         indent.out()
       }

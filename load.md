@@ -3,10 +3,21 @@ Load
 
 `load.js`:
 
-    define(['documents'], function(documents) {
+
+    define(['documents', 'getdependencies'], function(documents, getDependencies) {
       var servers = {}
+      var narrativesThatDependOn = {}
 
       function load(name, compiled, callback) {
+        getDependencies(compiled, function(dependencies) {
+          dependencies.forEach(function(dep) {
+            if (!narrativesThatDependOn[dep]) { narrativesThatDependOn[dep] = []}
+            narrativesThatDependOn[dep].push(name)
+            console.log(JSON.stringify({deps: narrativesThatDependOn}, null, 2))
+          })
+        })
+
+        console.log("Since", name, "changed, we should reload", narrativesThatDependOn[name])
 
         function undefine() {
           requirejs.undef(name)

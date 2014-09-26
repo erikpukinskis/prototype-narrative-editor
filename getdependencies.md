@@ -4,7 +4,7 @@ Get Dependencies
 `getdependencies.js`:
 
     define(['compile', 'underscore', 'indent'], function(compile, _, indent) {
-      return function (source, callback) {
+      return function (compiled, callback) {
         var dependencies = []
 
         // We should refactor this so it's just a dependencies function
@@ -21,14 +21,16 @@ Get Dependencies
         // })
 
         function searchBlock(block) {
-          var pattern = /(define) *\( *\[.*/g
+          var pattern = /(define) *\(.*\[.*]/g
           var match = block.source.match(pattern)
+          console.log("~*~*~* Looked in", block.source, "for", pattern, "and got", match)
           _(match).each(searchLine)
         }
 
         function searchLine(line) {
-          function unquote(quoted) { return quoted.replace(/'/g, "") }
+          function unquote(quoted) { return quoted.replace(/['"]/g, "") }
 
+          console.log(line)
           var commaSeparated = line.match(/\[(.*)\]/)[1]
           var deps = commaSeparated.split(', ').map(unquote)
 
@@ -43,15 +45,10 @@ Get Dependencies
           }
         }
 
-        indent('Getting dependencies for ' + compile.summarize(source) + '. About to compile:')
-        indent.in()
-        compile(source, function(compiled) {
-          indent.out()
-          compiled.each.code(searchBlock)
-          console.log("we're probably ending up here, right?")
-          indent('### calling back with ' + dependencies.length + '  dependencies')
-          callback(dependencies)
-        })
+        compiled.each.code(searchBlock)
+        indent('### calling back with ' + dependencies.length + '  dependencies')
+        callback(dependencies)
+
         indent("done with getDeps block, hopefully ###'ing later")
       }
     })
