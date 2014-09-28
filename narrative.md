@@ -9,7 +9,7 @@ Next up
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [X] Stop old server when there's a new one
- - [ ] Reload narrative when dependency is changed
+ - [X] Reload narrative when dependency is changed
  - [ ] Type in Folder
  - [ ] Type in all the other deps
  - [ ] Type Narrative into itself

@@ -3,7 +3,7 @@ Documents
 
 `documents.js`:
 
-    define(['database'], function(database) {
+    define(['database', 'chain', 'assert'], function(database, chain, assert) {
 
       function set(key, value, callback) {
         console.log('setting')
@@ -35,27 +35,42 @@ Documents
 
       function test() {
         console.log('testing')
-        set('i am', {is: 'lost'}, function(rowCount) {
-        console.log('returned from "i am" set. inserted', rowCount)
-        get('i am', function(value) {
-        console.log('back from getting "i am". Value was ' + JSON.stringify(value))
-        console.log('i am', value.is)
-        set('i am', {is: 'found'}, function(rowCount) {
-        console.log('inserted', rowCount)
-        get('i am', function(value) {
-        console.log('now i am', value.is)
-        set('one more', {}, function() {
-        set('one more', {is: 'this other shit'}, function() {
-        get('i am', function(value) {
-          console.log('now i am', value.is)
-          if (value.is != 'found') { throw new Error('overwrote "i am"') } else { console.log('wee!!') }
-        })
-        })
-        })
-        })
-        })
-        })
-        })
+
+        chain(
+          function setLost(f) { 
+            set('i am', {is: 'lost'}, f) 
+          },
+          function getState(rowCount, f) {
+            console.log('--------returned from "i am" set. inserted', rowCount)
+            get('i am', f)
+          },
+          function setFound(value, f) {
+            console.log('$$$$$ back from getting "i am". Value was ' + JSON.stringify(value))
+            console.log('i am', value.is)
+            set('i am', {is: 'found'}, f)
+          },
+          function getStateAgain(rowCount, f) {
+            console.log('inserted', rowCount)
+            get('i am', f)
+          },
+          function setEmptyObjec(value, f) {
+            console.log('now i am', value.is)
+            set('one more', {}, f)
+          },
+          function overwriteEmptyObject(f) {
+            set('one more', {is: 'this other shit'}, f)
+          },
+          function getStateOneMoreTime(f) {
+            get('i am', f)
+          },
+          function assertStateIsFound(value, xxxx) {
+            console.log('now i am', value.is)
+            assert.equal(value.is, 'found', 'overwrote "i am"')
+            console.log('wee!!')
+          }
+        )
+
+        console.log('done')
       }
 
       var api = function(request, response, doTheNextThing) {
