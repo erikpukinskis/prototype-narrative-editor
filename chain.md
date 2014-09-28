@@ -3,16 +3,30 @@ Chain
 
 `chain.js` runs a bunch of functions, one after another, waiting for each to respond to a callback
 
-    define(function() {
+    define(['assert'], function(assert) {
       function chain() {
-        var _arguments = arguments
-        if (arguments.length < 1) { return }
-        func = arguments[0]
+        var functions = arguments
+        if (functions.length < 1) { return }
+        var i = 0
 
-        func(function() {
-          var remainingArguments = Array.prototype.slice.call(_arguments, 1)
-          chain.apply(null, remainingArguments)
-        })
+        function runNext() {
+          i++
+          runOne.apply({}, Array.prototype.slice.call(arguments))
+        }
+
+        function runOne() {
+          var argumentsFromLastFunc = Array.prototype.slice.call(arguments)
+          var nextFunc = functions[i]
+          if (!nextFunc) { return }
+
+          var plentyOfArguments = argumentsFromLastFunc.concat(new Array(nextFunc.length))
+          var argumentsForNextFunc = plentyOfArguments.slice(0, nextFunc.length-1)
+          argumentsForNextFunc.push(runNext)
+
+          nextFunc.apply({}, argumentsForNextFunc)
+        }
+
+        runOne()
       }
 
       function testAddingTwice() {
@@ -29,13 +43,31 @@ Chain
         }
 
         chain(addHi,addHo, function() {
-          var expected = ['hi', 'ho']
-          if(JSON.stringify(array) != JSON.stringify(expected)) {
-            throw new Error("Chain didn't work. Expected " + array + " to be " + expected)
-          }
+          json = JSON.stringify
+          assert.equal(json(array), json(['hi', 'ho']), "Chain didn't work")
+          console.log('awesome!')
         })
       }
 
+      function testChainingResponses() {
+        function firstName(callback) {
+          callback('Gloria')
+        }
+        function addMiddleName(first, callback) {
+          callback(first + ' Evangelina')
+        }
+        function andLastName(first, callback) {
+          callback(first + ' Anzaldúa')
+        }
+        function test(name, callback) {
+          assert.equal(name, 'Gloria Evangelina Anzaldúa')
+          console.log('Gloria!')
+        }
+
+        chain(firstName, addMiddleName, andLastName, test)
+      }
+
       testAddingTwice()
+      testChainingResponses()
       return chain
     })
