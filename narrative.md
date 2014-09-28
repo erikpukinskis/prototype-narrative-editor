@@ -8,8 +8,8 @@ Next up
 
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Stop old server when there's a new one
- - [X] Reload narrative when dependency is changed
+ - [X] Fix the database encoding narratives can have single quotes and question marks
+ - [ ] Unindent
  - [ ] Type in Folder
  - [ ] Type in all the other deps
  - [ ] Type Narrative into itself
