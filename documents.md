@@ -3,16 +3,13 @@ Documents
 
 `documents.js`:
 
-    define(['database', 'chain', 'assert'], function(database, chain, assert) {
+    define(['database', 'chain', 'assert', 'pg-escape'], function(database, chain, assert, escape) {
 
       function set(key, value, callback) {
-        console.log('setting')
-        // ok, we hould try using knex for this.
+        var json = JSON.stringify(value)
+        var update = escape('UPDATE %I SET value = %L WHERE key = %L', 'documents', json, key)
+        var insert  = escape('INSERT INTO %I (key, value) VALUES (%L, %L)', 'documents', key, json)
 
-
-        var rawSqlValue = database.raw("'" + JSON.stringify(value) + "'")
-        var update = database.table('documents').where({key: key}).update({value: rawSqlValue}).toQuery()
-        var insert = "insert into documents (key, value) values ('" + key + "', '" + JSON.stringify(value) + "')"
         get(key, function(found) {
           var query = found ? update : insert
           database.query(query, function(data) {
@@ -63,10 +60,21 @@ Documents
           function getStateOneMoreTime(f) {
             get('i am', f)
           },
-          function assertStateIsFound(value, xxxx) {
+          function assertStateIsFound(value, f) {
             console.log('now i am', value.is)
             assert.equal(value.is, 'found', 'overwrote "i am"')
             console.log('wee!!')
+            f()
+          },
+          function saveQuotesAndQuestionMarks(f) {
+            set('weirdCharacters', "'\"?", f)
+          },
+          function getThemBack(rows, f) {
+            get('weirdCharacters', f)
+          },
+          function (characters, xxxx) {
+            assert.equal(characters, "'\"?")
+            console.log('yahooee.')
           }
         )
 

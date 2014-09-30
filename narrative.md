@@ -312,7 +312,8 @@ The first is `package.json`, which describes the various things running the serv
         "underscore": "*",
         "body-parser": "*",
         "knex": "*",
-        "pg": "*"
+        "pg": "*",
+        "pg-escape": "*"
       },
       "devDependencies": {
         "requirejs": "*"
