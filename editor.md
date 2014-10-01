@@ -35,10 +35,18 @@ This goes in `editor.js`:
 
         up: moveCursor(0,-1),
 
-        indent: function() {          
+        indent: function() {
+          this.setKind('code')
+        },
+
+        unindent: function() {
+          this.setKind('prose')
+        },
+
+        setKind: function(kind) {
           var cursorLine = this.get('cursor.line')
           var property = ['model', cursorLine, 'kind'].join('.')
-          this.set(property, 'code')
+          this.set(property, kind)
         },
 
         lineProperty: function(line) {

@@ -10,6 +10,7 @@ There's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [X] Fix the database encoding narratives can have single quotes and question marks
  - [ ] Unindent
+ - [ ] Fix doubling issue
  - [ ] Type in Folder
  - [ ] Type in all the other deps
  - [ ] Type Narrative into itself
@@ -174,15 +175,19 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             var _this = this
             var number = e.keyCode
             var editor = this.get('editor')
+            var code = e.shiftKey ? 'shift-' : ''
+            code = code + number
+
             var action = {
-              8: 'backspace',
-              9: 'indent',
-              39: 'right',
-              37: 'left',
-              38: 'up',
-              40: 'down',
-              13: 'enter'
-            }[number];
+              '8': 'backspace',
+              '9': 'indent',
+              'shift-9': 'unindent',
+              '39': 'right',
+              '37': 'left',
+              '38': 'up',
+              '40': 'down',
+              '13': 'enter'
+            }[code];
 
             if (action) {
               console.log(action)
