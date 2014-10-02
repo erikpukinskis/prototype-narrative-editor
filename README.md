@@ -37,9 +37,17 @@ In order to start the server you just do:
     npm install
     foreman start
 
-Now open up [http://localhost:5000](http://localhost:5000) in your web browser and you should see the editor! Cool! That's a legit web server running on your computer.
+Now open up [http://localhost:5000/myserver](http://localhost:5000/myserver) in your web browser and you should see the editor. Try typing this in:
 
-Try changing some code in the narrative.md and running through the process again, starting at the builder.js step. Reload your browser and you should see your changes!
+    ! My Server
+    This code will go into `center.js`:
+        define('myserver', function() {
+          console.log('hi!')
+        })
+
+Note that you need to press tab to indent the "define" line, but then use spaces to indent further. 
+
+Once you get it typed in, you should see the "hi!" message printed out in your terminal. That's your server starting up inside the narrative server. Pretty neat!
 
 Putting it on the intarwebs
 ---------------------------
