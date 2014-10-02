@@ -26,7 +26,8 @@ Needs some packages. `package.json`:
         "requirejs": "*",
         "underscore": "*",
         "pg": "*",
-        "knex": "*"
+        "knex": "*",
+        "pg-escape": "*"
       },
       "engines": {
         "node": "*"
