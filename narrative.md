@@ -43,7 +43,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor'], function(server, documents, build, underscore, getDependencies, compile, load) {
+    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor', 'handlebars'], function(server, documents, build, underscore, getDependencies, compile, load) {
       Server = server
       server = new Server()
 
