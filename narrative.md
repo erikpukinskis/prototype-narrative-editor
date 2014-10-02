@@ -247,7 +247,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
     }
 
     .line.code {
-      color: #1abc9c;
+      color: #00C8A0;
       padding-left: 2em;
       font-family: Courier;
       white-space: pre;
@@ -276,6 +276,10 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       opacity: 0.5;
       font-size: 0.5em;
       vertical-align: 0.25em;
+    }
+
+    .command {
+      color: #00C8A0;
     }
 
     a {

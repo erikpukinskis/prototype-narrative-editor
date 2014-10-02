@@ -191,6 +191,15 @@ This goes in `editor.js`:
             return parts.before + '<<<<CURSOR>>>>' + parts.after
           }
 
+          function noteTicks(line) {
+            var tickedCommands = /`([^`]+)`/
+            function withWrapped(xxxx, command) {
+              return '<span class="command">`' + command 
+                + '`</span>'
+            }
+            return line.replace(tickedCommands, withWrapped)
+          }
+
           var htmlLines = _(lines).map(function(line, lineNumber) {
             var html = line.string
             var isProse = line.kind == 'prose'
@@ -200,7 +209,7 @@ This goes in `editor.js`:
             }
 
             if (isProse) {
-              html = addHeadings(html)
+              html = noteTicks(addHeadings(html))
             }
 
             html = html.replace('<<<<CURSOR>>>>', '<div class="cursor"></div>')
