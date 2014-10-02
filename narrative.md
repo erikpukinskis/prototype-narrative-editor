@@ -48,6 +48,24 @@ Here's `center.js` of this story:
       server = new Server()
 
       documents.test()
+
+      var narrativesThatDependOn = {}
+      function rememberDependencies(name, compiled) {
+        getDependencies(compiled, function(dependencies) {
+          dependencies.forEach(function(dep) {
+            if (!narrativesThatDependOn[dep]) { narrativesThatDependOn[dep] = {}}
+            narrativesThatDependOn[dep][name] = true
+            console.log(JSON.stringify({deps: narrativesThatDependOn}, null, 2))
+          })
+        })
+      }
+
+      function reloadDependents(name) {
+        var dirty = _(narrativesThatDependOn[name]).keys()
+        dirty.forEach(function(dependent) {
+          load(dependent)
+        })
+      }
       
       server.use(server.static('.'))
 
@@ -102,9 +120,10 @@ Here's `center.js` of this story:
           var source = docToSource(doc)
           
           compile(source, function(compiled) {
-            load(name, compiled, function() {
-              response.json({ok: true})
-            })
+            load(name, compiled)
+            rememberDependencies(name, compiled)
+            reloadDependents(name, compiled)
+            response.json({ok: true})
           })
         })
       })
@@ -300,8 +319,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       content: '*';
       position: fixed;
       right: 0.2em;
-      bottom: 0;
-      line-height: .6em;
+      top: 0;
       font-size: 2em;
       -webkit-animation: colorPulse 500ms infinite alternate;
       opacity: 0;

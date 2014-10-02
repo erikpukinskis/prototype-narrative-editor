@@ -4,20 +4,17 @@ Load
 `load.js`:
 
 
-    define(['documents', 'getdependencies'], function(documents, getDependencies) {
+    define(['documents', 'getdependencies', 'underscore'], function(documents, getDependencies, _) {
       var servers = {}
       var narrativesThatDependOn = {}
+      var narratives = {}
 
-      function load(name, compiled, callback) {
-        getDependencies(compiled, function(dependencies) {
-          dependencies.forEach(function(dep) {
-            if (!narrativesThatDependOn[dep]) { narrativesThatDependOn[dep] = []}
-            narrativesThatDependOn[dep].push(name)
-            console.log(JSON.stringify({deps: narrativesThatDependOn}, null, 2))
-          })
-        })
-
-        console.log("Since", name, "changed, we should reload", narrativesThatDependOn[name])
+      function load(name, compiled) {
+        if (compiled) {
+          narratives[name] = compiled
+        } else {
+          compiled = narratives[name]
+        }
 
         function undefine() {
           requirejs.undef(name)
@@ -27,7 +24,7 @@ Load
           }
         }
 
-        function redefine(block) {
+        function redefineServer(block) {
           try {
             eval(block.source)
             console.log('\nRunning ' + name + '...\n+=================+\n')
@@ -42,17 +39,25 @@ Load
           }
         }
 
+        function redefineIfLib(block) {
+          if (block.filename != name + '.js') { return }
+
+          try {
+            eval(block.source)
+          } catch (e) {
+            console.log(e)
+          }
+        }
+
         function save(block) {
           var path = 'assets/' + block.filename
           documents.set(path, block.source)
         }
 
         undefine()
-        compiled.each.server(redefine)
+        compiled.each.server(redefineServer)
         compiled.each.source(save)
-
-        callback()
-
+        compiled.each.block(redefineIfLib)
       }
 
       return load

@@ -34,7 +34,8 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         this.each = {
           source: eachBlock(isSource),
           code: eachBlock(isCode),
-          server: eachBlock(isServer)
+          server: eachBlock(isServer),
+          block: eachBlock(function() { return true })
         }
         
       }
