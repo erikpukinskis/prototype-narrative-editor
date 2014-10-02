@@ -133,13 +133,18 @@ This goes in `editor.js`:
           var _this = this
           var strings = this.get('model')
           var cursor = this.get('cursor')
+
+          function addEntities(line) {
+            return line.replace(' ', '&nbsp;')
+          }
+
           var htmlLines = _(strings).map(function(line, lineNumber) {
             var html
             if (lineNumber == cursor.line) {
               var parts = _this.lineSplitAtCursor()
-              html = parts.before + '<div class="cursor"></div>' + parts.after
+              html = addEntities(parts.before) + '<div class="cursor"></div>' + addEntities(parts.after)
             } else {
-              html = line.string
+              html = addEntities(line.string)
             }
 
             var classes = ['line', line.kind]

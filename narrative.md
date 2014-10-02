@@ -9,7 +9,7 @@ Next up
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [X] Fix the database encoding narratives can have single quotes and question marks
- - [ ] Unindent
+ - [X] Unindent
  - [ ] Fix doubling issue
  - [ ] Type in Folder
  - [ ] Type in all the other deps
