@@ -145,15 +145,6 @@ This goes in `editor.js`:
             return line.replace(exclamation, withH1)
           }
 
-          function addLeadingSpaces(line) {
-            var leadingSpaces = /^(<<<<CURSOR>>>>|)( +)/
-            function withNonbreaking(xxxx, cursor, spaces) {
-              return new Array(spaces.length).join('&nbsp;') + cursor
-            }
-
-            return line.replace(leadingSpaces, withNonbreaking)
-          }
-
           function markCursor() {
             var parts = _this.lineSplitAtCursor()
             return parts.before + '<<<<CURSOR>>>>' + parts.after
@@ -167,7 +158,10 @@ This goes in `editor.js`:
               html = markCursor(html)
             }
 
-            html = (isProse ? addHeadings : addLeadingSpaces)(html)
+            if (isProse) {
+              html = addHeadings(html)
+            }
+
             html = html.replace('<<<<CURSOR>>>>', '<div class="cursor"></div>')
 
             var classes = ['line', line.kind]

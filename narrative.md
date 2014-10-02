@@ -10,8 +10,8 @@ There's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [X] Fix the database encoding narratives can have single quotes and question marks
  - [X] Unindent
- - [ ] Fix doubling issue
- - [ ] Type in Folder
+ - [X] Fix doubling issue
+ - [ ] Type in Chain
  - [ ] Type in all the other deps
  - [ ] Type Narrative into itself
 
@@ -252,14 +252,16 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       min-height: 1.6em;
     }
 
-    .line.prose {
+    .line.prose, h1 {
       color: #333;
+      white-space: pre-wrap;
     }
 
     .line.code {
       color: #1abc9c;
       padding-left: 2em;
       font-family: Courier;
+      white-space: pre;
     }
 
     .focus-input {
