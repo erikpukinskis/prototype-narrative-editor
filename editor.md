@@ -3,16 +3,21 @@ Editor
 
 This goes in `editor.js`:
 
+    function limit(number, min, max) {
+      number = Math.min(number, max)
+      number = Math.max(number, min)
+      return number
+    }
+
     var moveCursor = function(columns, lines) {
       return function() {
-        var column = this.get('cursor.column') + columns
         var line = this.get('cursor.line') + lines
-        if (column >= 0) {
-          this.set('cursor.column', column)
-        }
-        if (line >= 0) {
-          this.set('cursor.line', line)
-        }
+        line = limit(line, 0, this.get('model.length') - 1)
+        this.set('cursor.line', line)
+
+        var column = this.get('cursor.column') + columns
+        column = limit(column, 0, this.getLine().length)
+        this.set('cursor.column', column)
       }
     }
 
@@ -58,7 +63,7 @@ This goes in `editor.js`:
         },
 
         getLine: function(line) {
-          return this.get(this.lineProperty(line));
+          return this.get(this.lineProperty(line)) || '';
         },
 
         setLine: function(line, string) {
