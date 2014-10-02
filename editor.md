@@ -79,25 +79,31 @@ This goes in `editor.js`:
           var line = this.get('cursor.line')
           var string = this.getLine(line) + this.getLine(line+1)
           this.setLine(line, string)
-          this.removeAt(line+1,1)
+          this.get('model').removeAt(line+1,1)
         },
 
         backspace: function() {
           var _this = this;
           var cursor = this.get('cursor')
           var parts = _this.lineSplitAtCursor()
-          if (parts.before.length < 1) {
-            if (cursor.line > 0) {
-              this.decrementProperty('cursor.line')
-              var previousLine = this.getLine()
-              this.set('cursor.column', previousLine.length)
-              this.mergeDown(cursor.line - 1)
-            }           
+          var atBeginningOfLine = parts.before.length < 1
 
+          function moveToTheEndOfTheLine() { 
+            _this.set('cursor.column', _this.getLine().length)
+          }
+
+          if (atBeginningOfLine) {
+            if (cursor.line > 0) {
+              this.up()
+              moveToTheEndOfTheLine()
+              this.mergeDown()
+            } else {
+              // We're at the beginning of the document
+            }
           } else {
             var string = parts.before.slice(0, -1) + parts.after
-            _this.setLine(Cursor, string)
-            _this.left()
+            this.setLine(Cursor, string)
+            this.left()
           }
         },
 
