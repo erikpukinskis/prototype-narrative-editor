@@ -76,14 +76,17 @@ Here's `center.js` of this story:
         console.log('\n[GET] client is asking for '+name+' narrative.\n')
         documents.get(name, function(document) {
           if (document && !document.lines) { document = null }
-          if (typeof document.lines == 'object') {
-            document.lines = _(document.lines).values()
-          }
+
           document = document || {
             lines: [
               {string: '', kind: 'prose'}, 
             ]
           }
+
+          if (typeof document.lines == 'object') {
+            document.lines = _(document.lines).values()
+          }
+
           document.name = name
 
           response.json(document)
@@ -100,7 +103,6 @@ Here's `center.js` of this story:
           
           compile(source, function(compiled) {
             load(name, compiled, function() {
-              console.log("OK, loaded.")
               response.json({ok: true})
             })
           })
@@ -226,6 +228,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         App.NarrativeRoute = Ember.Route.extend({
           model: function(params) {
+            $(document).attr('title', params.name + ' - Narrative')
             return Ember.$.getJSON('/narratives/' + params.name)
           }
         })

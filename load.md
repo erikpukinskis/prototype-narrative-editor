@@ -30,7 +30,9 @@ Load
         function redefine(block) {
           try {
             eval(block.source)
+            console.log('\nRunning ' + name + '...\n+=================+\n')
             requirejs([name], function(server) {
+              console.log('\n+=================+\n')
               servers[name].push(server)
             }, function() {
               console.log("There was an error.")
