@@ -23,9 +23,7 @@ Load
           requirejs.undef(name)
           if (!servers[name]) { servers[name] = [] }
           while(server = servers[name].pop()) {
-            server.stop(function() {
-              console.log('back from stopping!')
-            })
+            server.stop()
           }
         }
 

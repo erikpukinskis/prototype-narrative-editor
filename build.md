@@ -49,7 +49,6 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
               }
 
               if (narrative == 'center') { 
-                console.log('skipping center')
                 return tryToFinish()
               }
 

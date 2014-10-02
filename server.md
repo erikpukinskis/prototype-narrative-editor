@@ -39,7 +39,6 @@ This `server.js` is what you use to set up an Express/Node server:
         this.app.use(function(request, response, next) {
           function match(handler) {
             var params = tryToParseUrl(request.url, handler)
-            console.log("Parsed url", request.url, "for handler", handler, "into", params)
             if (params) {
               request.params = params
               handler.func(request, response)
@@ -58,11 +57,9 @@ This `server.js` is what you use to set up an Express/Node server:
         this.server.listen(port)
 
         this.server.on('connection', function(socket) {
-          console.log('socket opened')
           sockets.push(socket)
           socket.setTimeout(4000)
           socket.on('close', function () {
-            console.log('socket closed')
             sockets.splice(sockets.indexOf(socket), 1)
           })
         })
@@ -71,7 +68,7 @@ This `server.js` is what you use to set up an Express/Node server:
       Server.prototype.stop = function (callback) {
         this.server.close(function () {
           console.log('Server closed!')
-          callback()
+          if (callback) { callback() }
         })
         this.sockets.forEach(function(socket) {
           socket.destroy()

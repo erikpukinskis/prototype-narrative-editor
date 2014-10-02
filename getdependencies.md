@@ -23,14 +23,12 @@ Get Dependencies
         function searchBlock(block) {
           var pattern = /(define) *\(.*\[.*]/g
           var match = block.source.match(pattern)
-          console.log("~*~*~* Looked in", block.source, "for", pattern, "and got", match)
           _(match).each(searchLine)
         }
 
         function searchLine(line) {
           function unquote(quoted) { return quoted.replace(/['"]/g, "") }
 
-          console.log(line)
           var commaSeparated = line.match(/\[(.*)\]/)[1]
           var deps = commaSeparated.split(', ').map(unquote)
 

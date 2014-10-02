@@ -58,7 +58,6 @@ Here's `center.js` of this story:
           var prefix = line.kind == 'code' ? '    ' : ''
           source = source + prefix + line.string
         })
-        console.log("made source:\n-------------\n"+source+"^^^^^^^^^^^^^^^^")
         return source
       }
 
@@ -74,9 +73,8 @@ Here's `center.js` of this story:
 
       server.get('/narratives/:name', function(request, response) {
         var name = request.params.name
-        console.log('[GET] client is asking for '+name+' narrative. looking in db.')
+        console.log('\n[GET] client is asking for '+name+' narrative.\n')
         documents.get(name, function(document) {
-          console.log('looking in the db for narrative, found ' + document)
           if (document && !document.lines) { document = null }
           if (typeof document.lines == 'object') {
             document.lines = _(document.lines).values()
@@ -88,16 +86,14 @@ Here's `center.js` of this story:
           }
           document.name = name
 
-          console.log('sending document', JSON.stringify(document, null, 2))
           response.json(document)
         })
       })
 
       server.post('/narratives', function(request, response) {
         var name = request.body.name
-        console.log('[POST] saving ' + request.body.name + ' to the db')
+        console.log('\n[POST] saving ' + request.body.name + ' to the db')
         var doc = _(request.body).pick('lines', 'name')
-        console.log("Got " + JSON.stringify(doc, null, 2) + "\n\n\n\nFrom " + JSON.stringify(request.body, null, 2))
 
         documents.set(name, doc, function() {
           var source = docToSource(doc)
@@ -159,13 +155,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         App = Ember.Application.create()
         App.NarrativeEditorComponent = Ember.Component.extend(editor)
         Cursor = new function(){}
-
-        distanceFromBottomToCursor = function() {
-          var cursorEl = $('.cursor')[0]
-          if (cursorEl) {
-            return window.innerHeight - cursorEl.getBoundingClientRect().bottom
-          }
-        }
 
         App.FocusInputComponent = Ember.TextField.extend({
           classNames: ['focus-input'],

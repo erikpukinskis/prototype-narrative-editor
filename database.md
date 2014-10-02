@@ -40,9 +40,8 @@ A wrapper for knex with an upsert extension. `database.js`
       }
 
       function dropTable(callback) {
-        console.log("\ndropping table\n")
-        query("DROP TABLE documents", function(one, two) {
-          console.log('dropped. got '+JSON.stringify(one)+' and '+two)
+        console.log("\ndropping documents table\n")
+        query("DROP TABLE documents", function() {
           callback()
         })
       }
@@ -65,8 +64,6 @@ A wrapper for knex with an upsert extension. `database.js`
       }
 
       function query(queryString, callback) {
-        // console.log('callback is', callback)
-
         if (!client) {
           return connect(function() {
             query(queryString, callback) // retry
@@ -80,7 +77,6 @@ A wrapper for knex with an upsert extension. `database.js`
         console.log('%% query', queryString)
         client.query(queryString, function(err, result) {
           if(err) { throw new Error(queryString + ' // ' + err) }
-          // console.log('and now', callback)
           callback(result)
         })
       }

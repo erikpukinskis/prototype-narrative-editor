@@ -13,7 +13,6 @@ Documents
         get(key, function(found) {
           var query = found ? update : insert
           database.query(query, function(data) {
-            console.log('+ set', data && data.rowCount, 'with', query)
             if (callback) { callback(JSON.parse(data && data.rowCount)) }
           })
         })
@@ -23,9 +22,7 @@ Documents
         var select = database.select('*').from('documents').where({key: key}).toQuery()
         database.query(select, function(data) {
           value = data.rows[0] && data.rows[0].value
-          console.log('back from select. Got value ' + value)
           if (value) { value = JSON.parse(value) }
-          console.log("<- got", value, 'from', select)
           callback(value)
         })
       }
@@ -82,11 +79,11 @@ Documents
       }
 
       var api = function(request, response, doTheNextThing) {
-        console.log("BEING USED!")
         var pattern = /^\/documents\/([a-z\/.]+)$/
         var partsOfTheAddress = request.url.match(pattern)
         if (!partsOfTheAddress) { return doTheNextThing() }
         var name = partsOfTheAddress[1]
+        console.log("Getting", name, "from the documents api")
         get(name, function(document) {
           response.send(document)
         })

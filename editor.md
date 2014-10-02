@@ -9,7 +9,7 @@ This goes in `editor.js`:
       return number
     }
 
-    var moveCursor = function(columns, lines) {
+    function moveCursor(columns, lines) {
       return function() {
         var line = this.get('cursor.line') + lines
         line = limit(line, 0, this.get('model.length') - 1)
@@ -21,12 +21,36 @@ This goes in `editor.js`:
       }
     }
 
+    function scrollTo(selector) {
+      EXTRA = 50
+      var distance = distanceFromEdgeToElement(selector, 'bottom')
+
+      if (distance < EXTRA) {
+        $("html,body").animate({scrollTop: $('body').scrollTop() - distance + EXTRA}, 0)
+      }
+      console.log('distanceToBottom', distance)
+
+      var distance = distanceFromEdgeToElement(selector, 'top')
+      console.log('distanceToTop', distance)
+    }
+
+    function distanceFromEdgeToElement(selector, edge) {
+      var cursorEl = $(selector)[0]
+      if (!cursorEl) { return }
+      if (edge == 'bottom') {
+        var direction = 1
+      } else if (edge == 'top') {
+        var direction = -1
+      }
+      return window.innerHeight - direction * cursorEl.getBoundingClientRect()[edge]
+    }
+
     define(['ember', 'underscore'], function(ember, underscore) {
       if (typeof window === 'undefined') { return }
 
       var _ = underscore
       return {
-        template: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}'),
+        layout: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}'),
 
         classNames: ['narrative'],
 
@@ -177,11 +201,7 @@ This goes in `editor.js`:
           var html = htmlLines.join("\n")
 
           Ember.run.next(function() {
-            EXTRA = 50
-            var distance = distanceFromBottomToCursor()
-            if (distance < EXTRA) {
-              $("html,body").animate({scrollTop: $('body').scrollTop() - distance + EXTRA}, 0)
-            }
+            scrollTo('.cursor')
           })
           return Ember.String.htmlSafe(html)
         }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
