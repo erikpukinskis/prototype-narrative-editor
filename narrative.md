@@ -248,7 +248,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       padding: 0 1em;
     }
 
-    .line {
+    .line, h1 {
       line-height: 1.6em;
       min-height: 1.6em;
     }

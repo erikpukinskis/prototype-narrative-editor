@@ -131,21 +131,46 @@ This goes in `editor.js`:
 
         html: function() {
           var _this = this
-          var strings = this.get('model')
+          var lines = this.get('model')
           var cursor = this.get('cursor')
 
-          function addEntities(line) {
-            return line.replace(' ', '&nbsp;')
+          function addHeadings(line) {
+            var exclamation = /^(<<<<CURSOR>>>>|)(!)(<<<<CURSOR>>>>|)(.*)$/
+
+            function withH1(xxxx, cursor, marker, otherCursor, line) {
+              return '<h1>' + cursor + '<span class="marker">' + 
+                marker + '</span>' + otherCursor + line + '</h1>'
+            }
+
+            return line.replace(exclamation, withH1)
           }
 
-          var htmlLines = _(strings).map(function(line, lineNumber) {
-            var html
-            if (lineNumber == cursor.line) {
-              var parts = _this.lineSplitAtCursor()
-              html = addEntities(parts.before) + '<div class="cursor"></div>' + addEntities(parts.after)
-            } else {
-              html = addEntities(line.string)
+          function addLeadingSpaces(line) {
+            var leadingSpaces = /^(<<<<CURSOR>>>>|)( +)/
+            function withNonbreaking(xxxx, cursor, spaces) {
+              console.log('match leading')
+              console.log(xxxx)
+              return new Array(spaces.length).join('&nbsp;') + cursor
             }
+
+            return line.replace(leadingSpaces, withNonbreaking)
+          }
+
+          function markCursor() {
+            var parts = _this.lineSplitAtCursor()
+            return parts.before + '<<<<CURSOR>>>>' + parts.after
+          }
+
+          var htmlLines = _(lines).map(function(line, lineNumber) {
+            var html = line.string
+            var isProse = line.kind == 'prose'
+
+            if (lineNumber == cursor.line) {
+              html = markCursor(html)
+            }
+
+            html = (isProse ? addHeadings : addLeadingSpaces)(html)
+            html = html.replace('<<<<CURSOR>>>>', '<div class="cursor"></div>')
 
             var classes = ['line', line.kind]
             classes = classes.join(' ')
