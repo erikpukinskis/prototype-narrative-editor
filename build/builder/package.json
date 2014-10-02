@@ -1,0 +1,13 @@
+{
+  "name": "narrative-builder",
+  "version": "0.0.2",
+  "dependencies": {
+    "requirejs": "*",
+    "underscore": "*",
+    "pg": "*",
+    "knex": "*"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
