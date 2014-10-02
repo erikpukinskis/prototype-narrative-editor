@@ -140,6 +140,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
     <script type="text/x-handlebars" data-template-name="narrative">
       {{narrative-editor model=model.lines}}
+      <div class="spinner"></div>
     </script>
 
     <script src="require.js"></script>
@@ -196,12 +197,23 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         App.NarrativeController = Ember.Controller.extend({
           save: function() {
+            if (this.get('isDirty') == null) {
+              this.set('isDirty', false)
+              return
+            }
+            this.set('isDirty', true)
             var _this = this
             if (this.timeout) { clearTimeout(this.timeout) }
             this.timeout = setTimeout(function() {
-              $.post('/narratives', _this.get('model'))
+              $.post('/narratives', _this.get('model'), function() {
+                _this.set('isDirty', false)
+              })
             }, 3000)
           }.observes('model.lines.@each.string')
+        })
+
+        App.NarrativeView = Ember.View.extend({
+          classNameBindings: ['controller.isDirty']
         })
 
         App.Router.reopen({
@@ -239,18 +251,21 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
     .line, h1 {
       line-height: 1.6em;
       min-height: 1.6em;
+      white-space: pre-wrap;
     }
 
     .line.prose, h1 {
-      color: #333;
-      white-space: pre-wrap;
+      color: #555;
+    }
+
+    .line.prose {
+      margin-bottom: 1em;
     }
 
     .line.code {
       color: #00C8A0;
       padding-left: 2em;
       font-family: Courier;
-      white-space: pre;
     }
 
     .focus-input {
@@ -276,6 +291,28 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       opacity: 0.5;
       font-size: 0.5em;
       vertical-align: 0.25em;
+    }
+
+    .spinner::before {
+      content: '*';
+      position: fixed;
+      right: 0.2em;
+      bottom: 0;
+      line-height: .6em;
+      font-size: 2em;
+      -webkit-animation: colorPulse 500ms infinite alternate;
+      opacity: 0;
+    }
+
+    @-webkit-keyframes colorPulse { 
+      0% {color: rgba(0,0,0,0.1)} 
+      100% {color: rgba(0,0,0,0.6)} 
+    }
+
+
+    .is-dirty .spinner::before {
+      opacity: 1;
+      transition: opacity 200ms;
     }
 
     .command {
