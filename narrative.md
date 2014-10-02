@@ -242,8 +242,8 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     .narrative {
       font-family: Georgia;
-      font-size: 30px;
-      max-width: 700px;
+      font-size: 26px;
+      max-width: 900px;
       margin: 2em auto;
       padding: 0 1em;
     }
@@ -282,12 +282,19 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       color: #999
     }
 
+    .marker {
+      opacity: 0.5;
+      font-size: 0.5em;
+      vertical-align: 0.25em;
+    }
+
     a {
       color: #9B59B6;
     }
 
     h1 {
       text-align: center;
+      margin-left: -0.5em;
     }
 
     h1, h2 {

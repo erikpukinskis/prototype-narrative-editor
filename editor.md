@@ -148,8 +148,6 @@ This goes in `editor.js`:
           function addLeadingSpaces(line) {
             var leadingSpaces = /^(<<<<CURSOR>>>>|)( +)/
             function withNonbreaking(xxxx, cursor, spaces) {
-              console.log('match leading')
-              console.log(xxxx)
               return new Array(spaces.length).join('&nbsp;') + cursor
             }
 
