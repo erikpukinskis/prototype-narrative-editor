@@ -21,21 +21,26 @@ This goes in `editor.js`:
       }
     }
 
-    function scrollTo(selector) {
+    function scrollToReveal(selector) {
       MINIMUM = 50
-      var distance = distanceTo('bottom', selector)
 
-      if (distance < MINIMUM) {
-        $("html,body").animate({scrollTop: $('body').scrollTop() - distance + MINIMUM}, 0)
+      function directionTowards(edge) {
+        return edge == 'bottom' ? 1 : -1
       }
-      console.log('distanceToBottom', distance)
 
-      var distance = distanceTo('top', selector)
-      if (distance < MINIMUM) {
-        $("html,body").animate({scrollTop: $('body').scrollTop() + distance - MINIMUM}, 0)
+      function scrollTowards(edge) {
+        var distance = distanceTo(edge, selector)
+        if (distance > MINIMUM) { return }
+
+        var offset = distance - MINIMUM
+        var direction = directionTowards(edge)
+        var newPosition = $('body').scrollTop() - direction * offset
+
+        $("html,body").scrollTop(newPosition)
       }
-      console.log('distanceToTop', distance)
 
+      scrollTowards('bottom')
+      scrollTowards('top')        
     }
 
     function distanceTo(edge, selector) {
@@ -208,7 +213,7 @@ This goes in `editor.js`:
           var html = htmlLines.join("\n")
 
           Ember.run.next(function() {
-            scrollTo('.cursor')
+            scrollToReveal('.cursor')
           })
           return Ember.String.htmlSafe(html)
         }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
