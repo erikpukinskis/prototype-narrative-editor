@@ -78,6 +78,9 @@ Here's `center.js` of this story:
         documents.get(name, function(document) {
           console.log('looking in the db for narrative, found ' + document)
           if (document && !document.lines) { document = null }
+          if (typeof document.lines == 'object') {
+            document.lines = _(document.lines).values()
+          }
           document = document || {
             lines: [
               {string: '', kind: 'prose'}, 
@@ -203,10 +206,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         });
 
         App.NarrativeController = Ember.Controller.extend({
-          hi: function() {
-            return 'yup'
-          }.property('model'),
-
           save: function() {
             var _this = this
             if (this.timeout) { clearTimeout(this.timeout) }
@@ -242,7 +241,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     .narrative {
       font-family: Georgia;
-      font-size: 26px;
+      font-size: 20px;
       max-width: 900px;
       margin: 2em auto;
       padding: 0 1em;
