@@ -22,27 +22,34 @@ This goes in `editor.js`:
     }
 
     function scrollTo(selector) {
-      EXTRA = 50
-      var distance = distanceFromEdgeToElement(selector, 'bottom')
+      MINIMUM = 50
+      var distance = distanceTo('bottom', selector)
 
-      if (distance < EXTRA) {
-        $("html,body").animate({scrollTop: $('body').scrollTop() - distance + EXTRA}, 0)
+      if (distance < MINIMUM) {
+        $("html,body").animate({scrollTop: $('body').scrollTop() - distance + MINIMUM}, 0)
       }
       console.log('distanceToBottom', distance)
 
-      var distance = distanceFromEdgeToElement(selector, 'top')
+      var distance = distanceTo('top', selector)
+      if (distance < MINIMUM) {
+        $("html,body").animate({scrollTop: $('body').scrollTop() + distance - MINIMUM}, 0)
+      }
       console.log('distanceToTop', distance)
+
     }
 
-    function distanceFromEdgeToElement(selector, edge) {
+    function distanceTo(edge, selector) {
       var cursorEl = $(selector)[0]
       if (!cursorEl) { return }
       if (edge == 'bottom') {
         var direction = 1
+        var start = window.innerHeight
       } else if (edge == 'top') {
         var direction = -1
+        var start = 0
       }
-      return window.innerHeight - direction * cursorEl.getBoundingClientRect()[edge]
+
+      return start - direction * cursorEl.getBoundingClientRect()[edge]
     }
 
     define(['ember', 'underscore'], function(ember, underscore) {
