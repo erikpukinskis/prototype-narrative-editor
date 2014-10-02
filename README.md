@@ -21,6 +21,8 @@ You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nod
 
 That will put you into a folder that has this document and all of the narratives you'll need. It also has a pre-built narrative builder in build/builder. In order to build narrative, run:
 
+    cp build/builder/package.json .
+    npm install
     node build/builder/builder.js narrative
 
 That will write all the files described in [narrative.md](narrative.md) into build/narrative. It also builds into there all of the other narratives that narrative depends on. So now if you type:
