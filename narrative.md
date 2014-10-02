@@ -294,6 +294,17 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       font-weight: normal;
     }
 
+    @media(max-width: 800px) {
+      .narrative {
+        font-size: 20px;
+      }
+    }
+
+    @media(max-width: 550px) {
+      .narrative {
+        font-size: 16px
+      }
+    }
 
 That's it! To start it up, we just do:
 
