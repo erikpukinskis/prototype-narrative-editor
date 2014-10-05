@@ -69,8 +69,6 @@ define(['database', 'chain', 'assert', 'pg-escape'], function(database, chain, a
         console.log('yahooee.')
       }
     )
-
-    console.log('done')
   }
 
   var api = function(request, response, doTheNextThing) {

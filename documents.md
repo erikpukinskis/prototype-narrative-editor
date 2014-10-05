@@ -74,8 +74,6 @@ Documents
             console.log('yahooee.')
           }
         )
-
-        console.log('done')
       }
 
       var api = function(request, response, doTheNextThing) {

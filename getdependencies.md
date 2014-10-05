@@ -44,9 +44,8 @@ Get Dependencies
         }
 
         compiled.each.code(searchBlock)
-        indent('### calling back with ' + dependencies.length + '  dependencies')
+        indent('Found ' + dependencies.length + '  dependencies')
         callback(dependencies)
 
-        indent("done with getDeps block, hopefully ###'ing later")
       }
     })

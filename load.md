@@ -6,6 +6,8 @@ Load
 
     define(['documents', 'getdependencies', 'underscore'], function(documents, getDependencies, _) {
       var servers = {}
+      var ports = {}
+      var nextPort = 5100
       var narratives = {}
       var narrativesThatDependOn = {}
 
@@ -33,20 +35,33 @@ Load
           compiled = narratives[name]
         }
 
-        function undefine() {
+        function undefine(callback) {
           requirejs.undef(name)
           if (!servers[name]) { servers[name] = [] }
+          if (servers[name].length < 1) { callback() }
           while(server = servers[name].pop()) {
-            server.stop()
+            server.stop(callback)
           }
         }
 
-        function redefineServer(block) {
+        function getPort(name) {
+          if (!ports[name]) {
+            ports[name] = nextPort
+            nextPort++
+          }
+          return ports[name]
+        }
+
+        function start(block) {
           try {
             eval(block.source)
             console.log('\nRequiring', name, '...\n+=================+\n')
             requirejs([name], function(server) {
               console.log('\n+=================+\n')
+
+              server.start(getPort(name))
+
+              console.log('starting', name)
               servers[name].push(server)
             }, function() {
               console.log("There was an error.")
@@ -57,10 +72,14 @@ Load
         }
 
         function redefineIfLib(block) {
-          if (block.filename != name + '.js') { return }
+          console.log('checking if', block.filename, 'is lib...')
+          if (block.filename != name + '.js') { 
+            console.log("it's not");
+            return 
+          }
 
           try {
-            console.log('evaluating', block)
+            console.log('it is. evaluating...')
             eval(block.source)
           } catch (e) {
             console.log(e)
@@ -72,10 +91,11 @@ Load
           documents.set(path, block.source)
         }
 
-        undefine()
-        compiled.each.server(redefineServer)
-        compiled.each.source(save)
-        compiled.each.block(redefineIfLib)
+        undefine(function() {
+          compiled.each.server(start)
+          compiled.each.source(save)
+          compiled.each.block(redefineIfLib)
+        })
       }
 
       return function(name, compiled) {

@@ -5,7 +5,6 @@ This `server.js` is what you use to set up an Express/Node server:
 
     define(['http', 'body-parser', 'assert', 'underscore'], function(http, bodyParser, assert, _) {
       var express = require("express")
-      var port = Number(port || 5000)
 
       function tryToParseUrl(url, handler) {
         var keys = []
@@ -31,7 +30,6 @@ This `server.js` is what you use to set up an Express/Node server:
         var handlers = this.handlers = {GET: [], POST: []}
 
         this.app = express()
-        var port = Number(port || 5000)
 
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded())
@@ -55,6 +53,7 @@ This `server.js` is what you use to set up an Express/Node server:
 
         this.server = http.createServer(this.app)
         this.server.listen(port)
+        console.log('listening on', port)
 
         this.server.on('connection', function(socket) {
           sockets.push(socket)
