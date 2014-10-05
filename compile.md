@@ -8,8 +8,6 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
       function hasFilename(block) { return !!block.filename }
       function isSource(block) { return isCode(block) && hasFilename(block) }
       function isServer(block) { 
-        var answer = block.filename == 'center.js' ? 'it is' : 'it is not'
-        console.log('checking if '+block.filename+' is a server. '+answer)
         return block.filename == 'center.js' 
       }
 

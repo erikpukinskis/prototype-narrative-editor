@@ -44,7 +44,7 @@ Load
         function redefineServer(block) {
           try {
             eval(block.source)
-            console.log('\nRunning ' + name + '...\n+=================+\n')
+            console.log('\nRequiring', name, '...\n+=================+\n')
             requirejs([name], function(server) {
               console.log('\n+=================+\n')
               servers[name].push(server)
@@ -60,6 +60,7 @@ Load
           if (block.filename != name + '.js') { return }
 
           try {
+            console.log('evaluating', block)
             eval(block.source)
           } catch (e) {
             console.log(e)

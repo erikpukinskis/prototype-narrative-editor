@@ -244,8 +244,8 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
     .narrative {
       font-family: Georgia;
       font-size: 20px;
-      max-width: 900px;
-      margin: 2em auto;
+      max-width: 800px;
+      margin: 1.5em auto;
       padding: 0 1em;
     }
 
@@ -334,13 +334,13 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     @media(max-width: 800px) {
       .narrative {
-        font-size: 18px;
+        font-size: 16px;
       }
     }
 
     @media(max-width: 550px) {
       .narrative {
-        font-size: 16px
+        font-size: 13px
       }
     }
 
