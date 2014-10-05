@@ -334,7 +334,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     @media(max-width: 800px) {
       .narrative {
-        font-size: 20px;
+        font-size: 18px;
       }
     }
 
