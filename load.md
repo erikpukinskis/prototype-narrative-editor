@@ -39,6 +39,7 @@ Load
           requirejs.undef(name)
           if (!servers[name]) { servers[name] = [] }
           if (servers[name].length < 1) { callback() }
+          
           while(server = servers[name].pop()) {
             server.stop(callback)
           }
@@ -63,11 +64,11 @@ Load
 
               console.log('starting', name)
               servers[name].push(server)
-            }, function() {
-              console.log("There was an error.")
+            }, function(e) {
+              console.log(e.stack)
             })
           } catch (e) {
-            console.log(e)
+            console.log(e.stack)
           }
         }
 
@@ -82,6 +83,7 @@ Load
             console.log('it is. evaluating...')
             eval(block.source)
           } catch (e) {
+            console.log('Error time!')
             console.log(e)
           }
         }
