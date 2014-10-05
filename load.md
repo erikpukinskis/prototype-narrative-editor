@@ -6,9 +6,26 @@ Load
 
     define(['documents', 'getdependencies', 'underscore'], function(documents, getDependencies, _) {
       var servers = {}
-      var narrativesThatDependOn = {}
       var narratives = {}
+      var narrativesThatDependOn = {}
 
+      function rememberDependencies(name, compiled) {
+        getDependencies(compiled, function(dependencies) {
+          dependencies.forEach(function(dep) {
+            if (!narrativesThatDependOn[dep]) { narrativesThatDependOn[dep] = {}}
+            narrativesThatDependOn[dep][name] = true
+            console.log(JSON.stringify({deps: narrativesThatDependOn}, null, 2))
+          })
+        })
+      }
+
+      function reloadDependents(name) {
+        var dirty = _(narrativesThatDependOn[name]).keys()
+        dirty.forEach(function(dependent) {
+          load(dependent)
+        })
+      }
+      
       function load(name, compiled) {
         if (compiled) {
           narratives[name] = compiled
@@ -60,5 +77,9 @@ Load
         compiled.each.block(redefineIfLib)
       }
 
-      return load
+      return function(name, compiled) {
+        load(name, compiled)
+        rememberDependencies(name, compiled)
+        reloadDependents(name, compiled)
+      }
     })

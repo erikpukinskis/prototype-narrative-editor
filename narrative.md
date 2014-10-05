@@ -43,30 +43,11 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor', 'handlebars'], function(server, documents, build, underscore, getDependencies, compile, load) {
-      Server = server
+    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor', 'handlebars'], function(Server, documents, build, underscore, getDependencies, compile, load) {
       server = new Server()
 
       documents.test()
 
-      var narrativesThatDependOn = {}
-      function rememberDependencies(name, compiled) {
-        getDependencies(compiled, function(dependencies) {
-          dependencies.forEach(function(dep) {
-            if (!narrativesThatDependOn[dep]) { narrativesThatDependOn[dep] = {}}
-            narrativesThatDependOn[dep][name] = true
-            console.log(JSON.stringify({deps: narrativesThatDependOn}, null, 2))
-          })
-        })
-      }
-
-      function reloadDependents(name) {
-        var dirty = _(narrativesThatDependOn[name]).keys()
-        dirty.forEach(function(dependent) {
-          load(dependent)
-        })
-      }
-      
       server.use(server.static('.'))
 
       function docToSource(doc) {
@@ -121,8 +102,6 @@ Here's `center.js` of this story:
           
           compile(source, function(compiled) {
             load(name, compiled)
-            rememberDependencies(name, compiled)
-            reloadDependents(name, compiled)
             response.json({ok: true})
           })
         })
