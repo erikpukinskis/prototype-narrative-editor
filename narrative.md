@@ -17,19 +17,13 @@ And that'll be 0.3.0, "Self hosting without touching the filesystem".
 
 Maybe 0.4.0 can be:
 
- - [ ] Split code blocks
  - [ ] Indented comments
- - [ ] Colors
  - [ ] Actually make these narratives read well
 
 Backlog
 -------
  - [ ] getDependencies should go straight to searchLine. We should just join the blocks together into a string in build
- - [ ] make getDependencies its own module that just takes a string
- - [ ] Do something to break up code blocks into different parts. Maybe make prose indentable. Maybe just design things so that it works. Maybe use other commands besides "write this file"
- - [ ] don't have entire function bodies in Build be wrapped in a compile block. Just pass the blocks or whatever. Pass a string if you can.
- - [ ] Automatically compile dependencies of dependencies so narrative doesn't have to require Ember and such
- - [ ] Make enter key not mess with indentation (so we can do inline prose)
+ - [ ] Automatically compile dependencies of dependencies so narrative doesn't have to require jquery and database and such
 
 The Server
 ----------
