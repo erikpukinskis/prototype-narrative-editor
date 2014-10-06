@@ -74,7 +74,7 @@ A wrapper for knex with an upsert extension. `database.js`
           throw new Error('Tried to run query ' + queryString + ' without providing a callback')
         }
 
-        console.log('%% query', queryString.slice(0,200))
+        console.log('%% query', queryString)
         client.query(queryString, function(err, result) {
           if(err) { throw new Error(queryString + ' // ' + err) }
           callback(result)

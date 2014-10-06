@@ -69,7 +69,7 @@ define(['pg', 'knex', 'chain'], function(pg, knex, chain) {
       throw new Error('Tried to run query ' + queryString + ' without providing a callback')
     }
 
-    console.log('%% query', queryString.slice(0,200))
+    console.log('%% query', queryString)
     client.query(queryString, function(err, result) {
       if(err) { throw new Error(queryString + ' // ' + err) }
       callback(result)

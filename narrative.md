@@ -8,12 +8,10 @@ Next up
 
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Fix the database encoding narratives can have single quotes and question marks
- - [X] Unindent
- - [X] Fix doubling issue
- - [ ] Type in Chain
- - [ ] Type in all the other deps
- - [ ] Type Narrative into itself
+ - [X] Type Narrative into itself
+ - [ ] Get Narrative typed in to save, reload, and run a hello world
+ - [ ] Write out stored narratives to .md files. Overwrite Narrative.
+ - [ ] Load .md files if there's nothing in the db
 
 And that'll be 0.3.0, "Self hosting without touching the filesystem".
 
