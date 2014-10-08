@@ -94,7 +94,7 @@ Here's `center.js` of this story:
           
           compile(source, function(compiled) {
             load(name, compiled)
-            response.json({ok: true})
+            response.send('yes')
           })
         })
       })

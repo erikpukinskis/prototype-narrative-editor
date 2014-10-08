@@ -16,7 +16,6 @@ Load
           dependencies.forEach(function(dep) {
             if (!narrativesThatDependOn[dep]) { narrativesThatDependOn[dep] = {}}
             narrativesThatDependOn[dep][name] = true
-            console.log(JSON.stringify({deps: narrativesThatDependOn}, null, 2))
           })
         })
       }
@@ -53,37 +52,39 @@ Load
           return ports[name]
         }
 
+        function startServer(server) {
+          console.log('\n+=================+\n')
+
+          if (server && server.start) {
+            console.log('Starting', name)
+            server.start(getPort(name))
+            servers[name].push(server)
+          } else {
+            console.log('Server has to return something that can be started. Got ' + JSON.stringify(server) + ' instead')
+          }
+        }
+
+        function logError(e) {
+          console.log(e.stack)
+        }
+
         function start(block) {
           try {
             eval(block.source)
             console.log('\nRequiring', name, '...\n+=================+\n')
-            requirejs([name], function(server) {
-              console.log('\n+=================+\n')
-
-              server.start(getPort(name))
-
-              console.log('starting', name)
-              servers[name].push(server)
-            }, function(e) {
-              console.log(e.stack)
-            })
+            requirejs([name], startServer, logError)
           } catch (e) {
             console.log(e.stack)
           }
         }
 
         function redefineIfLib(block) {
-          console.log('checking if', block.filename, 'is lib...')
-          if (block.filename != name + '.js') { 
-            console.log("it's not");
-            return 
-          }
+          if (block.filename != name + '.js') { return }
 
           try {
-            console.log('it is. evaluating...')
+            console.log('Evaluating', block.filename, 'because it seems to be a library....')
             eval(block.source)
           } catch (e) {
-            console.log('Error time!')
             console.log(e)
           }
         }
