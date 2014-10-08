@@ -57,11 +57,10 @@ This goes in `editor.js`:
       return start - direction * cursorEl.getBoundingClientRect()[edge]
     }
 
-    define(['ember', 'underscore'], function(ember, underscore) {
+    define(['ember', 'underscore'], function(Ember, _) {
       if (typeof window === 'undefined') { return }
 
-      var _ = underscore
-      return {
+      return Ember.Component.extend({
         layout: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}'),
 
         classNames: ['narrative'],
@@ -226,7 +225,7 @@ This goes in `editor.js`:
           })
           return Ember.String.htmlSafe(html)
         }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
-      }
+      })
     })
 
 It's an Ember Component so you can do:

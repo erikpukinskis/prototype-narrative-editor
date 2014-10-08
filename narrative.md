@@ -146,7 +146,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       require(['editor', 'ember', 'underscore', 'jquery', 'handlebars'], function(editor, ember){
         var Ember = ember
         App = Ember.Application.create()
-        App.NarrativeEditorComponent = Ember.Component.extend(editor)
+        App.NarrativeEditorComponent = editor
         Cursor = new function(){}
 
         App.FocusInputComponent = Ember.TextField.extend({
