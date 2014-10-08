@@ -35,69 +35,64 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'build', 'underscore', 'getdependencies', 'compile', 'load', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor', 'handlebars'], function(Server, documents, build, underscore, getDependencies, compile, load) {
-      server = new Server()
+    define(['server', 'documents', 'compile', 'load', 'underscore', 'getdependencies', 'build', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor'], function(server, documents, compile, load) {
 
-      documents.test()
-
-      server.use(server.static('.'))
+      var server = new Server()
 
       function docToSource(doc) {
-        var source = ''
-        _(doc.lines).each(function(line) {
-          if (source.length > 0) { source = source + "\n" }
+        return _(doc.lines).map(function(line) {
           var prefix = line.kind == 'code' ? '    ' : ''
-          source = source + prefix + line.string
-        })
-        return source
+          return prefix + line.string
+        }).join('\n')
+      }
+
+      function docToNarrative(document, name) {
+        if (document && !document.lines) { document = null }
+        document = document || {
+          lines: [{string: '', kind: 'prose'}]
+        }
+        if (typeof document.lines == 'object') {
+          document.lines = _(document.lines).values()
+        }
+
+        document.name = name
+
+        return document
       }
 
       function editor(xxxx, response) {
         response.sendfile('./edit.html')
       }
 
-      server.get('/', editor)
-
-      server.get('/:name', editor)
+      server.use(server.static('.'))
 
       server.use(documents.api)
 
-      server.get('/narratives/:name', function(request, response) {
+      server.get('/', editor)
+
+      server.get('/:name', editor)
+      
+      server.get('/narratives/:name', 
+        function(request, response) {
         var name = request.params.name
-        console.log('\n[GET] client is asking for '+name+' narrative.\n')
         documents.get(name, function(document) {
-          if (document && !document.lines) { document = null }
-
-          document = document || {
-            lines: [
-              {string: '', kind: 'prose'}, 
-            ]
-          }
-
-          if (typeof document.lines == 'object') {
-            document.lines = _(document.lines).values()
-          }
-
-          document.name = name
-
-          response.json(document)
+          response.json(docToNarrative(document, name))
         })
       })
 
       server.post('/narratives', function(request, response) {
         var name = request.body.name
-        console.log('\n[POST] saving ' + request.body.name + ' to the db')
         var doc = _(request.body).pick('lines', 'name')
-
+       
         documents.set(name, doc, function() {
-          var source = docToSource(doc)
-          
-          compile(source, function(compiled) {
+          compile(docToSource(doc), function(compiled) {
             load(name, compiled)
-            response.send('yes')
+            response.json({ok: true})
           })
         })
       })
+
+      documents.test()
 
       return server
     })

@@ -6,7 +6,6 @@ define(['pg', 'knex', 'chain'], function(pg, knex, chain) {
   var waitingForConnect = []
 
   function connect(callback) {
-    console.log("\n\n\n\n\nCONNECTING TO DB\n\n\n\n")
     if (client) {
       return callback() 
     }

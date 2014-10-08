@@ -69,6 +69,7 @@ Load
         }
 
         function start(block) {
+          console.log(block.source)
           try {
             eval(block.source)
             console.log('\nRequiring', name, '...\n+=================+\n')

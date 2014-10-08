@@ -11,7 +11,6 @@ A wrapper for knex with an upsert extension. `database.js`
       var waitingForConnect = []
 
       function connect(callback) {
-        console.log("\n\n\n\n\nCONNECTING TO DB\n\n\n\n")
         if (client) {
           return callback() 
         }
