@@ -170,10 +170,11 @@ This goes in `editor.js`:
           this.set('cursor.column', 0)
         },
 
-        html: function() {
+        lineToHtml: function(line, lineNumber) {
           var _this = this
-          var lines = this.get('model')
           var cursor = this.get('cursor')
+          var html = line.string
+          var isProse = line.kind == 'prose'
 
           function addHeadings(line) {
             var exclamation = /^(<<<<CURSOR>>>>|)(!)(<<<<CURSOR>>>>|)(.*)$/
@@ -200,24 +201,23 @@ This goes in `editor.js`:
             return line.replace(tickedCommands, withWrapped)
           }
 
-          var htmlLines = _(lines).map(function(line, lineNumber) {
-            var html = line.string
-            var isProse = line.kind == 'prose'
+          if (lineNumber == cursor.line) {
+            html = markCursor(html)
+          }
 
-            if (lineNumber == cursor.line) {
-              html = markCursor(html)
-            }
+          if (isProse) {
+            html = noteTicks(addHeadings(html))
+          }
 
-            if (isProse) {
-              html = noteTicks(addHeadings(html))
-            }
+          html = html.replace('<<<<CURSOR>>>>', '<div class="cursor"></div>')
 
-            html = html.replace('<<<<CURSOR>>>>', '<div class="cursor"></div>')
+          var classes = ['line', line.kind]
+          classes = classes.join(' ')
+          return '<div class="' + classes + '">' + html + '</div>'
+        },
 
-            var classes = ['line', line.kind]
-            classes = classes.join(' ')
-            return '<div class="' + classes + '">' + html + '</div>'
-          })
+        html: function() {
+          var htmlLines = this.get('model').map(this.lineToHtml, this)
           
           var html = htmlLines.join("\n")
 
