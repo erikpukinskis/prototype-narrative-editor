@@ -1,5 +1,4 @@
-Narrative
-=========
+! Narrative
 
 A tool for writing code in a literary way, "narratives". Includes a web-based editor, a compiler that can run the narratives and a bit of deployment framework, and an integrated host.
 
@@ -35,7 +34,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'compile', 'load', 'underscore', 'getdependencies', 'build', 'require', 'folder', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor'], function(server, documents, compile, load) {
+    define(['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor'], function(server, documents, compile, load, folder) {
 
       var server = new Server()
 
@@ -60,6 +59,22 @@ Here's `center.js` of this story:
         return document
       }
 
+      function sourceToNarrative(source, name) {
+        var lines = source.split('\n').map(function(string) {
+          if (string.match(/^    /)) {
+            string = string.replace(/$    /,'')
+            return {string: string, kind: 'code'}
+          } else {
+            return {string: string, kind: 'prose'}
+          }
+        })
+
+        return {
+          name: name,
+          lines: lines
+        }        
+      }
+
       function editor(xxxx, response) {
         response.sendfile('./edit.html')
       }
@@ -76,7 +91,14 @@ Here's `center.js` of this story:
         function(request, response) {
         var name = request.params.name
         documents.get(name, function(document) {
-          response.json(docToNarrative(document, name))
+          if (document) {
+            response.json(docToNarrative(document, name))
+          } else if (source = folder.read('../../' + name + '.md')) {
+            console.log('Loaded from disk...')
+            response.json(sourceToNarrative(source, name))
+          } else {
+            response.json(docToNarrative(null, name))
+          }
         })
       })
 

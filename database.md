@@ -25,7 +25,7 @@ A wrapper for knex with an upsert extension. `database.js`
           })
         }
 
-        chain(hookUpPostgres, createTable, callWaitingBack)
+        chain(hookUpPostgres, dropTable, createTable, callWaitingBack)
       }
 
 
