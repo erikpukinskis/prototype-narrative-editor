@@ -180,7 +180,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         function div(options) {
           classString = (options.classes || []).join(' ')
-          return '<div class="' + classString + '">' + options.html + '</div>'
+          return $('<div class="' + classString + '">' + options.html + '</div>')
         }
 
 
@@ -200,6 +200,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         function moveCursor(columnsToMove, linesToMove) {
           return function() {
             var line = cursor.line + linesToMove
+            var linesToRender = [cursor.line, line]
             line = limit(line, 0, lines.length - 1)
             cursor.line = line
 
@@ -207,6 +208,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             column = limit(column, 0, getLine().length)
             cursor.column = column
             console.log('cursor: ', cursor.line, cursor.column)
+
+            linesToRender.forEach(function(lineNumber) {
+              boundLines[lineNumber].render()
+            })
           }
         }
 
@@ -314,7 +319,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         // LINE BINDING
 
-        function lineToHtml(line, lineNumber) {
+        function lineToHtml(line) {
           var _this = this
           var html = line.string
           var isProse = line.kind == 'prose'
@@ -344,7 +349,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             return line.replace(tickedCommands, withWrapped)
           }
 
-          if (lineNumber == cursor.line) {
+          if (line.number == cursor.line) {
             html = markCursor(html)
           }
 
@@ -357,16 +362,21 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           return html
         }
 
-        function bindLine(line, lineNumber) {
-          var el = $(div({
-            classes: ['line', line.kind],
-            html: lineToHtml(line, lineNumber)
-          }))
+        LineBoundToDiv = function(line, renderer) {
+
+          var el = div({
+            id: 'line-'+line.number,
+            classes: ['line', line.kind]
+          })
+
+          this.render = function() {
+            el.html(renderer(line))
+          }
+
+          this.render()
 
           $('.narrative').append(el)
         }
-
-
 
 
         // ROUTER
@@ -377,10 +387,15 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         var name = getRouteParams().name
         var lines
+        var boundLines
 
         $.getJSON('/narratives/' + name, function(doc) {
           lines = doc.lines
-          lines.forEach(bindLine)
+          boundLines = lines.map(function(line, lineNumber) {
+            line.number = lineNumber
+            console.log('binding to', lineToHtml)
+            return new LineBoundToDiv(line, lineToHtml)
+          })
         })
 
       })
