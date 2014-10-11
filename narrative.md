@@ -157,93 +157,236 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <script data-main="ember" src="require.js"></script>
     <script data-main="underscore" src="require.js"></script>
 
+    <body>
+      <input class="focus-input">
+      <div class="narrative"></div>
+    </body>
+
     <script>
 
-
       require(['editor', 'ember', 'underscore', 'jquery', 'handlebars'], function(editor, ember){
-        var Ember = ember
-        App = Ember.Application.create()
-        App.NarrativeEditorComponent = editor
-        Cursor = new function(){}
 
-        App.FocusInputComponent = Ember.TextField.extend({
-          classNames: ['focus-input'],
 
-          becomeFocused: function() {
-            this.$().focus();
-          }.on('didInsertElement'),
+        // HELPER
 
-          keyDown: function(e) {
-            var _this = this
-            var number = e.keyCode
-            var editor = this.get('editor')
-            var code = e.shiftKey ? 'shift-' : ''
-            code = code + number
+        function limit(number, min, max) {
+          number = Math.min(number, max)
+          number = Math.max(number, min)
+          return number
+        }
 
-            var action = {
-              '8': 'backspace',
-              '9': 'indent',
-              'shift-9': 'unindent',
-              '39': 'right',
-              '37': 'left',
-              '38': 'up',
-              '40': 'down',
-              '13': 'enter'
-            }[code];
 
-            if (action) {
-              console.log(action)
-              editor[action]()
-              return false
+        // TEMPLATING
+
+        function div(options) {
+          classString = (options.classes || []).join(' ')
+          return '<div class="' + classString + '">' + options.html + '</div>'
+        }
+
+
+
+        // EDITOR
+
+        function AtCursor() {}
+        var cursor = {line: 0, column: 0}
+
+        function getLine(line) {
+          if (!line || (line == AtCursor)) {
+            line = cursor.line
+          }
+          return lines[line].string || ''
+        }
+
+        function moveCursor(columnsToMove, linesToMove) {
+          return function() {
+            var line = cursor.line + linesToMove
+            line = limit(line, 0, lines.length - 1)
+            cursor.line = line
+
+            var column = cursor.column + columnsToMove
+            column = limit(column, 0, getLine().length)
+            cursor.column = column
+            console.log('cursor: ', cursor.line, cursor.column)
+          }
+        }
+
+        function lineSplitAtCursor() {          
+          var string = getLine(AtCursor)
+
+          console.log('line.string at cursor is ', string)
+          return {
+            before: string.slice(0,cursor.column),
+            after: string.slice(cursor.column, string.length)
+          }
+        }
+
+        var editor = {
+          right: moveCursor(1,0),
+
+          left: moveCursor(-1,0),
+
+          down: moveCursor(0,1),
+
+          up: moveCursor(0,-1),
+
+          backspace: function() {
+            var _this = this;
+            var cursor = this.get('cursor')
+            var parts = _this.lineSplitAtCursor()
+            var atBeginningOfLine = parts.before.length < 1
+
+            function moveToTheEndOfTheLine() { 
+              _this.set('cursor.column', _this.getLine().length)
+            }
+
+            if (atBeginningOfLine) {
+              if (cursor.line > 0) {
+                this.up()
+                moveToTheEndOfTheLine()
+                this.mergeDown()
+              } else {
+                // We are at the beginning of the document
+              }
             } else {
-              Ember.run.next(function() {
-                editor.type(_this.get('value'))
-                _this.set('value', '')
-              })
+              var string = parts.before.slice(0, -1) + parts.after
+              this.setLine(Cursor, string)
+              this.left()
             }
-          }
-        });
+          },
 
-        App.NarrativeController = Ember.Controller.extend({
-          save: function() {
-            if (this.get('isDirty') == null) {
-              this.set('isDirty', false)
-              return
+          type: function(letter) {
+            if (letter.length < 1) { return }
+            var cursor = this.get('cursor')
+            var parts = this.lineSplitAtCursor()
+            var string = parts.before.concat(letter, parts.after)
+
+            this.setLine(Cursor, string)
+            this.right()
+          },
+
+          enter: function() {
+            var cursor = this.get('cursor')
+            var parts = this.lineSplitAtCursor()
+            var kind = this.get('model')[cursor.line].kind
+            var linesAfter = this.get('model').slice(cursor.line)
+            linesAfter.unshiftObject({string: parts.before, kind: kind})
+            linesAfter[1] = {string: parts.after, kind: kind}
+            this.get('model').replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
+            this.incrementProperty('cursor.line')
+            this.set('cursor.column', 0)
+          }
+        }
+
+
+        // FOCUS-INPUT
+
+        $('.focus-input').focus();
+        $('.focus-input').keydown(function(e) {
+          var number = e.keyCode
+          var code = e.shiftKey ? 'shift-' : ''
+          code = code + number
+
+          var action = {
+            '8': 'backspace',
+            '9': 'indent',
+            'shift-9': 'unindent',
+            '39': 'right',
+            '37': 'left',
+            '38': 'up',
+            '40': 'down',
+            '13': 'enter'
+          }[code];
+
+          if (action) {
+            console.log(action)
+            editor[action]()
+            return false
+          } else {
+            setTimeout(function() {
+              editor.type($('.focus-input').val())
+              $('focus-input').val('')
+            })
+          }
+        })
+
+
+
+
+        // LINE BINDING
+
+        function lineToHtml(line, lineNumber) {
+          var _this = this
+          var html = line.string
+          var isProse = line.kind == 'prose'
+
+          function addHeadings(line) {
+            var exclamation = /^(<<<<CURSOR>>>>|)(!)(<<<<CURSOR>>>>|)(.*)$/
+
+            function withH1(xxxx, cursor, marker, otherCursor, line) {
+              return '<h1>' + cursor + '<span class="marker">' + 
+                marker + '</span>' + otherCursor + line + '</h1>'
             }
-            this.set('isDirty', true)
-            var _this = this
-            if (this.timeout) { clearTimeout(this.timeout) }
-            this.timeout = setTimeout(function() {
-              $.post('/narratives', _this.get('model'), function() {
-                _this.set('isDirty', false)
-              })
-            }, 3000)
-          }.observes('model.lines.@each.string')
-        })
 
-        App.NarrativeView = Ember.View.extend({
-          classNameBindings: ['controller.isDirty']
-        })
-
-        App.Router.reopen({
-          location: 'history'
-        })
-
-        App.Router.map(function() {
-          this.route("narrative", { path: "/:name" });
-        })
-
-        App.NarrativeRoute = Ember.Route.extend({
-          model: function(params) {
-            $(document).attr('title', params.name + ' - Narrative')
-            return Ember.$.getJSON('/narratives/' + params.name)
+            return line.replace(exclamation, withH1)
           }
+
+          function markCursor() {
+            var parts = lineSplitAtCursor()
+            return parts.before + '<<<<CURSOR>>>>' + parts.after
+          }
+
+          function noteTicks(line) {
+            var tickedCommands = /`([^`]+)`/
+            function withWrapped(xxxx, command) {
+              return '<span class="command">`' + command 
+                + '`</span>'
+            }
+            return line.replace(tickedCommands, withWrapped)
+          }
+
+          if (lineNumber == cursor.line) {
+            html = markCursor(html)
+          }
+
+          if (isProse) {
+            html = noteTicks(addHeadings(html))
+          }
+
+          html = html.replace('<<<<CURSOR>>>>', '<div class="cursor"></div>')
+
+          return html
+        }
+
+        function bindLine(line, lineNumber) {
+          var el = $(div({
+            classes: ['line', line.kind],
+            html: lineToHtml(line, lineNumber)
+          }))
+
+          $('.narrative').append(el)
+        }
+
+
+
+
+        // ROUTER
+
+        function getRouteParams() {
+          return {name: 'narrative'}
+        }
+
+        var name = getRouteParams().name
+        var lines
+
+        $.getJSON('/narratives/' + name, function(doc) {
+          lines = doc.lines
+          lines.forEach(bindLine)
         })
 
       })
 
     </script>
-
+    
     </html>
 
 There's a lot going on there. It loads Ember and some other javascript libraries that it needs to work. It creates an Ember application with a Handlebars template and a link back to the Read page.
@@ -280,7 +423,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     .focus-input {
       position: fixed;
-      opacity: 0;
+      opacity: 0.3;
       width: 100%;
       height: 100%;
       top: 0;
