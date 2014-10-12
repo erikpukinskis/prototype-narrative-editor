@@ -158,7 +158,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <script data-main="underscore" src="require.js"></script>
 
     <body>
-      <input class="focus-input">
+      <input id="focus-input">
       <div class="narrative"></div>
     </body>
 
@@ -218,11 +218,16 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         function lineSplitAtCursor() {          
           var string = getLine(AtCursor)
 
-          console.log('line.string at cursor is ', string)
           return {
             before: string.slice(0,cursor.column),
             after: string.slice(cursor.column, string.length)
           }
+        }
+
+        function mergeDown() {
+          var string = getLine(cursor.line) + getLine(cursor.line+1)
+          boundLines[cursor.line] = string
+          boundLines[cursor.line+1].remove()
         }
 
         var editor = {
@@ -235,26 +240,24 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           up: moveCursor(0,-1),
 
           backspace: function() {
-            var _this = this;
-            var cursor = this.get('cursor')
-            var parts = _this.lineSplitAtCursor()
+            var parts = lineSplitAtCursor()
             var atBeginningOfLine = parts.before.length < 1
 
             function moveToTheEndOfTheLine() { 
-              _this.set('cursor.column', _this.getLine().length)
+              cursor.column = getLine().length
             }
 
             if (atBeginningOfLine) {
               if (cursor.line > 0) {
                 this.up()
                 moveToTheEndOfTheLine()
-                this.mergeDown()
+                mergeDown()
               } else {
                 // We are at the beginning of the document
               }
             } else {
               var string = parts.before.slice(0, -1) + parts.after
-              this.setLine(Cursor, string)
+              boundLines[cursor.line].set('string', string)
               this.left()
             }
           },
@@ -285,10 +288,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         // FOCUS-INPUT
 
         FocusInput = function() {
-          var el = $('.focus-input')
-          el.focus()
+          var el = $('#focus-input')
 
-          el.keydown(function(e) {
+          function copyText(e) {
+            console.log('doon')
             var number = e.keyCode
             var code = e.shiftKey ? 'shift-' : ''
             code = code + number
@@ -318,7 +321,12 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
                 console.log('after clearing is ', el, el.val())
               })
             }
-          })
+
+            return true
+          }
+
+          el.on('keydown', copyText)
+          el.on('paste', copyText)
         }
 
         new FocusInput()
@@ -336,7 +344,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           var isProse = line.kind == 'prose'
 
           function addHeadings(line) {
-            var exclamation = /^(<<<<CURSOR>>>>|)(!)(<<<<CURSOR>>>>|)(.*)$/
+            var exclamation = /^(####CURSOR####|)(!)(####CURSOR####|)(.*)$/
 
             function withH1(xxxx, cursor, marker, otherCursor, line) {
               return '<h1>' + cursor + '<span class="marker">' + 
@@ -348,7 +356,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
           function markCursor() {
             var parts = lineSplitAtCursor()
-            return parts.before + '<<<<CURSOR>>>>' + parts.after
+            return parts.before + '####CURSOR####' + parts.after
           }
 
           function noteTicks(line) {
@@ -360,17 +368,34 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             return line.replace(tickedCommands, withWrapped)
           }
 
+          var entityMap = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': '&quot;',
+            "'": '&#39;',
+            "/": '&#x2F;'
+          };
+
+          function escapeHtml(string) {
+            return String(string).replace(/[&<>"'\/]/g, function (s) {
+              return entityMap[s]
+            })
+          }
+
           if (line.number == cursor.line) {
             html = markCursor(html)
           }
+
+          html = escapeHtml(html)
 
           if (isProse) {
             html = noteTicks(addHeadings(html))
           }
 
-          html = html.replace('<<<<CURSOR>>>>', '<div class="cursor"></div>')
+          html = html.replace('####CURSOR####', '<div class="cursor"></div>')
 
-          return html
+          return '<span class="line-number">' + line.number + '</span>' + html
         }
 
         LineBoundToDiv = function(line, renderer) {
@@ -391,6 +416,11 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             this.render()
           }
 
+          this.remove = function() {
+            boundLines.splice(line+1,1)
+            // for(boundLines.)
+          }
+
           $('.narrative').append(el)
         }
 
@@ -409,7 +439,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           lines = doc.lines
           boundLines = lines.map(function(line, lineNumber) {
             line.number = lineNumber
-            console.log('binding to', lineToHtml)
             return new LineBoundToDiv(line, lineToHtml)
           })
         })
@@ -448,27 +477,60 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     .line.code {
       color: #00C8A0;
-      padding-left: 2em;
+      padding-left: 40px;
       font-family: Courier;
     }
 
-    .focus-input {
-      position: fixed;
+    .line-number {
+      font-size: 0.6em;
+      width: 50px;
+      margin-left: -50px;
+      display: inline-block;
       opacity: 0.3;
+      vertical-align: 8px;
+      -webkit-font-smoothing: antialias;
+    }
+
+    .line.code .line-number {
+      margin-left: -90px;
+      margin-right: 50px;
+    }
+
+    #focus-input {
+      outline: 0;
+      box-sizing: border-box;
+      position: fixed;
+      background: rgba(0,0,0,0);
+      border: 10px solid rgba(0,0,0,0);
+      color: rgba(0,0,0,0);
       width: 100%;
       height: 100%;
       top: 0;
       left: 0;
     }
 
+    #focus-input:focus {
+      border: 10px solid rgba(0, 255, 136, 0.1);
+    }
+
+    @-webkit-keyframes blinker {  
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
     .cursor {
-      display: inline-block;
-      background: #999;
+      -webkit-animation: blinker 500ms cubic-bezier(1,-0.21,0,1.33) infinite alternate;  
+      display: none;
+      text-decoration: blink;
+      background: rgba(0,0,0,0.3);
       width: 2px;
       margin-right: -2px;
       height: 1.2em;
       vertical-align: -.2em;
-      color: #999
+    }
+
+    #focus-input:focus + .narrative .cursor {
+      display: inline-block;
     }
 
     .marker {
