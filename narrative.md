@@ -261,11 +261,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
           type: function(letter) {
             if (letter.length < 1) { return }
-            var cursor = this.get('cursor')
-            var parts = this.lineSplitAtCursor()
+            var parts = lineSplitAtCursor()
             var string = parts.before.concat(letter, parts.after)
 
-            this.setLine(Cursor, string)
+            boundLines[cursor.line].set('string', string)
             this.right()
           },
 
@@ -285,34 +284,46 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         // FOCUS-INPUT
 
-        $('.focus-input').focus();
-        $('.focus-input').keydown(function(e) {
-          var number = e.keyCode
-          var code = e.shiftKey ? 'shift-' : ''
-          code = code + number
+        FocusInput = function() {
+          var el = $('.focus-input')
+          el.focus()
 
-          var action = {
-            '8': 'backspace',
-            '9': 'indent',
-            'shift-9': 'unindent',
-            '39': 'right',
-            '37': 'left',
-            '38': 'up',
-            '40': 'down',
-            '13': 'enter'
-          }[code];
+          el.keydown(function(e) {
+            var number = e.keyCode
+            var code = e.shiftKey ? 'shift-' : ''
+            code = code + number
 
-          if (action) {
-            console.log(action)
-            editor[action]()
-            return false
-          } else {
-            setTimeout(function() {
-              editor.type($('.focus-input').val())
-              $('focus-input').val('')
-            })
-          }
-        })
+            var action = {
+              '8': 'backspace',
+              '9': 'indent',
+              'shift-9': 'unindent',
+              '39': 'right',
+              '37': 'left',
+              '38': 'up',
+              '40': 'down',
+              '13': 'enter'
+            }[code];
+
+            if (action) {
+              console.log(action)
+              editor[action]()
+              return false
+            } else {
+              setTimeout(function() {
+                console.log('el is ', el, el.val())
+                var text = el.val()
+                editor.type(text)
+                console.log('typing', text)
+                el.val('')
+                console.log('after clearing is ', el, el.val())
+              })
+            }
+          })
+        }
+
+        new FocusInput()
+
+
 
 
 
@@ -374,6 +385,11 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           }
 
           this.render()
+
+          this.set = function(key, value) {
+            line[key] = value
+            this.render()
+          }
 
           $('.narrative').append(el)
         }
