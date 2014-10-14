@@ -2,31 +2,8 @@
 
 A tool for writing code in a literary way, "narratives". Includes a web-based editor, a compiler that can run the narratives and a bit of deployment framework, and an integrated host.
 
-Next up
--------
-
-There's some stuff to clean up to get back to feature parity with 0.2.0.
-
- - [X] Type Narrative into itself
- - [ ] Get Narrative typed in to save, reload, and run a hello world
- - [ ] Write out stored narratives to .md files. Overwrite Narrative.
- - [ ] Load .md files if there's nothing in the db
-
-And that'll be 0.3.0, "Self hosting without touching the filesystem".
-
-Maybe 0.4.0 can be:
-
- - [ ] Indented comments
- - [ ] Actually make these narratives read well
-
-Backlog
--------
- - [ ] getDependencies should go straight to searchLine. We should just join the blocks together into a string in build
- - [ ] Automatically compile dependencies of dependencies so narrative doesn't have to require jquery and database and such
-
 The Server
 ----------
-
 
 First off, this document is written in a filed called narrative.md. It's written in a language called Markdown. You can see that file [here](https://raw.githubusercontent.com/erikpukinskis/narrative/master/narrative.md).
 
@@ -453,6 +430,10 @@ There's a lot going on there. It loads Ember and some other javascript libraries
 
 And we also need a CSS stylesheet to make things pretty, which goes in `styles.css`:
 
+    body {
+      -webkit-font-smoothing: antialiased;
+    }
+
     .narrative {
       font-family: Georgia;
       font-size: 20px;
@@ -488,7 +469,6 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       display: inline-block;
       opacity: 0.3;
       vertical-align: 8px;
-      -webkit-font-smoothing: antialias;
     }
 
     .line.code .line-number {
