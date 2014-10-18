@@ -3,235 +3,151 @@ Editor
 
 This goes in `editor.js`:
 
-    function limit(number, min, max) {
-      number = Math.min(number, max)
-      number = Math.max(number, min)
-      return number
-    }
 
-    function moveCursor(columns, lines) {
-      return function() {
-        var line = this.get('cursor.line') + lines
-        line = limit(line, 0, this.get('model.length') - 1)
-        this.set('cursor.line', line)
+    define(['underscore'], function(_) {
 
-        var column = this.get('cursor.column') + columns
-        column = limit(column, 0, this.getLine().length)
-        this.set('cursor.column', column)
-      }
-    }
+      function Editor(lines) {
+        var cursor = this.cursor = {line: 0, column: 0}
 
-    function scrollToReveal(selector) {
-      MINIMUM = 50
+        function getLine(line) {
+          return lines[line].get('string') || ''
+        }
 
-      function directionTowards(edge) {
-        return edge == 'bottom' ? 1 : -1
-      }
+        function mergeDown() {
+          var string = getLine(cursor.line) + getLine(cursor.line+1)
+          lines[cursor.line].set('string', string)
+          lines.splice(cursor.line+1, 1)
+        }
 
-      function scrollTowards(edge) {
-        var distance = distanceTo(edge, selector)
-        if (distance > MINIMUM) { return }
+        function scrollToReveal(selector) {
+          MINIMUM = 50
 
-        var offset = distance - MINIMUM
-        var direction = directionTowards(edge)
-        var newPosition = $('body').scrollTop() - direction * offset
+          function scrollTowards(edge) {
+            var distance = distanceTo(edge, selector)
+            if (distance > MINIMUM) { return }
 
-        $("html,body").scrollTop(newPosition)
-      }
-
-      scrollTowards('bottom')
-      scrollTowards('top')        
-    }
-
-    function distanceTo(edge, selector) {
-      var cursorEl = $(selector)[0]
-      if (!cursorEl) { return }
-      if (edge == 'bottom') {
-        var direction = 1
-        var start = window.innerHeight
-      } else if (edge == 'top') {
-        var direction = -1
-        var start = 0
-      }
-
-      return start - direction * cursorEl.getBoundingClientRect()[edge]
-    }
-
-    define(['ember', 'underscore'], function(Ember, _) {
-      if (typeof window === 'undefined') { return }
-
-      return Ember.Component.extend({
-        layout: Ember.Handlebars.compile('{{focus-input editor=controller}}{{html}}'),
-
-        classNames: ['narrative'],
-
-        cursor: {line: 0, column: 0},
-
-        right: moveCursor(1,0),
-
-        left: moveCursor(-1,0),
-
-        down: moveCursor(0,1),
-
-        up: moveCursor(0,-1),
-
-        indent: function() {
-          this.setKind('code')
-        },
-
-        unindent: function() {
-          this.setKind('prose')
-        },
-
-        setKind: function(kind) {
-          var cursorLine = this.get('cursor.line')
-          var property = ['model', cursorLine, 'kind'].join('.')
-          this.set(property, kind)
-        },
-
-        lineProperty: function(line) {
-          if (!line || (line == Cursor)) {
-            line = this.get('cursor.line')
-          }
-
-          return ['model', line, 'string'].join('.')
-        },
-
-        getLine: function(line) {
-          return this.get(this.lineProperty(line)) || '';
-        },
-
-        setLine: function(line, string) {
-          this.set(this.lineProperty(line), string)
-        },
-
-        lineSplitAtCursor: function() {          
-          var string = this.getLine(Cursor)
-          var cursor = this.get('cursor')
-
-          return {
-            before: string.slice(0,cursor.column),
-            after: string.slice(cursor.column, string.length)
-          }
-        },
-
-        mergeDown: function() {
-          var line = this.get('cursor.line')
-          var string = this.getLine(line) + this.getLine(line+1)
-          this.setLine(line, string)
-          this.get('model').removeAt(line+1,1)
-        },
-
-        backspace: function() {
-          var _this = this;
-          var cursor = this.get('cursor')
-          var parts = _this.lineSplitAtCursor()
-          var atBeginningOfLine = parts.before.length < 1
-
-          function moveToTheEndOfTheLine() { 
-            _this.set('cursor.column', _this.getLine().length)
-          }
-
-          if (atBeginningOfLine) {
-            if (cursor.line > 0) {
-              this.up()
-              moveToTheEndOfTheLine()
-              this.mergeDown()
-            } else {
-              // We're at the beginning of the document
-            }
-          } else {
-            var string = parts.before.slice(0, -1) + parts.after
-            this.setLine(Cursor, string)
-            this.left()
-          }
-        },
-
-        type: function(letter) {
-          if (letter.length < 1) { return }
-          var cursor = this.get('cursor')
-          var parts = this.lineSplitAtCursor()
-          var string = parts.before.concat(letter, parts.after)
-
-          this.setLine(Cursor, string)
-          this.right()
-        },
-
-        enter: function() {
-          var cursor = this.get('cursor')
-          var parts = this.lineSplitAtCursor()
-          var kind = this.get('model')[cursor.line].kind
-          var linesAfter = this.get('model').slice(cursor.line)
-          linesAfter.unshiftObject({string: parts.before, kind: kind})
-          linesAfter[1] = {string: parts.after, kind: kind}
-          this.get('model').replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
-          this.incrementProperty('cursor.line')
-          this.set('cursor.column', 0)
-        },
-
-        lineToHtml: function(line, lineNumber) {
-          var _this = this
-          var cursor = this.get('cursor')
-          var html = line.string
-          var isProse = line.kind == 'prose'
-
-          function addHeadings(line) {
-            var exclamation = /^(<<<<CURSOR>>>>|)(!)(<<<<CURSOR>>>>|)(.*)$/
-
-            function withH1(xxxx, cursor, marker, otherCursor, line) {
-              return '<h1>' + cursor + '<span class="marker">' + 
-                marker + '</span>' + otherCursor + line + '</h1>'
+            function directionTowards(edge) {
+              return edge == 'bottom' ? 1 : -1
             }
 
-            return line.replace(exclamation, withH1)
+            var offset = distance - MINIMUM
+            var direction = directionTowards(edge)
+            var newPosition = $('body').scrollTop() - direction * offset
+
+            $("html,body").scrollTop(newPosition)
           }
 
-          function markCursor() {
-            var parts = _this.lineSplitAtCursor()
-            return parts.before + '<<<<CURSOR>>>>' + parts.after
+          scrollTowards('bottom')
+          scrollTowards('top')        
+        }
+
+        function distanceTo(edge, selector) {
+          var cursorEl = $(selector)[0]
+          if (!cursorEl) { return }
+          if (edge == 'bottom') {
+            var direction = 1
+            var start = window.innerHeight
+          } else if (edge == 'top') {
+            var direction = -1
+            var start = 0
           }
 
-          function noteTicks(line) {
-            var tickedCommands = /`([^`]+)`/
-            function withWrapped(xxxx, command) {
-              return '<span class="command">`' + command 
-                + '`</span>'
-            }
-            return line.replace(tickedCommands, withWrapped)
-          }
+          return start - direction * cursorEl.getBoundingClientRect()[edge]
+        }
 
-          if (lineNumber == cursor.line) {
-            html = markCursor(html)
-          }
+        function limit(number, min, max) {
+          number = Math.min(number, max)
+          number = Math.max(number, min)
+          return number
+        }
 
-          if (isProse) {
-            html = noteTicks(addHeadings(html))
-          }
+        function moveCursor(columnsToMove, linesToMove) {
+          return function() {
+            var line = cursor.line + linesToMove
+            var linesToRender = [cursor.line, line]
+            line = limit(line, 0, lines.length - 1)
+            cursor.line = line
 
-          html = html.replace('<<<<CURSOR>>>>', '<div class="cursor"></div>')
+            var column = cursor.column + columnsToMove
+            column = limit(column, 0, getLine(cursor.line).length)
+            cursor.column = column
+            console.log('cursor: ', cursor.line, cursor.column)
 
-          var classes = ['line', line.kind]
-          classes = classes.join(' ')
-          return '<div class="' + classes + '">' + html + '</div>'
-        },
+            linesToRender.forEach(function(lineNumber) {
+              lines[lineNumber].render()
+            })
 
-        html: function() {
-          var htmlLines = this.get('model').map(this.lineToHtml, this)
-          
-          var html = htmlLines.join("\n")
-
-          Ember.run.next(function() {
             scrollToReveal('.cursor')
-          })
-          return Ember.String.htmlSafe(html)
-        }.property('model.@each', 'model.@each.string', 'model.@each.kind', 'cursor.line', 'cursor.column'),
-      })
+          }
+        }
+
+        _(this).extend({
+          lineSplitAtCursor: function() {          
+            var string = getLine(cursor.line)
+            return {
+              before: string.slice(0,cursor.column),
+              after: string.slice(cursor.column, string.length)
+            }
+          },
+
+          right: moveCursor(1,0),
+
+          left: moveCursor(-1,0),
+
+          down: moveCursor(0,1),
+
+          up: moveCursor(0,-1),
+
+          backspace: function() {
+            var parts = this.lineSplitAtCursor()
+            var atBeginningOfLine = parts.before.length < 1
+
+            function moveToTheEndOfTheLine() { 
+              cursor.column = getLine(cursor.line).length
+            }
+
+            if (atBeginningOfLine) {
+              if (cursor.line > 0) {
+                this.up()
+                moveToTheEndOfTheLine()
+                mergeDown()
+              } else {
+                // We are at the beginning of the document
+              }
+            } else {
+              var string = parts.before.slice(0, -1) + parts.after
+              lines[cursor.line].set('string', string)
+              this.left()
+            }
+          },
+
+          type: function(letter) {
+            if (letter.length < 1) { return }
+            var parts = this.lineSplitAtCursor()
+            var string = parts.before.concat(letter, parts.after)
+
+            lines[cursor.line].set('string', string)
+            this.right()
+          },
+
+          enter: function() {
+            throw new Error('not yet')
+            var cursor = this.get('cursor')
+            var parts = this.lineSplitAtCursor()
+            var kind = this.get('model')[cursor.line].kind
+            var linesAfter = this.get('model').slice(cursor.line)
+            linesAfter.unshiftObject({string: parts.before, kind: kind})
+            linesAfter[1] = {string: parts.after, kind: kind}
+            this.get('model').replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
+            this.incrementProperty('cursor.line')
+            this.set('cursor.column', 0)
+          }
+        })
+      }
+
+      return Editor
+
     })
-
-It's an Ember Component so you can do:
-
-
-
 
 Ideas for the future
 ====================

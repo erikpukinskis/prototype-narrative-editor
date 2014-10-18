@@ -141,17 +141,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
     <script>
 
-      require(['editor', 'ember', 'underscore', 'jquery', 'handlebars'], function(editor, ember){
+      require(['editor', 'underscore', 'jquery', 'handlebars'], function(Editor){
 
-
-        // HELPER
-
-        function limit(number, min, max) {
-          number = Math.min(number, max)
-          number = Math.max(number, min)
-          return number
-        }
-
+        var editor
 
         // TEMPLATING
 
@@ -162,113 +154,12 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
 
 
-        // EDITOR
-
-        function AtCursor() {}
-        var cursor = {line: 0, column: 0}
-
-        function getLine(line) {
-          if (!line || (line == AtCursor)) {
-            line = cursor.line
-          }
-          return lines[line].string || ''
-        }
-
-        function moveCursor(columnsToMove, linesToMove) {
-          return function() {
-            var line = cursor.line + linesToMove
-            var linesToRender = [cursor.line, line]
-            line = limit(line, 0, lines.length - 1)
-            cursor.line = line
-
-            var column = cursor.column + columnsToMove
-            column = limit(column, 0, getLine().length)
-            cursor.column = column
-            console.log('cursor: ', cursor.line, cursor.column)
-
-            linesToRender.forEach(function(lineNumber) {
-              boundLines[lineNumber].render()
-            })
-          }
-        }
-
-        function lineSplitAtCursor() {          
-          var string = getLine(AtCursor)
-
-          return {
-            before: string.slice(0,cursor.column),
-            after: string.slice(cursor.column, string.length)
-          }
-        }
-
-        function mergeDown() {
-          var string = getLine(cursor.line) + getLine(cursor.line+1)
-          boundLines[cursor.line] = string
-          boundLines[cursor.line+1].remove()
-        }
-
-        var editor = {
-          right: moveCursor(1,0),
-
-          left: moveCursor(-1,0),
-
-          down: moveCursor(0,1),
-
-          up: moveCursor(0,-1),
-
-          backspace: function() {
-            var parts = lineSplitAtCursor()
-            var atBeginningOfLine = parts.before.length < 1
-
-            function moveToTheEndOfTheLine() { 
-              cursor.column = getLine().length
-            }
-
-            if (atBeginningOfLine) {
-              if (cursor.line > 0) {
-                this.up()
-                moveToTheEndOfTheLine()
-                mergeDown()
-              } else {
-                // We are at the beginning of the document
-              }
-            } else {
-              var string = parts.before.slice(0, -1) + parts.after
-              boundLines[cursor.line].set('string', string)
-              this.left()
-            }
-          },
-
-          type: function(letter) {
-            if (letter.length < 1) { return }
-            var parts = lineSplitAtCursor()
-            var string = parts.before.concat(letter, parts.after)
-
-            boundLines[cursor.line].set('string', string)
-            this.right()
-          },
-
-          enter: function() {
-            var cursor = this.get('cursor')
-            var parts = this.lineSplitAtCursor()
-            var kind = this.get('model')[cursor.line].kind
-            var linesAfter = this.get('model').slice(cursor.line)
-            linesAfter.unshiftObject({string: parts.before, kind: kind})
-            linesAfter[1] = {string: parts.after, kind: kind}
-            this.get('model').replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
-            this.incrementProperty('cursor.line')
-            this.set('cursor.column', 0)
-          }
-        }
-
-
         // FOCUS-INPUT
 
         FocusInput = function() {
           var el = $('#focus-input')
 
           function copyText(e) {
-            console.log('doon')
             var number = e.keyCode
             var code = e.shiftKey ? 'shift-' : ''
             code = code + number
@@ -332,7 +223,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           }
 
           function markCursor() {
-            var parts = lineSplitAtCursor()
+            var parts = editor.lineSplitAtCursor()
             return parts.before + '####CURSOR####' + parts.after
           }
 
@@ -360,7 +251,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             })
           }
 
-          if (line.number == cursor.line) {
+          if (editor && line.number == editor.cursor.line) {
             html = markCursor(html)
           }
 
@@ -393,9 +284,8 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             this.render()
           }
 
-          this.remove = function() {
-            boundLines.splice(line+1,1)
-            // for(boundLines.)
+          this.get = function(key) {
+            return line[key]
           }
 
           $('.narrative').append(el)
@@ -409,7 +299,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         }
 
         var name = getRouteParams().name
-        var lines
         var boundLines
 
         $.getJSON('/narratives/' + name, function(doc) {
@@ -418,6 +307,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             line.number = lineNumber
             return new LineBoundToDiv(line, lineToHtml)
           })
+          editor = new Editor(boundLines)
         })
 
       })
