@@ -144,27 +144,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         var editor
 
 
-
-        var ExampleApplication = React.createClass({
-          displayName: 'ExampleApplication',
-          render: function() {
-            var elapsed = Math.round(this.props.elapsed  / 100)
-            var seconds = elapsed / 10 + (elapsed % 10 ? '' : '.0' )
-            var message = 'React has been running for ' + seconds 
-              + ' seconds.';
-            return React.DOM.p(null, message);
-          }
-        })
-
-        var start = new Date().getTime();
-
-        setInterval(function() {
-          React.renderComponent(
-            ExampleApplication({elapsed: new Date().getTime() - start}),
-            document.getElementById('container')
-          )
-        }, 50)
-
         // TEMPLATING
 
         function div(options) {
@@ -321,14 +300,42 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         var name = getRouteParams().name
         var boundLines
 
-        $.getJSON('/narratives/' + name, function(doc) {
-          lines = doc.lines
-          boundLines = lines.map(function(line, lineNumber) {
-            line.number = lineNumber
-            return new LineBoundToDiv(line, lineToHtml)
-          })
-          editor = new Editor(boundLines)
+
+        var Line = React.createClass({
+          displayName: 'Line',
+          render: function() {
+            return React.DOM.div({className: "line"}, this.props.string)
+          }
         })
+
+        var Editor = React.createClass({
+          displayName: 'Editor',
+          componentDidMount : function() {
+            $.ajax({
+              url: '/narratives/' + name,
+              dataType: 'json',
+              success: function(doc) {
+                console.log(doc)
+                this.setState(doc)
+              }.bind(this)
+            })
+            setInterval(this.loadCommentsFromServer, this.props.pollInterval)
+          },
+          getInitialState: function() {
+            return {lines: []};
+          },
+          render: function() {
+            var lines = this.state.lines.map(function (line) {
+              return Line(line)
+            })
+            return React.DOM.div({className: "narrative"}, lines)
+          }
+        })
+
+        React.renderComponent(
+          Editor(),
+          document.getElementById('container')
+        )
 
       })
 
