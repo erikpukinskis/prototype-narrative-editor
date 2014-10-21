@@ -11,7 +11,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor'], function(server, documents, compile, load, folder) {
+    define(['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'react', 'editor'], function(server, documents, compile, load, folder) {
 
       var server = new Server()
 
@@ -130,20 +130,40 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     </script>
 
     <script src="require.js"></script>
-    <script data-main="editor" src="require.js"></script>
-    <script data-main="ember" src="require.js"></script>
-    <script data-main="underscore" src="require.js"></script>
 
     <body>
+      <div id="container"></div>
       <input id="focus-input">
       <div class="narrative"></div>
     </body>
 
     <script>
 
-      require(['editor', 'underscore', 'jquery', 'handlebars'], function(Editor){
+      require(['editor', 'react', 'underscore', 'jquery'], function(Editor, React){
 
         var editor
+
+
+
+        var ExampleApplication = React.createClass({
+          displayName: 'ExampleApplication',
+          render: function() {
+            var elapsed = Math.round(this.props.elapsed  / 100)
+            var seconds = elapsed / 10 + (elapsed % 10 ? '' : '.0' )
+            var message = 'React has been running for ' + seconds 
+              + ' seconds.';
+            return React.DOM.p(null, message);
+          }
+        })
+
+        var start = new Date().getTime();
+
+        setInterval(function() {
+          React.renderComponent(
+            ExampleApplication({elapsed: new Date().getTime() - start}),
+            document.getElementById('container')
+          )
+        }, 50)
 
         // TEMPLATING
 
