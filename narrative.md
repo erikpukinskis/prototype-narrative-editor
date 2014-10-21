@@ -187,7 +187,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         var name = getRouteParams().name
 
-        React.renderComponent(
+        editor = React.renderComponent(
           Editor({name: name}),
           document.getElementById('container')
         )

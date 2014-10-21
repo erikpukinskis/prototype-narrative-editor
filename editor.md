@@ -120,12 +120,12 @@ This goes in `editor.js`:
         return function() {
           var cursor = this.state.cursor
           var line = cursor.line + linesToMove
-          line = limit(line, 0, lines.length - 1)
+          line = limit(line, 0, this.state.lines.length - 1)
 
           var column = cursor.column + columnsToMove
-          column = limit(column, 0, getLine(cursor.line).length)
+          column = limit(column, 0, this.getLine(cursor.line).length)
 
-          this.setState({cursor: {line: column, column: column}})
+          this.setState({cursor: {line: line, column: column}})
           
           scrollToReveal('.cursor')
         }
