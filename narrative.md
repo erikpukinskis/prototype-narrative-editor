@@ -121,19 +121,15 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <head>
       <meta charset="utf-8">
       <title>Narrative</title>
-        <link rel="stylesheet" href="styles.css" />
+      <link rel="stylesheet" href="styles.css" />
     </head>
-
-    <script type="text/x-handlebars" data-template-name="narrative">
-      {{narrative-editor model=model.lines}}
-      <div class="spinner"></div>
-    </script>
 
     <script src="require.js"></script>
 
     <body>
-      <div id="container"></div>
+      <div class="spinner"></div>
       <input id="focus-input">
+      <div id="container"></div>
     </body>
 
     <script>
@@ -141,18 +137,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       require(['editor', 'react', 'underscore', 'jquery'], function(Editor, React){
 
         var editor
-
-
-        // TEMPLATING
-
-        function div(options) {
-          classString = (options.classes || []).join(' ')
-          return $('<div class="' + classString + '">' + options.html + '</div>')
-        }
-
-
-
-        // FOCUS-INPUT
 
         FocusInput = function() {
           var el = $('#focus-input')
@@ -197,126 +181,14 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         new FocusInput()
 
-
-
-
-
-
-        // LINE BINDING
-
-        function lineToHtml(line) {
-          var _this = this
-          var html = line.string
-          var isProse = line.kind == 'prose'
-
-          function addHeadings(line) {
-            var exclamation = /^(####CURSOR####|)(!)(####CURSOR####|)(.*)$/
-
-            function withH1(xxxx, cursor, marker, otherCursor, line) {
-              return '<h1>' + cursor + '<span class="marker">' + 
-                marker + '</span>' + otherCursor + line + '</h1>'
-            }
-
-            return line.replace(exclamation, withH1)
-          }
-
-          function markCursor() {
-            var parts = editor.lineSplitAtCursor()
-            return parts.before + '####CURSOR####' + parts.after
-          }
-
-          function noteTicks(line) {
-            var tickedCommands = /`([^`]+)`/
-            function withWrapped(xxxx, command) {
-              return '<span class="command">`' + command 
-                + '`</span>'
-            }
-            return line.replace(tickedCommands, withWrapped)
-          }
-
-          var entityMap = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': '&quot;',
-            "'": '&#39;',
-            "/": '&#x2F;'
-          };
-
-          function escapeHtml(string) {
-            return String(string).replace(/[&<>"'\/]/g, function (s) {
-              return entityMap[s]
-            })
-          }
-
-          if (editor && line.number == editor.cursor.line) {
-            html = markCursor(html)
-          }
-
-          html = escapeHtml(html)
-
-          if (isProse) {
-            html = noteTicks(addHeadings(html))
-          }
-
-          html = html.replace('####CURSOR####', '<div class="cursor"></div>')
-
-          return '<span class="line-number">' + line.number + '</span>' + html
-        }
-
-
-        // ROUTER
-
         function getRouteParams() {
           return {name: 'narrative'}
         }
 
         var name = getRouteParams().name
-        var boundLines
-
-
-        var Line = React.createClass({
-          displayName: 'Line',
-          render: function() {
-            var line = this.props
-            var html = lineToHtml(line)
-
-            return React.DOM.div({
-              id: 'line-'+line.number,
-              className: 'line '+line.kind,
-              dangerouslySetInnerHTML: {__html: html}
-            })
-          }
-        })
-
-        var Editor = React.createClass({
-          displayName: 'Editor',
-          componentDidMount : function() {
-            $.ajax({
-              url: '/narratives/' + name,
-              dataType: 'json',
-              success: function(doc) {
-                console.log(doc)
-                this.setState(doc)
-              }.bind(this)
-            })
-            setInterval(this.loadCommentsFromServer, this.props.pollInterval)
-          },
-          getInitialState: function() {
-            return {lines: []};
-          },
-          render: function() {
-            return React.DOM.div({className: "narrative"}, 
-              this.state.lines.map(function (line, number) {
-                line.number = number
-                return Line(line)
-              })
-            )
-          }
-        })
 
         React.renderComponent(
-          Editor(),
+          Editor({name: name}),
           document.getElementById('container')
         )
 
@@ -409,7 +281,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       vertical-align: -.2em;
     }
 
-    #focus-input:focus + .narrative .cursor {
+    #focus-input:focus + #container .narrative .cursor {
       display: inline-block;
     }
 
