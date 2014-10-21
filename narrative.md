@@ -134,7 +134,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     <body>
       <div id="container"></div>
       <input id="focus-input">
-      <div class="narrative"></div>
     </body>
 
     <script>
@@ -265,31 +264,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           return '<span class="line-number">' + line.number + '</span>' + html
         }
 
-        LineBoundToDiv = function(line, renderer) {
-
-          var el = div({
-            id: 'line-'+line.number,
-            classes: ['line', line.kind]
-          })
-
-          this.render = function() {
-            el.html(renderer(line))
-          }
-
-          this.render()
-
-          this.set = function(key, value) {
-            line[key] = value
-            this.render()
-          }
-
-          this.get = function(key) {
-            return line[key]
-          }
-
-          $('.narrative').append(el)
-        }
-
 
         // ROUTER
 
@@ -304,7 +278,14 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         var Line = React.createClass({
           displayName: 'Line',
           render: function() {
-            return React.DOM.div({className: "line"}, this.props.string)
+            var line = this.props
+            var html = lineToHtml(line)
+
+            return React.DOM.div({
+              id: 'line-'+line.number,
+              className: 'line '+line.kind,
+              dangerouslySetInnerHTML: {__html: html}
+            })
           }
         })
 
@@ -325,10 +306,12 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             return {lines: []};
           },
           render: function() {
-            var lines = this.state.lines.map(function (line) {
-              return Line(line)
-            })
-            return React.DOM.div({className: "narrative"}, lines)
+            return React.DOM.div({className: "narrative"}, 
+              this.state.lines.map(function (line, number) {
+                line.number = number
+                return Line(line)
+              })
+            )
           }
         })
 
