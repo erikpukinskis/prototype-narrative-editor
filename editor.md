@@ -101,7 +101,7 @@ This goes in `editor.js`:
           })
         }
 
-        if (line.number == cursor.line) {
+        if (cursor) {
           html = markCursor(html)
         }
 
@@ -171,7 +171,9 @@ This goes in `editor.js`:
           return React.DOM.div({className: "narrative"}, 
             this.state.lines.map(function (line, number) {
               line.number = number
-              line.cursor = cursor
+              if (cursor.line == number) {
+                line.cursor = cursor
+              }
               return Line(line)
             })
           )
@@ -210,11 +212,13 @@ This goes in `editor.js`:
         up: moveCursor(0,-1),
 
         backspace: function() {
+          var cursor = this.state.cursor
           var parts = this.lineSplitAtCursor()
           var atBeginningOfLine = parts.before.length < 1
 
           function moveToTheEndOfTheLine() { 
-            cursor.column = this.getLine(cursor.line).length
+            var column = this.getLine(cursor.line).length
+            this.setState({cursor: {column: column}})
           }
 
           if (atBeginningOfLine) {
@@ -238,8 +242,8 @@ This goes in `editor.js`:
           var parts = this.lineSplitAtCursor()
           var string = parts.before.concat(letter, parts.after)
 
-          lines[this.state.cursor.line].string = string
-          this.setState({lines: lines})
+          this.state.lines[this.state.cursor.line].string = string
+          this.setState({lines: this.state.lines})
           this.right()
         },
 
