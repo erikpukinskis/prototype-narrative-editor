@@ -86,6 +86,10 @@ This goes in `editor.js`:
           return line.replace(tickedCommands, withWrapped)
         }
 
+        function doubleSpaces(html) {
+          return html.replace(/^( +)/, '$1$1')          
+        }
+
         var entityMap = {
           "&": "&amp;",
           "<": "&lt;",
@@ -101,17 +105,11 @@ This goes in `editor.js`:
           })
         }
 
-        if (cursor) {
-          html = markCursor(html)
-        }
-
+        if (cursor) { html = markCursor(html) }
         html = escapeHtml(html)
-
-        if (isProse) {
-          html = noteTicks(addHeadings(html))
-        }
-
+        if (isProse) { html = noteTicks(addHeadings(html)) }
         html = html.replace('####CURSOR####', '<div class="cursor"></div>')
+        html = doubleSpaces(html)
 
         return '<span class="line-number">' + line.number + '</span>' + html
       }
@@ -125,8 +123,10 @@ This goes in `editor.js`:
           var column = cursor.column + columnsToMove
           column = limit(column, 0, this.getLine(cursor.line).length)
 
-          this.setState({cursor: {line: line, column: column}})
-          
+          var newCursor = {line: line, column: column}
+
+          this.setState({cursor: newCursor})
+
           scrollToReveal('.cursor')
         }
       }
@@ -174,7 +174,9 @@ This goes in `editor.js`:
               if (cursor.line == number) {
                 line.cursor = cursor
               }
-              return Line(line)
+              line = Line(line)
+              line.setState({string: 'rabbit'})
+              return line
             })
           )
         },
@@ -185,14 +187,6 @@ This goes in `editor.js`:
           return this.state.lines[line].string || ''
         },
 
-        mergeDown: function() {
-          var string = this.getLine(cursor.line) + this.getLine(cursor.line+1)
-          var newLine = this.state.lines[cursor.line]
-          newLine.string = string
-
-          this.state.lines.splice(cursor.line, 2, thisLine)
-          this.setState({lines: this.state.lines})
-        }, 
 
         lineSplitAtCursor: function() {
           var cursor = this.state.cursor       

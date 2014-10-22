@@ -163,7 +163,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
               return false
             } else {
               setTimeout(function() {
+                var text = el.val()
                 editor.type(text)
+                el.val('')
               })
             }
 
@@ -226,7 +228,8 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
     .line.code {
       color: #00C8A0;
       padding-left: 40px;
-      font-family: Courier;
+      font-family: Helvetica;
+      letter-spacing: 0.01em;
     }
 
     .line-number {
