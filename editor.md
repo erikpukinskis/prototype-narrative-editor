@@ -149,6 +149,57 @@ This goes in `editor.js`:
 
     })
 
+What should happen
+------------------
+
+
+Let's just think in terms of messages for a second.
+
+render the first line number
+render the first line
+add those to the dom
+
+render the second line number
+render the second line
+add those to the dom
+
+....
+
+[focus]
+
+reRender(1):
+
+render the first half of the line
+render the cursor
+render the second half of the line
+(keep the first line number)
+swap that all for the first line
+
+[press down]
+
+render the first line
+(keep the first line number)
+swap that all for the first line
+
+reRender(2)
+
+[arrow right]
+
+reRender(2)
+
+[spacebar]
+
+add a space to the line
+reRender(2)
+
+[enter]
+
+remove second part of line
+reRender(2) without the cursor
+render new line with second part of line and cursor and new line number
+add it to the dom
+
+
 Ideas for the future
 ====================
 
