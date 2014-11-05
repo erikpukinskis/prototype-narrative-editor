@@ -255,8 +255,19 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       font-family: Courier;
     }
 
-    .line.active {
-      background: #eee;
+
+    .line .absolute {
+      display: none;
+      position: absolute;
+      background: rgba(0,0,0,0.1);
+    }
+
+    .line.active .absolute {
+      display: block;
+    }
+
+    .line.active .static {
+      opacity: 0.1;
     }
 
     .line-number {
@@ -281,7 +292,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       border: 10px solid rgba(0,0,0,0);
       color: rgba(0,0,0,0);
       width: 100%;
-      height: 100%;
+      /*height: 100%;*/
       top: 0;
       left: 0;
     }
@@ -306,7 +317,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       vertical-align: -.2em;
     }
 
-    #focus-input:focus + .narrative .cursor {
+    .narrative .cursor { /* #focus-input:focus + */
       display: inline-block;
     }
 

@@ -1,15 +1,23 @@
 Editor
 ------
 
+[x] Show cursor
+
 This goes in `editor.js`:
 
 
     define(['underscore'], function(_) {
 
-      function lineToHtml(line) {
-        var _this = this
-        var html = line.string
-        var isProse = line.kind == 'prose'
+      function splitLine(string, column) {
+        return {
+          before: string.slice(0,column),
+          after: string.slice(column, string.length)
+        }
+      }
+
+      function lineToHtml(string, kind) {
+        var html = string
+        var isProse = kind == 'prose'
 
         function addHeadings(line) {
           var exclamation = /^(!)(.*)$/
@@ -53,6 +61,23 @@ This goes in `editor.js`:
         }
 
         return html
+      }
+
+
+      function renderLineWithCursor(line, cursor) {
+        if (cursor.column == 0) {
+          var html = lineToHtml(line.string, line.kind)
+          return html.replace(/^(<[^>]*>|)/, '$1'+div('cursor'))
+        }
+        var parts = splitLine(line.string, cursor.column)
+        var string = parts.before + '<<CURSOR>>' + parts.after
+        return lineToHtml(string, line.kind).replace('<<CURSOR>>', div('cursor'))
+      }
+
+      function div(classNames, contents) {
+        contents = contents || ''
+        if (contents.join) { contents = contents.join('') }
+        return '<div class="' + classNames + '">' + contents + '</div>'
       }
 
 
@@ -131,30 +156,29 @@ This goes in `editor.js`:
           }
         }
 
-        function div(classNames, contents) {
-          if (contents.join) { contents = contents.join('') }
-          return '<div class="' + classNames + '">' + contents + '</div>'
-        }
-
         function createLine(line, number) {
-          var html = div('line.line-1', [
+          var html = div('line line-'+number, [
             div('line-number', number),
-            div('static', lineToHtml(line)),
-            div('absolute', '')
+            div('absolute', ''),
+            div('static', lineToHtml(line.string, line.kind))
           ])
 
-          console.log(number)
           $('.narrative').append(html)
         }
 
         function activate(number) {
           var line = $('.line-'+number)
           line.addClass('active')
-          // line.find('.absolute').html(renderLineWithCursor(lines[number], cursor))
+          console.log('activated ' + number)
+          var absolute = line.find('.absolute')
+          absolute.html(renderLineWithCursor(lines[number], cursor))
+          absolute.css('width', line.width()+'px')
+
         }
 
         _(this).extend({
-          lineSplitAtCursor: function() {          
+          lineSplitAtCursor: function() {
+            splitLine(line, cursor.column)
             var string = getLine(cursor.line)
             return {
               before: string.slice(0,cursor.column),
@@ -243,43 +267,6 @@ render the second line
 add those to the dom
 
 ....
-
-    .line .absolute {
-      position: absolute;
-    }
-
-    .line.active .absolute {
-      display: block;
-    }
-
-    .line.active .static {
-      visibility: hidden;
-    }
-
-    var cursor
-
-    function renderLineWithCursor(text, cursor) {
-      var parts = lineSplitAtCursor(text, cursor)
-      return parts.before + div('cursor') + parts.after
-    }
-
-    function activate(number) {
-      var line = $('.line-'+number+)
-      line.addClass('active')
-      line.find('.absolute').html(renderLineWithCursor(lines[number], cursor))
-    }
-
-    function init(lines) {
-      lines.each(function(line, number) {
-        createLine(line, number)
-      })
-      cursor = {line: 0, column: 0}      
-      activate()
-    }
-
-    function down() {
-      $('.line-'+number+)
-    }
 
 XXX [focus]
 
