@@ -6,6 +6,56 @@ This goes in `editor.js`:
 
     define(['underscore'], function(_) {
 
+      function lineToHtml(line) {
+        var _this = this
+        var html = line.string
+        var isProse = line.kind == 'prose'
+
+        function addHeadings(line) {
+          var exclamation = /^(!)(.*)$/
+
+          function withH1(xxxx, marker, line) {
+            return '<h1><span class="marker">' + 
+              marker + '</span>' + line + '</h1>'
+          }
+
+          return line.replace(exclamation, withH1)
+        }
+
+        function noteTicks(line) {
+          var tickedCommands = /`([^`]+)`/
+          function withWrapped(xxxx, command) {
+            return '<span class="command">`' + command 
+              + '`</span>'
+          }
+          return line.replace(tickedCommands, withWrapped)
+        }
+
+        var entityMap = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': '&quot;',
+          "'": '&#39;',
+          "/": '&#x2F;'
+        };
+
+        function escapeHtml(string) {
+          return String(string).replace(/[&<>"'\/]/g, function (s) {
+            return entityMap[s]
+          })
+        }
+
+        html = escapeHtml(html)
+
+        if (isProse) {
+          html = noteTicks(addHeadings(html))
+        }
+
+        return html
+      }
+
+
       function Editor(lines) {
         var cursor = this.cursor = {line: 0, column: 0}
 
@@ -81,6 +131,28 @@ This goes in `editor.js`:
           }
         }
 
+        function div(classNames, contents) {
+          if (contents.join) { contents = contents.join('') }
+          return '<div class="' + classNames + '">' + contents + '</div>'
+        }
+
+        function createLine(line, number) {
+          var html = div('line.line-1', [
+            div('line-number', number),
+            div('static', lineToHtml(line)),
+            div('absolute', '')
+          ])
+
+          console.log(number)
+          $('.narrative').append(html)
+        }
+
+        function activate(number) {
+          var line = $('.line-'+number)
+          line.addClass('active')
+          // line.find('.absolute').html(renderLineWithCursor(lines[number], cursor))
+        }
+
         _(this).extend({
           lineSplitAtCursor: function() {          
             var string = getLine(cursor.line)
@@ -141,6 +213,13 @@ This goes in `editor.js`:
             this.get('model').replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
             this.incrementProperty('cursor.line')
             this.set('cursor.column', 0)
+          },
+
+          init: function(selector) {
+            lines.forEach(function(line, number) {
+              createLine(line, number)
+            })
+            activate(0)
           }
         })
       }
@@ -165,39 +244,80 @@ add those to the dom
 
 ....
 
-[focus]
+    .line .absolute {
+      position: absolute;
+    }
 
-reRender(1):
+    .line.active .absolute {
+      display: block;
+    }
 
-render the first half of the line
-render the cursor
-render the second half of the line
-(keep the first line number)
-swap that all for the first line
+    .line.active .static {
+      visibility: hidden;
+    }
+
+    var cursor
+
+    function renderLineWithCursor(text, cursor) {
+      var parts = lineSplitAtCursor(text, cursor)
+      return parts.before + div('cursor') + parts.after
+    }
+
+    function activate(number) {
+      var line = $('.line-'+number+)
+      line.addClass('active')
+      line.find('.absolute').html(renderLineWithCursor(lines[number], cursor))
+    }
+
+    function init(lines) {
+      lines.each(function(line, number) {
+        createLine(line, number)
+      })
+      cursor = {line: 0, column: 0}      
+      activate()
+    }
+
+    function down() {
+      $('.line-'+number+)
+    }
+
+XXX [focus]
+
+when I create a document with two lines
+
+activate:
+  set line one to visibility:hidden
+  copy the node and re-render it with the cursor in the same spot with position:absolute
+  note how tall it is
 
 [press down]
 
-render the first line
-(keep the first line number)
-swap that all for the first line
+set the static first line back to visibility:visible
+hide the absolute one
 
-reRender(2)
+move the cursor down
+
+wait a few ms, then:
+  activate the second one
 
 [arrow right]
 
+(it might make sense to get metrics on the whole line so we can move faster)
 reRender(2)
 
 [spacebar]
 
 add a space to the line
 reRender(2)
+check if the height changed. If it did, re-render the static line
 
 [enter]
 
 remove second part of line
-reRender(2) without the cursor
-render new line with second part of line and cursor and new line number
+rerender the static line 2
+render new line with second part of line
 add it to the dom
+activate the new line
 
 
 Ideas for the future

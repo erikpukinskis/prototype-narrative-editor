@@ -200,98 +200,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         new FocusInput()
 
 
-
-
-
-
-        // LINE BINDING
-
-        function lineToHtml(line) {
-          var _this = this
-          var html = line.string
-          var isProse = line.kind == 'prose'
-
-          function addHeadings(line) {
-            var exclamation = /^(####CURSOR####|)(!)(####CURSOR####|)(.*)$/
-
-            function withH1(xxxx, cursor, marker, otherCursor, line) {
-              return '<h1>' + cursor + '<span class="marker">' + 
-                marker + '</span>' + otherCursor + line + '</h1>'
-            }
-
-            return line.replace(exclamation, withH1)
-          }
-
-          function markCursor() {
-            var parts = editor.lineSplitAtCursor()
-            return parts.before + '####CURSOR####' + parts.after
-          }
-
-          function noteTicks(line) {
-            var tickedCommands = /`([^`]+)`/
-            function withWrapped(xxxx, command) {
-              return '<span class="command">`' + command 
-                + '`</span>'
-            }
-            return line.replace(tickedCommands, withWrapped)
-          }
-
-          var entityMap = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': '&quot;',
-            "'": '&#39;',
-            "/": '&#x2F;'
-          };
-
-          function escapeHtml(string) {
-            return String(string).replace(/[&<>"'\/]/g, function (s) {
-              return entityMap[s]
-            })
-          }
-
-          if (editor && line.number == editor.cursor.line) {
-            html = markCursor(html)
-          }
-
-          html = escapeHtml(html)
-
-          if (isProse) {
-            html = noteTicks(addHeadings(html))
-          }
-
-          html = html.replace('####CURSOR####', '<div class="cursor"></div>')
-
-          return '<span class="line-number">' + line.number + '</span>' + html
-        }
-
-        LineBoundToDiv = function(line, renderer) {
-
-          var el = div({
-            id: 'line-'+line.number,
-            classes: ['line', line.kind]
-          })
-
-          this.render = function() {
-            el.html(renderer(line))
-          }
-
-          this.render()
-
-          this.set = function(key, value) {
-            line[key] = value
-            this.render()
-          }
-
-          this.get = function(key) {
-            return line[key]
-          }
-
-          $('.narrative').append(el)
-        }
-
-
         // ROUTER
 
         function getRouteParams() {
@@ -299,15 +207,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         }
 
         var name = getRouteParams().name
-        var boundLines
 
         $.getJSON('/narratives/' + name, function(doc) {
-          lines = doc.lines
-          boundLines = lines.map(function(line, lineNumber) {
-            line.number = lineNumber
-            return new LineBoundToDiv(line, lineToHtml)
-          })
-          editor = new Editor(boundLines)
+          editor = new Editor(doc.lines)
+          editor.init()
         })
 
       })
@@ -350,6 +253,10 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       color: #00C8A0;
       padding-left: 40px;
       font-family: Courier;
+    }
+
+    .line.active {
+      background: #eee;
     }
 
     .line-number {
