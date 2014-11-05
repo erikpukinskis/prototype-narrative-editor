@@ -259,7 +259,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
     .line .absolute {
       display: none;
       position: absolute;
-      background: rgba(0,0,0,0.1);
+      z-index: 0;
     }
 
     .line.active .absolute {
@@ -292,9 +292,10 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       border: 10px solid rgba(0,0,0,0);
       color: rgba(0,0,0,0);
       width: 100%;
-      /*height: 100%;*/
+      height: 100%;
       top: 0;
       left: 0;
+      z-index: 1;
     }
 
     #focus-input:focus {
@@ -317,7 +318,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       vertical-align: -.2em;
     }
 
-    .narrative .cursor { /* #focus-input:focus + */
+    #focus-input:focus + .narrative .cursor {
       display: inline-block;
     }
 

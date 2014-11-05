@@ -71,7 +71,7 @@ This goes in `editor.js`:
         }
         var parts = splitLine(line.string, cursor.column)
         var string = parts.before + '<<CURSOR>>' + parts.after
-        return lineToHtml(string, line.kind).replace('<<CURSOR>>', div('cursor'))
+        return lineToHtml(string, line.kind).replace('&lt;&lt;CURSOR&gt;&gt;', div('cursor'))
       }
 
       function div(classNames, contents) {
@@ -85,7 +85,7 @@ This goes in `editor.js`:
         var cursor = this.cursor = {line: 0, column: 0}
 
         function getLine(line) {
-          return lines[line].get('string') || ''
+          return lines[line].string || ''
         }
 
         function mergeDown() {
@@ -99,6 +99,7 @@ This goes in `editor.js`:
 
           function scrollTowards(edge) {
             var distance = distanceTo(edge, selector)
+            console.log('distance', distance)
             if (distance > MINIMUM) { return }
 
             function directionTowards(edge) {
@@ -108,6 +109,7 @@ This goes in `editor.js`:
             var offset = distance - MINIMUM
             var direction = directionTowards(edge)
             var newPosition = $('body').scrollTop() - direction * offset
+            console.log(offset, direction, newPosition)
 
             $("html,body").scrollTop(newPosition)
           }
@@ -139,20 +141,21 @@ This goes in `editor.js`:
         function moveCursor(columnsToMove, linesToMove) {
           return function() {
             var line = cursor.line + linesToMove
-            var linesToRender = [cursor.line, line]
             line = limit(line, 0, lines.length - 1)
-            cursor.line = line
+
+            if (cursor.line != line) {
+              $('.line-'+cursor.line).removeClass('active')
+              cursor.line = line
+              activate(cursor.line)
+            }
 
             var column = cursor.column + columnsToMove
             column = limit(column, 0, getLine(cursor.line).length)
             cursor.column = column
+
+            activate(cursor.line)
             console.log('cursor: ', cursor.line, cursor.column)
-
-            linesToRender.forEach(function(lineNumber) {
-              lines[lineNumber].render()
-            })
-
-            scrollToReveal('.cursor')
+            scrollToReveal('.line-'+cursor.line)
           }
         }
 
