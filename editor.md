@@ -176,17 +176,30 @@ This goes in `editor.js`:
           var absolute = line.find('.absolute')
           absolute.html(renderLineWithCursor(lines[number], cursor))
           absolute.css('width', line.width()+'px')
+        }
 
+
+        var dirtyLines = new Set()
+        var updateTimeout
+        function setLine(number, string) {
+          var line = lines[number]
+          line.string = string
+          dirtyLines.add(number)
+          if (updateTimeout) { return }
+          updateTimeout = setTimeout(function() {
+            dirtyLines.forEach(function(number) {
+              var dirty = lines[number]
+              var html = lineToHtml(dirty.string, dirty.kind)
+              $('.line-'+number+' .static').html(html)
+            })
+            dirtyLines.clear()
+          }, 1000)
+          activate(number)          
         }
 
         _(this).extend({
           lineSplitAtCursor: function() {
-            splitLine(line, cursor.column)
-            var string = getLine(cursor.line)
-            return {
-              before: string.slice(0,cursor.column),
-              after: string.slice(cursor.column, string.length)
-            }
+            return splitLine(getLine(cursor.line), cursor.column)
           },
 
           right: moveCursor(1,0),
@@ -225,8 +238,8 @@ This goes in `editor.js`:
             var parts = this.lineSplitAtCursor()
             var string = parts.before.concat(letter, parts.after)
 
-            lines[cursor.line].set('string', string)
             this.right()
+            setLine(cursor.line, string)
           },
 
           enter: function() {
