@@ -23,7 +23,6 @@ Scroll To Reveal
 
         function scrollTowards(edge) {
           var distance = distanceTo(edge, selector)
-          console.log('distance', distance)
           if (distance > MINIMUM) { return }
 
           function directionTowards(edge) {
@@ -33,7 +32,6 @@ Scroll To Reveal
           var offset = distance - MINIMUM
           var direction = directionTowards(edge)
           var newPosition = $('body').scrollTop() - direction * offset
-          console.log(offset, direction, newPosition)
 
           $("html,body").scrollTop(newPosition)
         }

@@ -89,19 +89,22 @@ This goes in `editor.js`:
           return lines[line].string || ''
         }
 
+        function syncStaticAndAbsoluteElements(number) {
+          dirtyLines.forEach(function(number) {
+            var dirty = lines[number]
+            var html = lineToHtml(dirty.string, dirty.kind)
+            $('.line-'+number+' .static').html(html)
+          })
+          dirtyLines.clear()
+          updateTimeout = null
+        }
+
         function setLine(number, string) {
           var line = lines[number]
           line.string = string
           dirtyLines.add(number)
           if (updateTimeout) { return }
-          updateTimeout = setTimeout(function() {
-            dirtyLines.forEach(function(number) {
-              var dirty = lines[number]
-              var html = lineToHtml(dirty.string, dirty.kind)
-              $('.line-'+number+' .static').html(html)
-            })
-            dirtyLines.clear()
-          }, 1000)
+          updateTimeout = setTimeout(syncStaticAndAbsoluteElements, 1000, number)
         }
 
         function removeLine(line) {
@@ -137,7 +140,6 @@ This goes in `editor.js`:
             cursor.column = column
 
             activate(cursor.line)
-            console.log('cursor: ', cursor.line, cursor.column)
             scrollToReveal('.line-'+cursor.line)
           }
         }
@@ -154,7 +156,6 @@ This goes in `editor.js`:
         function activate(number) {
           var line = $('.line-'+number)
           line.addClass('active')
-          console.log('activated ' + number)
           var absolute = line.find('.absolute')
           absolute.html(renderLineWithCursor(lines[number], cursor))
           absolute.css('width', line.width()+'px')

@@ -181,12 +181,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
               return false
             } else {
               setTimeout(function() {
-                console.log('el is ', el, el.val())
                 var text = el.val()
                 editor.type(text)
-                console.log('typing', text)
                 el.val('')
-                console.log('after clearing is ', el, el.val())
               })
             }
 
