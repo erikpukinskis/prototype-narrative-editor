@@ -89,11 +89,10 @@ This goes in `editor.js`:
           return lines[line].string || ''
         }
 
-        function syncStaticAndAbsoluteElements(number) {
-          dirtyLines.forEach(function(number) {
-            var dirty = lines[number]
+        function syncStaticAndAbsoluteElements() {
+          dirtyLines.forEach(function(dirty) {
             var html = lineToHtml(dirty.string, dirty.kind)
-            $('.line-'+number+' .static').html(html)
+            $('.line-'+dirty.id+' .static').html(html)
           })
           dirtyLines.clear()
           updateTimeout = null
@@ -102,14 +101,15 @@ This goes in `editor.js`:
         function setLine(number, string) {
           var line = lines[number]
           line.string = string
-          dirtyLines.add(number)
+          dirtyLines.add(line)
           if (updateTimeout) { return }
-          updateTimeout = setTimeout(syncStaticAndAbsoluteElements, 1000, number)
+          updateTimeout = setTimeout(syncStaticAndAbsoluteElements, 1000)
         }
 
-        function removeLine(line) {
-          lines.splice(line+1, 1)
-          $('.line-'+line).remove()
+        function removeLine(number) {
+          var line = lines[number]
+          lines.splice(number+1, 1)
+          $('.line-'+line.id).remove()
         }
 
         function mergeDown() {
@@ -126,11 +126,12 @@ This goes in `editor.js`:
 
         function moveCursor(columnsToMove, linesToMove) {
           return function() {
+            var previousId = lines[cursor.line].id
             var line = cursor.line + linesToMove
             line = limit(line, 0, lines.length - 1)
 
             if (cursor.line != line) {
-              $('.line-'+cursor.line).removeClass('active')
+              $('.line-'+previousId).removeClass('active')
               cursor.line = line
               activate(cursor.line)
             }
@@ -140,12 +141,14 @@ This goes in `editor.js`:
             cursor.column = column
 
             activate(cursor.line)
-            scrollToReveal('.line-'+cursor.line)
+            scrollToReveal('.line-'+lines[cursor.line].id)
           }
         }
 
-        function createLine(line, number) {
-          var html = div('line line-'+number, [
+        var counter = 28846
+        function createLine(line) {
+          if (!line.id) { line.id = (counter++).toString(36) }
+          var html = div('line line-'+line.id, [
             div('absolute', ''),
             div('static', lineToHtml(line.string, line.kind))
           ])
@@ -154,11 +157,12 @@ This goes in `editor.js`:
         }
 
         function activate(number) {
-          var line = $('.line-'+number)
-          line.addClass('active')
-          var absolute = line.find('.absolute')
-          absolute.html(renderLineWithCursor(lines[number], cursor))
-          absolute.css('width', line.width()+'px')
+          var line = lines[number]
+          var el = $('.line-'+line.id)
+          el.addClass('active')
+          var absolute = el.find('.absolute')
+          absolute.html(renderLineWithCursor(line, cursor))
+          absolute.css('width', el.width()+'px')
         }
 
         _(this).extend({
@@ -222,9 +226,7 @@ This goes in `editor.js`:
           },
 
           init: function(selector) {
-            lines.forEach(function(line, number) {
-              createLine(line, number)
-            })
+            lines.forEach(createLine)
             activate(0)
           }
         })
