@@ -5,8 +5,7 @@ Editor
 
 This goes in `editor.js`:
 
-
-    define(['underscore'], function(_) {
+    define(['underscore', 'scrolltoreveal'], function(_, scrollToReveal) {
 
       function splitLine(string, column) {
         return {
@@ -83,53 +82,37 @@ This goes in `editor.js`:
 
       function Editor(lines) {
         var cursor = this.cursor = {line: 0, column: 0}
+        var dirtyLines = new Set()
+        var updateTimeout
 
         function getLine(line) {
           return lines[line].string || ''
         }
 
+        function setLine(number, string) {
+          var line = lines[number]
+          line.string = string
+          dirtyLines.add(number)
+          if (updateTimeout) { return }
+          updateTimeout = setTimeout(function() {
+            dirtyLines.forEach(function(number) {
+              var dirty = lines[number]
+              var html = lineToHtml(dirty.string, dirty.kind)
+              $('.line-'+number+' .static').html(html)
+            })
+            dirtyLines.clear()
+          }, 1000)
+        }
+
+        function removeLine(line) {
+          lines.splice(line+1, 1)
+          $('.line-'+line).remove()
+        }
+
         function mergeDown() {
           var string = getLine(cursor.line) + getLine(cursor.line+1)
-          lines[cursor.line].set('string', string)
-          lines.splice(cursor.line+1, 1)
-        }
-
-        function scrollToReveal(selector) {
-          MINIMUM = 50
-
-          function scrollTowards(edge) {
-            var distance = distanceTo(edge, selector)
-            console.log('distance', distance)
-            if (distance > MINIMUM) { return }
-
-            function directionTowards(edge) {
-              return edge == 'bottom' ? 1 : -1
-            }
-
-            var offset = distance - MINIMUM
-            var direction = directionTowards(edge)
-            var newPosition = $('body').scrollTop() - direction * offset
-            console.log(offset, direction, newPosition)
-
-            $("html,body").scrollTop(newPosition)
-          }
-
-          scrollTowards('bottom')
-          scrollTowards('top')        
-        }
-
-        function distanceTo(edge, selector) {
-          var cursorEl = $(selector)[0]
-          if (!cursorEl) { return }
-          if (edge == 'bottom') {
-            var direction = 1
-            var start = window.innerHeight
-          } else if (edge == 'top') {
-            var direction = -1
-            var start = 0
-          }
-
-          return start - direction * cursorEl.getBoundingClientRect()[edge]
+          setLine(cursor.line, string)
+          removeLine(cursor.line+1)
         }
 
         function limit(number, min, max) {
@@ -177,25 +160,6 @@ This goes in `editor.js`:
           absolute.css('width', line.width()+'px')
         }
 
-
-        var dirtyLines = new Set()
-        var updateTimeout
-        function setLine(number, string) {
-          var line = lines[number]
-          line.string = string
-          dirtyLines.add(number)
-          if (updateTimeout) { return }
-          updateTimeout = setTimeout(function() {
-            dirtyLines.forEach(function(number) {
-              var dirty = lines[number]
-              var html = lineToHtml(dirty.string, dirty.kind)
-              $('.line-'+number+' .static').html(html)
-            })
-            dirtyLines.clear()
-          }, 1000)
-          activate(number)          
-        }
-
         _(this).extend({
           lineSplitAtCursor: function() {
             return splitLine(getLine(cursor.line), cursor.column)
@@ -211,34 +175,36 @@ This goes in `editor.js`:
 
           backspace: function() {
             var parts = this.lineSplitAtCursor()
-            var atBeginningOfLine = parts.before.length < 1
 
             function moveToTheEndOfTheLine() { 
               cursor.column = getLine(cursor.line).length
             }
 
-            if (atBeginningOfLine) {
+            if (cursor.column == 0) {
               if (cursor.line > 0) {
-                this.up()
                 moveToTheEndOfTheLine()
+                this.up()
                 mergeDown()
+                activate(cursor.line)
               } else {
                 // We are at the beginning of the document
               }
             } else {
-              var string = parts.before.slice(0, -1) + parts.after
-              lines[cursor.line].set('string', string)
               this.left()
+              var string = parts.before.slice(0, -1) + parts.after
+              setLine(cursor.line, string)
+              activate(cursor.line)
             }
           },
 
-          type: function(letter) {
-            if (letter.length < 1) { return }
+          type: function(letters) {
+            if (letters.length < 1) { return }
             var parts = this.lineSplitAtCursor()
-            var string = parts.before.concat(letter, parts.after)
+            var string = parts.before.concat(letters, parts.after)
 
-            this.right()
             setLine(cursor.line, string)
+            this.right()
+            activate(cursor.line)
           },
 
           enter: function() {

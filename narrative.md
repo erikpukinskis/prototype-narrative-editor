@@ -11,7 +11,7 @@ In order for you to be reading a nicely formatted version of this document in yo
 
 Here's `center.js` of this story:
 
-    define(['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor'], function(server, documents, compile, load, folder) {
+    define(['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor', 'scrolltoreveal'], function(server, documents, compile, load, folder) {
 
       var server = new Server()
 
@@ -255,6 +255,8 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       font-family: Courier;
     }
 
+    .line .static {
+    }
 
     .line .absolute {
       display: none;
@@ -278,7 +280,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       border: 10px solid rgba(0,0,0,0);
       color: rgba(0,0,0,0);
       width: 100%;
-      height: 100%;
+      /* height: 100%; */
       top: 0;
       left: 0;
       z-index: 1;
@@ -345,7 +347,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     h1 {
       text-align: center;
-      margin-left: -0.5em;
+      margin: 0 0 0 -0.5em;
     }
 
     h1, h2 {
