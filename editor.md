@@ -1,7 +1,10 @@
 Editor
 ------
 
-[x] Show cursor
+[x] Enter key works
+[x] Fix cursor bug
+...
+[ ] Get saving working again
 
 This goes in `editor.js`:
 
@@ -106,7 +109,7 @@ This goes in `editor.js`:
           updateTimeout = setTimeout(syncStaticAndAbsoluteElements, 1000)
         }
 
-        function removeLine(number) {
+        function deleteLine(number) {
           var line = lines[number]
           lines.splice(number+1, 1)
           $('.line-'+line.id).remove()
@@ -115,7 +118,7 @@ This goes in `editor.js`:
         function mergeDown() {
           var string = getLine(cursor.line) + getLine(cursor.line+1)
           setLine(cursor.line, string)
-          removeLine(cursor.line+1)
+          deleteLine(cursor.line+1)
         }
 
         function limit(number, min, max) {
@@ -146,14 +149,12 @@ This goes in `editor.js`:
         }
 
         var counter = 28846
-        function createLine(line) {
+        function renderLine(line) {
           if (!line.id) { line.id = (counter++).toString(36) }
-          var html = div('line line-'+line.id, [
+          return div('line line-'+line.id, [
             div('absolute', ''),
             div('static', lineToHtml(line.string, line.kind))
           ])
-
-          $('.narrative').append(html)
         }
 
         function activate(number) {
@@ -213,20 +214,29 @@ This goes in `editor.js`:
           },
 
           enter: function() {
-            throw new Error('not yet')
-            var cursor = this.get('cursor')
             var parts = this.lineSplitAtCursor()
-            var kind = this.get('model')[cursor.line].kind
-            var linesAfter = this.get('model').slice(cursor.line)
-            linesAfter.unshiftObject({string: parts.before, kind: kind})
-            linesAfter[1] = {string: parts.after, kind: kind}
-            this.get('model').replace(cursor.line, cursor.line + linesAfter.length + 1, linesAfter)
-            this.incrementProperty('cursor.line')
-            this.set('cursor.column', 0)
+            var line = lines[cursor.line]
+            var kind = line.kind
+            var previousId = lines[cursor.line - 1].id
+
+            var firstHalf = {string: parts.before, kind: kind}
+            var secondHalf = {string: parts.after, kind: kind}
+
+            lines.splice(cursor.line, 1, firstHalf, secondHalf)
+
+            cursor.line = cursor.line + 1
+            cursor.column = 0
+
+            $('.line-'+line.id).remove()
+
+            $(renderLine(firstHalf) + renderLine(secondHalf)).insertAfter('.line-'+previousId)
+            activate(cursor.line)
           },
 
           init: function(selector) {
-            lines.forEach(createLine)
+            lines.forEach(function(line) {
+              $('.narrative').append(renderLine(line))
+            })
             activate(0)
           }
         })
