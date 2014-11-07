@@ -161,7 +161,6 @@ This goes in `editor.js`:
 
         function createLine(line, number) {
           var html = div('line line-'+number, [
-            div('line-number', number),
             div('absolute', ''),
             div('static', lineToHtml(line.string, line.kind))
           ])

@@ -270,20 +270,6 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       opacity: 0.1;
     }
 
-    .line-number {
-      font-size: 0.6em;
-      width: 50px;
-      margin-left: -50px;
-      display: inline-block;
-      opacity: 0.3;
-      vertical-align: 8px;
-    }
-
-    .line.code .line-number {
-      margin-left: -90px;
-      margin-right: 50px;
-    }
-
     #focus-input {
       outline: 0;
       box-sizing: border-box;
