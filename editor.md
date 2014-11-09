@@ -65,6 +65,11 @@ This goes in `editor.js`:
         return html
       }
 
+      function limit(number, min, max) {
+        number = Math.min(number, max)
+        number = Math.max(number, min)
+        return number
+      }
 
       function renderLineWithCursor(line, cursor) {
         if (cursor.column == 0) {
@@ -101,6 +106,9 @@ This goes in `editor.js`:
           updateTimeout = null
         }
 
+
+        /* Data model */
+        
         function setLine(number, string) {
           var line = lines[number]
           line.string = string
@@ -109,9 +117,13 @@ This goes in `editor.js`:
           updateTimeout = setTimeout(syncStaticAndAbsoluteElements, 1000)
         }
 
+        function splice(arguments) {
+          Array.prototype.splice.apply(lines, arguments)
+        }
+
         function deleteLine(number) {
           var line = lines[number]
-          lines.splice(number+1, 1)
+          splice(number+1, 1)
           $('.line-'+line.id).remove()
         }
 
@@ -121,11 +133,6 @@ This goes in `editor.js`:
           deleteLine(cursor.line+1)
         }
 
-        function limit(number, min, max) {
-          number = Math.min(number, max)
-          number = Math.max(number, min)
-          return number
-        }
 
         function moveCursor(columnsToMove, linesToMove) {
           return function() {
@@ -222,7 +229,7 @@ This goes in `editor.js`:
             var firstHalf = {string: parts.before, kind: kind}
             var secondHalf = {string: parts.after, kind: kind}
 
-            lines.splice(cursor.line, 1, firstHalf, secondHalf)
+            splice(cursor.line, 1, firstHalf, secondHalf)
 
             cursor.line = cursor.line + 1
             cursor.column = 0
