@@ -108,13 +108,13 @@ This goes in `editor.js`:
 
 
         /* Data model */
-        
+
         function setLine(number, string) {
           var line = lines[number]
           line.string = string
           dirtyLines.add(line)
           if (updateTimeout) { return }
-          updateTimeout = setTimeout(syncStaticAndAbsoluteElements, 1000)
+          updateTimeout = setTimeout(syncStaticAndAbsoluteElements, 100)
         }
 
         function splice(arguments) {
