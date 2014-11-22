@@ -135,7 +135,7 @@ This goes in `editor.js`:
           updateTimeout = setTimeout(syncStaticAndAbsoluteElements, 100)
         }
 
-        function splice(arguments) {
+        function splice() {
           Array.prototype.splice.apply(lines, arguments)
         }
 
@@ -185,7 +185,7 @@ This goes in `editor.js`:
         var counter = 28846
         function renderLine(line) {
           if (!line.id) { line.id = (counter++).toString(36) }
-          return div('line line-'+line.id, [
+          return div('line line-'+line.id+' '+line.kind, [
             div('absolute', ''),
             div('static', lineToHtml(line.string, line.kind))
           ])

@@ -192,6 +192,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
           el.on('keydown', copyText)
           el.on('paste', copyText)
+          el.focus()
         }
 
         new FocusInput()
@@ -290,7 +291,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       border: 10px solid rgba(0,0,0,0);
       color: rgba(0,0,0,0);
       width: 100%;
-      /* height: 100%; */
+      height: 100%;
       top: 0;
       left: 0;
       z-index: 1;
