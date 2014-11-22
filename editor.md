@@ -71,6 +71,24 @@ This goes in `editor.js`:
         return number
       }
 
+      function whenIStopAskingYouTo(callback) {
+        if (callback.requested) {
+          callback.requestedAgain = true
+        } else {
+          callback.requested = setTimeout(sleep, 500)
+        }
+
+        function sleep() {
+          if (callback.requestedAgain) { 
+            callback.requestedAgain = false
+            callback.requested = setTimeout(sleep, 500)
+            return
+          }
+          callback.requested = null
+          callback()
+        }
+      }      
+
       function renderLineWithCursor(line, cursor) {
         if (cursor.column == 0) {
           var html = lineToHtml(line.string, line.kind)
@@ -88,15 +106,15 @@ This goes in `editor.js`:
       }
 
 
-      function Editor(lines) {
+      function Editor(lines, saveCallback) {
         var cursor = this.cursor = {line: 0, column: 0}
-        var dirtyLines = new Set()
-        var updateTimeout
 
         function getLine(line) {
           return lines[line].string || ''
         }
 
+        var dirtyLines = new Set()
+        var updateTimeout
         function syncStaticAndAbsoluteElements() {
           dirtyLines.forEach(function(dirty) {
             var html = lineToHtml(dirty.string, dirty.kind)
@@ -107,7 +125,7 @@ This goes in `editor.js`:
         }
 
 
-        /* Data model */
+        // Data model 
 
         function setLine(number, string) {
           var line = lines[number]
@@ -133,6 +151,15 @@ This goes in `editor.js`:
           deleteLine(cursor.line+1)
         }
 
+        function saveNow() {
+          saveCallback(lines)
+        }
+
+        // This syncs with the server, usually after a setLine, 
+        // deleteLine, or splice
+        function save() {
+          whenIStopAskingYouTo(saveNow)
+        }
 
         function moveCursor(columnsToMove, linesToMove) {
           return function() {
@@ -199,6 +226,7 @@ This goes in `editor.js`:
                 this.up()
                 mergeDown()
                 activate(cursor.line)
+                save()
               } else {
                 // We are at the beginning of the document
               }
@@ -207,6 +235,7 @@ This goes in `editor.js`:
               var string = parts.before.slice(0, -1) + parts.after
               setLine(cursor.line, string)
               activate(cursor.line)
+              save()
             }
           },
 
@@ -218,6 +247,7 @@ This goes in `editor.js`:
             setLine(cursor.line, string)
             this.right()
             activate(cursor.line)
+            save()
           },
 
           enter: function() {
@@ -238,6 +268,7 @@ This goes in `editor.js`:
 
             $(renderLine(firstHalf) + renderLine(secondHalf)).insertAfter('.line-'+previousId)
             activate(cursor.line)
+            save()
           },
 
           init: function(selector) {

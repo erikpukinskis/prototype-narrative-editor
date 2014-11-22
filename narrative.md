@@ -205,8 +205,21 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         var name = getRouteParams().name
 
+        function onDocumentChange(lines) {
+          doc = {name: name, lines: lines}
+          $.ajax({
+            method: 'POST',
+            dataType: 'json',
+            url: '/documents/'+name, 
+            data: doc,
+            success: function() {
+              console.log('heard back from the server! should be saved now.')
+            }
+          })
+        }
+
         $.getJSON('/narratives/' + name, function(doc) {
-          editor = new Editor(doc.lines)
+          editor = new Editor(doc.lines, onDocumentChange)
           editor.init()
         })
 

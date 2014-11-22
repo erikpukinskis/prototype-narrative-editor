@@ -76,15 +76,30 @@ Documents
         )
       }
 
-      var api = function(request, response, doTheNextThing) {
+      function nameFromRequest(request) {
         var pattern = /^\/documents\/([a-z\/.]+)$/
         var partsOfTheAddress = request.url.match(pattern)
-        if (!partsOfTheAddress) { return doTheNextThing() }
-        var name = partsOfTheAddress[1]
-        console.log("Getting", name, "from the documents api")
-        get(name, function(document) {
-          response.send(document)
-        })
+        if (!partsOfTheAddress) { return }
+        return partsOfTheAddress[1]        
+      }
+
+      // Ideally this would be automatically generated from the narrative.
+      // Like documents provides set and get, it would also provide verbs
+      // and the arguments would be become querystring or POST parameters.
+      var api = function(request, response, doTheNextThing) {
+        var name = nameFromRequest(request)
+        if (!name) { doTheNextThing() }
+
+        if (request.method == "POST") {
+          console.log("Saving", name, "via the documents api")
+          set(name, request.body)
+          response.send('ok!')
+        } else {
+          console.log("Getting", name, "from the documents api")
+          get(name, function(document) {
+            response.send(document)
+          })
+        }
       }
 
       return {get: get, set: set, test: test, api: api}
