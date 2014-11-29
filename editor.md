@@ -106,7 +106,6 @@ This goes in `editor.js`:
         return '<div class="' + classNames + '">' + contents + '</div>'
       }
 
-
       function Editor(lines, saveCallback) {
         var cursor = this.cursor = {line: 0, column: 0}
 
