@@ -1,14 +1,16 @@
 ! Right now
 
-There are some weird bugs with the editor. I am wondering if it's a symptom of me doing everything procedurally, and if it's time to start working on a declarative binding-based setup of some kind. One alternative is to try to centralize the procedural stuff better so the data model is less likely to have synchronization bugs. Or I can just keep going and wait to see what patterns emerge.
+Somehow when I start with
 
-I started writing a declarative Node class, but it's not working, and it's not super straightforward to write and I am wondering if it wouldn't be a smoother approach to let it grow organically by picking a single job in the existing code for it to take over, and slowly growing its responsibilities.
+One
+Two
 
-It's also relevant that I'm still not yet back to feature parity with 0.2.0, which is not even particularly useful in itself. That makes it feel like I'm doing a bad job at incrementalism.
+and I backspace on the second line, the server comes back with
 
-Still, I think my philosophy on this project has been to not try to do too much, feature-wise, but to really take my time to work on the architecture and the data model, since that's really the whole point. That's what makes me think it's ok to spend so much time in the wilderness.
+OneTwo
+Two
 
-That said, I don't really see a clear path forward with the declarative stuff, besides just patching in a bunch of refactors and hoping for the best. Right now, the kind of setup I would build is pretty much exactly what Ember would do (an ArrayController with a view hierarchy, basically). But the reason I don't want to use an Ember model, is because I'm hoping it will be useful to have tighter integration with the concept of a narrative at some point. I kind of want to wait and see what building blocks emerge and how they need to communicate before I really work on the declarative model. So I think for now I'm just going to keep working on behavior and keep an eye out for possible centralization.
+So I guess we're not doing the splice properly?
 
 ! Future Future Future Future
 

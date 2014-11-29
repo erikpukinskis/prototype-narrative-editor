@@ -141,7 +141,7 @@ This goes in `editor.js`:
 
         function deleteLine(number) {
           var line = lines[number]
-          splice(number+1, 1)
+          splice(number, 1)
           $('.line-'+line.id).remove()
         }
 
@@ -222,8 +222,8 @@ This goes in `editor.js`:
 
             if (cursor.column == 0) {
               if (cursor.line > 0) {
-                moveToTheEndOfTheLine()
                 this.up()
+                moveToTheEndOfTheLine()
                 mergeDown()
                 activate(cursor.line)
                 save()
