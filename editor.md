@@ -255,7 +255,6 @@ This goes in `editor.js`:
             var parts = this.lineSplitAtCursor()
             var line = lines[cursor.line]
             var kind = line.kind
-            var previousId = lines[cursor.line - 1].id
 
             var firstHalf = {string: parts.before, kind: kind}
             var secondHalf = {string: parts.after, kind: kind}
@@ -267,7 +266,14 @@ This goes in `editor.js`:
 
             $('.line-'+line.id).remove()
 
-            $(renderLine(firstHalf) + renderLine(secondHalf)).insertAfter('.line-'+previousId)
+            var html = renderLine(firstHalf) + renderLine(secondHalf)
+
+            if (cursor.line > 1) {
+              var previousId = lines[cursor.line - 2].id
+              $(html).insertAfter('.line-'+previousId)
+            } else {
+              $('.narrative').append(html)
+            }
             activate(cursor.line)
             save()
           },
@@ -283,7 +289,7 @@ This goes in `editor.js`:
 
           unindent: function() {
             var line = lines[cursor.line]
-            line.kind = 'code'
+            line.kind = 'prose'
             var el = $('.line-'+line.id)
             el.removeClass('code')
             el.addClass('prose')
@@ -292,6 +298,7 @@ This goes in `editor.js`:
 
           init: function(selector) {
             lines.forEach(function(line) {
+              line.id = null
               $('.narrative').append(renderLine(line))
             })
             activate(0)
