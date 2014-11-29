@@ -90,6 +90,7 @@ This goes in `editor.js`:
       }      
 
       function renderLineWithCursor(line, cursor) {
+
         if (cursor.column == 0) {
           var html = lineToHtml(line.string, line.kind)
           return html.replace(/^(<[^>]*>|)/, '$1'+div('cursor'))
@@ -268,6 +269,24 @@ This goes in `editor.js`:
 
             $(renderLine(firstHalf) + renderLine(secondHalf)).insertAfter('.line-'+previousId)
             activate(cursor.line)
+            save()
+          },
+
+          indent: function() {
+            var line = lines[cursor.line]
+            line.kind = 'code'
+            var el = $('.line-'+line.id)
+            el.removeClass('prose')
+            el.addClass('code')
+            save()
+          },
+
+          unindent: function() {
+            var line = lines[cursor.line]
+            line.kind = 'code'
+            var el = $('.line-'+line.id)
+            el.removeClass('code')
+            el.addClass('prose')
             save()
           },
 

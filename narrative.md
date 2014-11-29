@@ -123,16 +123,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
       <title>Narrative</title>
         <link rel="stylesheet" href="styles.css" />
     </head>
-
-    <script type="text/x-handlebars" data-template-name="narrative">
-      {{narrative-editor model=model.lines}}
-      <div class="spinner"></div>
-    </script>
-
     <script src="require.js"></script>
-    <script data-main="editor" src="require.js"></script>
-    <script data-main="ember" src="require.js"></script>
-    <script data-main="underscore" src="require.js"></script>
 
     <body>
       <input id="focus-input">

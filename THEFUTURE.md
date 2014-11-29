@@ -6,8 +6,9 @@ There's some stuff to clean up to get back to feature parity with 0.2.0.
  - [X] Get Narrative typed in to save, reload, and run a hello world
  - [X] Load .md files if there's nothing in the db
  - [X] Replaced Ember with a bunch of stuff inlined with the very beginnings of a framework
- - [ ] Autoscroll
+ - [X] Autoscroll
  - [ ] Get back to feature parity with the Ember editor
+   - [ ] Get tabbing working again
  - [ ] Get the loaded-from-disk narrative to go through the loader
  - [ ] Tidy up
 
