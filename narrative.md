@@ -192,7 +192,8 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         // ROUTER
 
         function getRouteParams() {
-          return {name: 'narrative'}
+          var parts = document.location.pathname.split('/')
+          return {name: parts[1] || 'narrative'}
         }
 
         var name = getRouteParams().name
