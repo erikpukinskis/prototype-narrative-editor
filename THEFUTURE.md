@@ -1,30 +1,12 @@
 ! Right now
 
-Somehow when I start with
-
-One
-Two
-
-and I backspace on the second line, the server comes back with
-
-OneTwo
-Two
-
-So I guess we're not doing the splice properly?
+Some weirdness with enter and backspace. Not sure what it is. Maybe it's not blocking then. Onward to the hard stuff! Loader! Bootstrapping!
 
 ! Future Future Future Future
 
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
- - [X] Type Narrative into itself
- - [X] Get Narrative typed in to save, reload, and run a hello world
- - [X] Load .md files if there's nothing in the db
- - [X] Replaced Ember with a bunch of stuff inlined with the very beginnings of a framework
- - [X] Autoscroll
- - [ ] Get back to feature parity with the Ember editor
-   - [X] Get tabbing working again
-   - [X] Enter on the first line
-   - [ ] Fix backspace key
+ - [X] Get back to feature parity with the Ember editor
  - [ ] Get the loaded-from-disk narrative to go through the loader
  - [ ] Tidy up
 
