@@ -412,13 +412,11 @@ The first is `package.json`, which describes the various things running the serv
       "version": "0.2.6",
       "dependencies": {
         "express": "*",
-        "ejs": "*",
         "underscore": "*",
         "body-parser": "*",
         "knex": "*",
         "pg": "*",
-        "pg-escape": "*",
-        "handlebars": "*"
+        "pg-escape": "*"
       },
       "devDependencies": {
         "requirejs": "*"
