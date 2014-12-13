@@ -13,7 +13,7 @@ Tests
 As I stray from test-driven development, I am always pulled back. What better way is there to start than to describe some necessary conditions for a thing to be itself?
 
 [X] The client saves a narrative to the database
-[X] If you type a hello world server, it gets started immediately
+[X] If you type hello.md a server starts
 [ ] If you type some css in the hello world it gets saved to the database
 [ ] If you reload the hello world it has the new css
 [ ] You can add a dependency to hello world and it will get loaded on the server

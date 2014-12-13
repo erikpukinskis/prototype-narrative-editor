@@ -60,7 +60,7 @@ Load
             server.start(getPort(name))
             servers[name].push(server)
           } else {
-            console.log('Server has to return something that can be started. Got ' + JSON.stringify(server) + ' instead')
+            console.log('Your center.js needs to return a server that can be started! It returned ' + JSON.stringify(server) + ' instead')
           }
         }
 
