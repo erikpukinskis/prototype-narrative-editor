@@ -79,26 +79,26 @@ Load
           }
         }
 
-        function redefineIfLib(block) {
-          if (block.filename != name + '.js') { return }
-
-          try {
-            console.log('Evaluating', block.filename, 'because it seems to be a library....')
-            eval(block.source)
-          } catch (e) {
-            console.log(e)
-          }
-        }
-
         function save(block) {
           var path = 'assets/' + block.filename
           documents.set(path, block.source)
         }
 
+        function redefine(block) {
+          try {
+            console.log('Evaluating', block.filename, 'because it seems to be a library....')
+            console.log('evaling', block.source)
+            eval(block.source)
+            console.log('done')
+          } catch (e) {
+            console.log(e)
+          }
+        }
+
         undefine(function() {
           compiled.each.server(start)
           compiled.each.source(save)
-          compiled.each.block(redefineIfLib)
+          compiled.each.library(redefine)
         })
       }
 

@@ -8,7 +8,9 @@ define(['database', 'chain', 'assert', 'pg-escape'], function(database, chain, a
     get(key, function(found) {
       var query = found ? update : insert
       database.query(query, function(data) {
-        if (callback) { callback(JSON.parse(data && data.rowCount)) }
+        var rowCount = JSON.parse(data && data.rowCount)
+        console.log('Saved ', key, ' - ', rowCount, 'row')
+        if (callback) { callback(rowCount) }
       })
     })
   }

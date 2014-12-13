@@ -9,6 +9,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
       function isSource(block) { return isCode(block) && hasFilename(block) }
       function isServer(block) { return block.filename == 'center.js' }
       function isStylesheet(block) { return endsWith(block.filename, '.css') }
+      function isLibrary(block) { return endsWith(block.filename, '.js') }
 
       startsWith = function(string, pattern) {
         return !!(string||'').match(new RegExp('^' + pattern))
@@ -36,6 +37,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
           code: eachBlock(isCode),
           server: eachBlock(isServer),
           stylesheet: eachBlock(isStylesheet),
+          library: eachBlock(isLibrary),
           block: eachBlock(function() { return true })
         }
         

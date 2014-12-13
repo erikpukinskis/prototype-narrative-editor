@@ -16,7 +16,7 @@ As I stray from test-driven development, I am always pulled back. What better wa
 [X] If you type hello.md a server starts
 [X] If you type some css in the hello world it gets saved to the database
 [X] If you reload the hello world it has the new css
-[ ] You can add a dependency to hello world and it will get loaded on the server
+[X] You can add a dependency to hello world and it will get loaded on the server
 [ ] Narrative can restart itself from a web request
 [ ] When you edit editor.md it gets hot reloaded
 
@@ -97,12 +97,6 @@ Here's `center.js` of this story:
         })
       })
 
-      function saveBlock(block) {
-        documents.set(block.filename, block.source, function(done) {
-          console.log('saved', block.filename)
-        })
-      }
-
       server.post('/narratives', function(request, response) {
         var name = request.body.name
         var doc = _(request.body).pick('lines', 'name')
@@ -110,7 +104,6 @@ Here's `center.js` of this story:
         documents.set(name, doc, function() {
           compile(docToSource(doc), function(compiled) {
             load(name, compiled)
-            compiled.each.stylesheet(saveBlock)
             response.json({ok: true})
           })
         })
