@@ -4,7 +4,7 @@ Load
 `load.js`:
 
 
-    define(['documents', 'getdependencies', 'underscore'], function(documents, getDependencies, _) {
+    define(['documents', 'getdependencies', 'underscore', 'requirejs'], function(documents, getDependencies, _, requirejs) {
       var servers = {}
       var ports = {}
       var nextPort = 5100
@@ -68,8 +68,9 @@ Load
           console.log(e.stack)
         }
 
+        requirejs.onError = logError
+
         function start(block) {
-          console.log(block.source)
           try {
             eval(block.source)
             console.log('\nRequiring', name, '...\n+=================+\n')
@@ -87,9 +88,8 @@ Load
         function redefine(block) {
           try {
             console.log('Evaluating', block.filename, 'because it seems to be a library....')
-            console.log('evaling', block.source)
+            console.log('source:', block.source)
             eval(block.source)
-            console.log('done')
           } catch (e) {
             console.log(e)
           }

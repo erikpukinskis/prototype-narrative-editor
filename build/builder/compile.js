@@ -4,7 +4,11 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
   function isSource(block) { return isCode(block) && hasFilename(block) }
   function isServer(block) { return block.filename == 'center.js' }
   function isStylesheet(block) { return endsWith(block.filename, '.css') }
-  function isLibrary(block) { return endsWith(block.filename, '.js') }
+  function isLibrary(block) { 
+    notCenter = block.filename != 'center.js'
+    rightExtension = endsWith(block.filename, '.js')
+    return notCenter && rightExtension
+  }
 
   startsWith = function(string, pattern) {
     return !!(string||'').match(new RegExp('^' + pattern))

@@ -37,7 +37,7 @@ And here is some css that goes in `style.css`:
 
 Including another lib:
 
-! Hello world
+! Hello, world
 
 This is the simplest server you could imagine. It needs to know it lives in `center.js`:
 
@@ -55,11 +55,11 @@ And here is some css that goes in `style.css`:
     body { background: yellow; color: fuchsia }
 
 
-
 In `helloworldhtml.js`:
 
     define('helloworldhtml', function() {
-      return '<html><link rel="stylesheet"'
-      +' href="/documents/assets/style.css" ><body>hello worldies!</body></html>'
-      +' href="/documents/assets/style.css" ><body>hello worldies!</body></html>'
+      return '<html>'
+      + '<link rel="stylesheet" href="documents/assets/style.css" />'
+      + '<body>hello worldums!</body>'
+      + '</html>'
     })

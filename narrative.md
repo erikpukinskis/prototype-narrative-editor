@@ -109,7 +109,7 @@ Here's `center.js` of this story:
         })
       })
 
-      documents.test()
+      // documents.test()
 
       return server
     })
@@ -251,7 +251,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
     .narrative {
       font-family: Georgia;
       font-size: 20px;
-      max-width: 800px;
+      max-width: 950px;
       margin: 1.5em auto;
       padding: 0 1em;
     }
