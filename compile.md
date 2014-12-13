@@ -7,13 +7,15 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
       function isCode(block) { return block.kind == 'code' }
       function hasFilename(block) { return !!block.filename }
       function isSource(block) { return isCode(block) && hasFilename(block) }
-      function isServer(block) { 
-        return block.filename == 'center.js' 
-      }
+      function isServer(block) { return block.filename == 'center.js' }
+      function isStylesheet(block) { return endsWith(block.filename, '.css') }
 
       startsWith = function(string, pattern) {
-        var pattern = new RegExp("^" + pattern);
-        return !!string.match(pattern);
+        return !!(string||'').match(new RegExp('^' + pattern))
+      }
+
+      endsWith = function(string, pattern) {
+        return !!(string||'').match(new RegExp(pattern + '$'))
       }
 
       Compiled = function(blocks, run) {
@@ -33,6 +35,7 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
           source: eachBlock(isSource),
           code: eachBlock(isCode),
           server: eachBlock(isServer),
+          stylesheet: eachBlock(isStylesheet),
           block: eachBlock(function() { return true })
         }
         
