@@ -20,7 +20,7 @@ define(['pg', 'knex', 'chain'], function(pg, knex, chain) {
       })
     }
 
-    chain(hookUpPostgres, dropTable, createTable, callWaitingBack)
+    chain(hookUpPostgres, createTable, callWaitingBack)
   }
 
 

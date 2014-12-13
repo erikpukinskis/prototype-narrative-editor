@@ -405,5 +405,8 @@ And those search results would get dimmer as you got further away. And they woul
 
 When you type library.give it explains to you what that is. It shows you the first line of the library.give narrative! And that links to it! And if you just press the right arrow after it auto-completes it, you just gracefully slide over to the full document. The first line can be bigger font so when it's a little smaller because it's further back in the z-axis, the font actually just looks normal size. Then when you rightarrow over to it, it zooms to full size while the rest of the narrative fades in.
 
+There's a light gray cursor with a tappable tab on top of it that is at the beginning of each world that brings the cursor there. If you drag it up it selects multi-cursor lines above it. You can hover at a spot and it will put that line's cursor there, or just drag over multiple lines and the editor will try to guess what you're highlighting. It tries for straight columns and then goes to punctuation and then whatever. The editor should lead people step by step into advanced usage. These features can be organized in a tree of interactions off the base view.
+
+Each level of the architecture adds DOM structures and can style those structures, but only the structures at that level and above are visible. So at the top level (the UI) it's just the characters and the pipe. One layer down the cursor might have its line,column coordinates, lines have numbers, etc.
 
 
