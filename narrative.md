@@ -15,7 +15,7 @@ As I stray from test-driven development, I am always pulled back. What better wa
 [X] The client saves a narrative to the database
 [X] If you type hello.md a server starts
 [X] If you type some css in the hello world it gets saved to the database
-[ ] If you reload the hello world it has the new css
+[X] If you reload the hello world it has the new css
 [ ] You can add a dependency to hello world and it will get loaded on the server
 [ ] Narrative can restart itself from a web request
 [ ] When you edit editor.md it gets hot reloaded
