@@ -98,12 +98,11 @@ Here's `center.js` of this story:
       })
 
       server.post('/narratives', function(request, response) {
-        var name = request.body.name
         var doc = _(request.body).pick('lines', 'name')
        
-        documents.set(name, doc, function() {
+        documents.set(doc.name, doc, function() {
           compile(docToSource(doc), function(compiled) {
-            load(name, compiled)
+            load(doc.name, compiled)
             response.json({ok: true})
           })
         })
@@ -118,7 +117,7 @@ At this point we need to
 
 > Note that in order to parse that we need to recognize center declarations in the Narrative compiler. The reason this is special is we need to know how to plug in to the narrative without actually running foreman on the filesystem. So in our POST after the compile we can just eval the funcs and then eval the server.
 
-Then we need a javascript file that starts the server. We'll put it in `narrative.js`:
+Then we need a javascript file that starts the server. We'll put it in `start.js`:
 
     var requirejs = require('requirejs')
 
@@ -220,9 +219,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
           doc = {name: name, lines: lines}
           $.ajax({
             method: 'POST',
-            dataType: 'json',
+            contentType: "application/json",
             url: '/narratives',
-            data: doc,
+            data: JSON.stringify(doc),
             success: function() {
               console.log('heard back from the server! should be saved now.')
             }

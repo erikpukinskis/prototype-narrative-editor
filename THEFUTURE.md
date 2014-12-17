@@ -7,13 +7,18 @@ Some weirdness with enter and backspace. Not sure what it is. Maybe it's not blo
 There's some stuff to clean up to get back to feature parity with 0.2.0.
 
  - [X] Get back to feature parity with the Ember editor
- - [ ] Get the loaded-from-disk narrative to go through the loader
- - [ ] Tidy up
+ - [X] Broken libs don't crash server
+ - [X] Use JSON instead of querystring for save format
+ - [X] Fix "port in use" error on Narrative save
+ - [ ] Make it so Narrative can load from Procfile even with a name (define('narrative', ...))
+ - [ ] Narrative can restart itself from a web request
+ - [ ] When you edit editor.md it gets hot reloaded
 
 And that'll be 0.3.0, "Self hosting without touching the filesystem". Not pretty. But this is 0.x.
 
 At 0.4 we're probably on feature dot releases for a while:
 
+ - [ ] Load deps from db after restart
  - [ ] Use the CSS files from the live Narrative
  - [ ] Typed in CSS file can bootsrap and edits go into the 2nd generation
  - [ ] Typed Narrative and Narrative on disk are one in the same. They work alike whether built or loaded.

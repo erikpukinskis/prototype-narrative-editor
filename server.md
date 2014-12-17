@@ -32,7 +32,6 @@ This `server.js` is what you use to set up an Express/Node server:
         this.app = express()
 
         this.app.use(bodyParser.json())
-        this.app.use(bodyParser.urlencoded())
 
         this.app.use(function(request, response, next) {
           function match(handler) {
