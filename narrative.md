@@ -5,7 +5,7 @@ A tool for writing code in a literary way, "narratives". Includes a web-based ed
 Thank you
 ---------
 
-Why?, Ursula K. Leguin
+Why?, Ursula K. Leguin, Jonathan Blow, Audre Lorde, Ryan Dahl
 
 Tests
 -----
@@ -17,7 +17,7 @@ As I stray from test-driven development, I am always pulled back. What better wa
 [X] If you type some css in the hello world it gets saved to the database
 [X] If you reload the hello world it has the new css
 [X] You can add a dependency to hello world and it will get loaded on the server
-[ ] Narrative can restart itself from a web request
+[X] Narrative can restart itself from a web request
 [ ] When you edit editor.md it gets hot reloaded
 
 The Server
