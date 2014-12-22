@@ -2,13 +2,9 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
   function isCode(block) { return block.kind == 'code' }
   function hasFilename(block) { return !!block.filename }
   function isSource(block) { return isCode(block) && hasFilename(block) }
-  function isServer(block) { return block.filename == 'center.js' }
+  function isServer(block) { return block.command == 'server' }
   function isStylesheet(block) { return endsWith(block.filename, '.css') }
-  function isLibrary(block) { 
-    notCenter = block.filename != 'center.js'
-    rightExtension = endsWith(block.filename, '.js')
-    return notCenter && rightExtension
-  }
+  function isLibrary(block) { return block.command == 'library' }
 
   startsWith = function(string, pattern) {
     return !!(string||'').match(new RegExp('^' + pattern))
@@ -81,6 +77,7 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
   extractFilenamesAndSource = function(blocks) {
     var filenameLastSeen = null
 
+    console.log('block count:', blocks.length)
     blocks.forEach(function(block) {
       // TODO: This needs to also identify center blocks now.
       var inAComment = block.kind == 'comment'
@@ -96,7 +93,12 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
       } else if (inCode && !filenameLastSeen) {
         block.unassigned = true
       } else if (inCode && filenameLastSeen) {
-        block.filename = filenameLastSeen
+        var parts = filenameLastSeen.split(' ')
+        block.filename = parts[parts.length-1]
+        if (parts[1]) {
+          block.command = parts[0]
+        }
+        console.log('in block', filenameLastSeen, parts, parts.length, block.filename, block.command)
         filenameLastSeen = null
       }
     })

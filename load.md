@@ -45,11 +45,7 @@ Load
         }
 
         function getPort(name) {
-          if (!ports[name]) {
-            ports[name] = nextPort
-            nextPort++
-          }
-          return ports[name]
+          return ports[name] || nextPort++
         }
 
         function startServer(server) {
@@ -57,8 +53,10 @@ Load
 
           if (server && server.start) {
             console.log('Starting', name)
-            server.start(getPort(name))
+            port = getPort(name)
+            server.start(port)
             servers[name].push(server)
+            ports[name] = port
           } else {
             console.log('Your center.js needs to return a server that can be started! It returned ' + JSON.stringify(server) + ' instead')
           }
@@ -88,7 +86,6 @@ Load
         function redefine(block) {
           try {
             console.log('Evaluating', block.filename, 'because it seems to be a library....')
-            console.log('source:', block.source)
             eval(block.source)
           } catch (e) {
             console.log(e)

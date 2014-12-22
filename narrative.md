@@ -27,9 +27,9 @@ First off, this document is written in a filed called narrative.md. It's written
 
 In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
 
-Here's `center.js` of this story:
+Here's `server narrative.js`:
 
-    define(['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'ember', 'editor', 'scrolltoreveal'], function(server, documents, compile, load, folder) {
+    define('narrative', ['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal'], function(server, documents, compile, load, folder) {
 
       var server = new Server()
 
@@ -121,8 +121,8 @@ Then we need a javascript file that starts the server. We'll put it in `start.js
 
     var requirejs = require('requirejs')
 
-    requirejs(['center'], function(center) {
-      center.start(process.env.PORT)
+    requirejs(['narrative'], function(server) {
+      server.start(process.env.PORT)
     })
 
 
@@ -149,7 +149,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
     <script>
 
-      require(['editor', 'underscore', 'jquery', 'handlebars'], function(Editor){
+      require(['editor', 'underscore', 'jquery'], function(Editor){
 
         var editor
 
@@ -420,7 +420,7 @@ The first is `package.json`, which describes the various things running the serv
 
 We also need to tell Heroku what it has to do to start the server. We do that in a `Procfile`:
 
-    web: node narrative.js
+    web: node start.js
 
 That just tells them that to start the web server they should run the command "node server.js".
 

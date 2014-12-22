@@ -2,6 +2,7 @@ define(['database', 'chain', 'assert', 'pg-escape'], function(database, chain, a
 
   function set(key, value, callback) {
     var json = JSON.stringify(value)
+    console.log('Setting', key)
     var update = escape('UPDATE %I SET value = %L WHERE key = %L', 'documents', json, key)
     var insert  = escape('INSERT INTO %I (key, value) VALUES (%L, %L)', 'documents', key, json)
 

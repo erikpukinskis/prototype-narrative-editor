@@ -1,6 +1,6 @@
 ! Hello world
 
-This is the simplest server you could imagine. It needs to know it lives in `center.js`:
+This is the simplest server you could imagine. It needs to know it lives in `server hello.js`:
 
     define('hello', ['server'], function(Server) {
       var server = new Server()
@@ -17,7 +17,7 @@ With CSS:
 
 ! Hello world
 
-This is the simplest server you could imagine. It needs to know it lives in `center.js`:
+This is the simplest server you could imagine. It needs to know it lives in `server hello.js`:
 
     define('hello', ['server', 'documents'], function(Server, documents) {
       var server = new Server()
@@ -39,7 +39,7 @@ Including another lib:
 
 ! Hello, world
 
-This is the simplest server you could imagine. It needs to know it lives in `center.js`:
+This is the simplest server you could imagine. It needs to know it lives in `server hello.js`:
 
     define('hello', ['server', 'documents', 'helloworldhtml'],function(Server, documents, html) {
       var server = new Server()
@@ -55,7 +55,7 @@ And here is some css that goes in `style.css`:
     body { background: yellow; color: fuchsia }
 
 
-In `helloworldhtml.js`:
+In `library helloworldhtml.js`:
 
     define('helloworldhtml', function() {
       return '<html>'
