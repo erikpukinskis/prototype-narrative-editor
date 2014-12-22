@@ -18,7 +18,7 @@ As I stray from test-driven development, I am always pulled back. What better wa
 [X] If you reload the hello world it has the new css
 [X] You can add a dependency to hello world and it will get loaded on the server
 [X] Narrative can restart itself from a web request
-[ ] When you edit editor.md it gets hot reloaded
+[X] When you edit editor.md it can be reloaded in the client
 
 The Server
 ----------
@@ -81,12 +81,22 @@ Here's `server narrative.js`:
       server.get('/', editor)
 
       server.get('/:name', editor)
+
+      server.get('/:name.js', function(request, response, next) {
+        documents.get('assets/'+request.params.name+'.js', function(document) {
+          if (document) {
+            response.send(document)
+          } else {
+            next()
+          }
+        })
+      })
       
       server.get('/narratives/:name', 
         function(request, response) {
         var name = request.params.name
         documents.get(name, function(document) {
-          if (document) {
+          if ((name != 'narrative') && document) {
             response.json(docToNarrative(document, name))
           } else if (source = folder.read('../../' + name + '.md')) {
             console.log('Loaded from disk...')

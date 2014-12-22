@@ -12,17 +12,17 @@ There's some stuff to clean up to get back to feature parity with 0.2.0.
  - [X] Fix "port in use" error on Narrative save
  - [X] Narrative can restart itself from a web request
  - [X] Make it so Narrative can load from Procfile even with a name (define('narrative', ...))
- - [ ] Load hello before helloworldhtml
- - [ ] When you edit editor.md it gets hot reloaded
+ - [X] When you edit editor.md it gets reloaded in the client
+ - [X] Use the CSS files from the live Narrative
+ - [X] Typed in CSS file can bootsrap and edits go into the 2nd generation
+ - [X] Typed Narrative and Narrative on disk are one in the same. They work alike whether built or loaded.
 
 And that'll be 0.3.0, "Self hosting without touching the filesystem". Not pretty. But this is 0.x.
 
 At 0.4 we're probably on feature dot releases for a while:
 
+ - [ ] Export to disk/git
  - [ ] Load deps from db after restart
- - [ ] Use the CSS files from the live Narrative
- - [ ] Typed in CSS file can bootsrap and edits go into the 2nd generation
- - [ ] Typed Narrative and Narrative on disk are one in the same. They work alike whether built or loaded.
  - [ ] Add the features we need to actually make these narratives read well
  - [ ] getDependencies should go straight to searchLine. We should just join the blocks together into a string in build
  - [ ] Automatically compile dependencies of dependencies so narrative doesn't have to require jquery and database and such

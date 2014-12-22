@@ -38,7 +38,7 @@ This `server.js` is what you use to set up an Express/Node server:
             var params = tryToParseUrl(request.url, handler)
             if (params) {
               request.params = params
-              handler.func(request, response)
+              handler.func(request, response, next)
               return true
             }
           }
