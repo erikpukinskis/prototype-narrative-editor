@@ -7,19 +7,6 @@ Get Dependencies
       return function (compiled, callback) {
         var dependencies = []
 
-        // We should refactor this so it's just a dependencies function
-        // that returns the dependencies and we just keep unioning them
-        // in out compile function down there. I.e
-        // 
-        // compile(name, function(compiled) {
-        //   var dependencies = []
-        //   compiled.each.code(function(block) { 
-        //     var moreDeps = searchBlock(block)
-        //     dependencies = _(dependencies).union(moreDeps)
-        //   })
-        //   return dependencies
-        // })
-
         function searchBlock(block) {
           var pattern = /(define) *\(.*\[.*]/g
           var match = block.source.match(pattern)
@@ -46,6 +33,5 @@ Get Dependencies
         compiled.each.code(searchBlock)
         indent('Found ' + dependencies.length + '  dependencies')
         callback(dependencies)
-
       }
     })
