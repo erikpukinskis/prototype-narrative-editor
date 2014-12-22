@@ -1,11 +1,6 @@
 Editor
 ------
 
-[x] Enter key works
-[x] Fix cursor bug
-...
-[ ] Get saving working again
-
 This goes in `editor.js`:
 
     define(['underscore', 'scrolltoreveal'], function(_, scrollToReveal) {
@@ -308,61 +303,6 @@ This goes in `editor.js`:
       return Editor
 
     })
-
-What should happen
-------------------
-
-
-Let's just think in terms of messages for a second.
-
-render the first line number
-render the first line
-add those to the dom
-
-render the second line number
-render the second line
-add those to the dom
-
-....
-
-XXX [focus]
-
-when I create a document with two lines
-
-activate:
-  set line one to visibility:hidden
-  copy the node and re-render it with the cursor in the same spot with position:absolute
-  note how tall it is
-
-[press down]
-
-set the static first line back to visibility:visible
-hide the absolute one
-
-move the cursor down
-
-wait a few ms, then:
-  activate the second one
-
-[arrow right]
-
-(it might make sense to get metrics on the whole line so we can move faster)
-reRender(2)
-
-[spacebar]
-
-add a space to the line
-reRender(2)
-check if the height changed. If it did, re-render the static line
-
-[enter]
-
-remove second part of line
-rerender the static line 2
-render new line with second part of line
-add it to the dom
-activate the new line
-
 
 Ideas for the future
 ====================

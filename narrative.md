@@ -5,12 +5,12 @@ A tool for writing code in a literary way, "narratives". Includes a web-based ed
 Thank you
 ---------
 
-Why?, Ursula K. Leguin, Jonathan Blow, Audre Lorde, Ryan Dahl
+Why?, Ursula K. Leguin, Jonathan Blow, Ryan Dahl
 
 Tests
 -----
 
-As I stray from test-driven development, I am always pulled back. What better way is there to start than to describe some necessary conditions for a thing to be itself?
+What better way is there to start than to describe some necessary conditions for a thing to be itself?
 
 [X] The client saves a narrative to the database
 [X] If you type hello.md a server starts
@@ -23,11 +23,7 @@ As I stray from test-driven development, I am always pulled back. What better wa
 The Server
 ----------
 
-First off, this document is written in a filed called narrative.md. It's written in a language called Markdown. You can see that file [here](https://raw.githubusercontent.com/erikpukinskis/narrative/master/narrative.md).
-
-In order for you to be reading a nicely formatted version of this document in your web browser right now, there needs to be a web server that can take your request, convert that README file into HTML, and send it down to your web browser on your phone or laptop or whatever.
-
-Here's `server narrative.js`:
+`server narrative.js`:
 
     define('narrative', ['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal'], function(server, documents, compile, load, folder) {
 
@@ -123,10 +119,6 @@ Here's `server narrative.js`:
       return server
     })
 
-At this point we need to 
-
-> Note that in order to parse that we need to recognize center declarations in the Narrative compiler. The reason this is special is we need to know how to plug in to the narrative without actually running foreman on the filesystem. So in our POST after the compile we can just eval the funcs and then eval the server.
-
 Then we need a javascript file that starts the server. We'll put it in `start.js`:
 
     var requirejs = require('requirejs')
@@ -134,9 +126,6 @@ Then we need a javascript file that starts the server. We'll put it in `start.js
     requirejs(['narrative'], function(server) {
       server.start(process.env.PORT)
     })
-
-
-We're giving it to the [library](library.md) to hold on to (don't trust myself with that!). It needs one other narrative from the library in order to work: [Express](express.md), a web server. 
 
 Writing
 -------
@@ -248,8 +237,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
     </script>
     
     </html>
-
-There's a lot going on there. It loads Ember and some other javascript libraries that it needs to work. It creates an Ember application with a Handlebars template and a link back to the Read page.
 
 And we also need a CSS stylesheet to make things pretty, which goes in `styles.css`:
 
@@ -411,7 +398,7 @@ The first is `package.json`, which describes the various things running the serv
 
     {
       "name": "narrative",
-      "version": "0.2.9",
+      "version": "0.3.0",
       "dependencies": {
         "express": "*",
         "underscore": "*",
