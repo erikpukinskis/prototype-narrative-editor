@@ -405,7 +405,8 @@ The first is `package.json`, which describes the various things running the serv
         "body-parser": "*",
         "knex": "*",
         "pg": "*",
-        "pg-escape": "*"
+        "pg-escape": "*",
+        "chai": "*"
       },
       "devDependencies": {
         "requirejs": "*"

@@ -6,7 +6,8 @@
     "underscore": "*",
     "pg": "*",
     "knex": "*",
-    "pg-escape": "*"
+    "pg-escape": "*",
+    "chai": "*"
   },
   "engines": {
     "node": "*"

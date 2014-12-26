@@ -3,7 +3,8 @@ Express
 
 This `server.js` is what you use to set up an Express/Node server:
 
-    define(['http', 'body-parser', 'assert', 'underscore'], function(http, bodyParser, assert, _) {
+    define(['http', 'body-parser', 'chai', 'underscore'], function(http, bodyParser, chai, _) {
+      var expect = chai.expect
       var express = require("express")
 
       function tryToParseUrl(url, handler) {
@@ -92,8 +93,7 @@ This `server.js` is what you use to set up an Express/Node server:
           pattern: '/narratives/:name'
         }
         var params = tryToParseUrl('/narratives/legendofhelga', handler)
-        assert(params)
-        assert.equal(params.name, 'legendofhelga')
+        expect(params).to.have.property('name', 'legendofhelga')
         console.log('yippee!')
       }
 

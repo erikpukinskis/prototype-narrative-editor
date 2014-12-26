@@ -1,4 +1,6 @@
-define(['assert'], function(assert) {
+define(['chai'], function(chai) {
+  var expect = chai.expect
+
   function chain() {
     var functions = arguments
     if (functions.length < 1) { return }
@@ -39,7 +41,7 @@ define(['assert'], function(assert) {
 
     chain(addHi,addHo, function() {
       json = JSON.stringify
-      assert.equal(json(array), json(['hi', 'ho']), "Chain didn't work")
+      expect(array).to.deep.equal(['hi', 'ho'])
       console.log('awesome!')
     })
   }
@@ -55,7 +57,7 @@ define(['assert'], function(assert) {
       callback(first + ' Anzaldúa')
     }
     function test(name, callback) {
-      assert.equal(name, 'Gloria Evangelina Anzaldúa')
+      expect(name).to.equal('Gloria Evangelina Anzaldúa')
       console.log('Gloria!')
     }
 

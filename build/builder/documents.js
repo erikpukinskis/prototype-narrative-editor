@@ -1,4 +1,5 @@
-define(['database', 'chain', 'assert', 'pg-escape'], function(database, chain, assert, escape) {
+define(['database', 'chain', 'chai', 'pg-escape'], function(database, chain, chai, escape) {
+  var expect = chai.expect
 
   function set(key, value, callback) {
     var json = JSON.stringify(value)
@@ -55,10 +56,9 @@ define(['database', 'chain', 'assert', 'pg-escape'], function(database, chain, a
       function getStateOneMoreTime(f) {
         get('i am', f)
       },
-      function assertStateIsFound(value, f) {
+      function expectStateIsFound(value, f) {
         console.log('now i am', value.is)
-        assert.equal(value.is, 'found', 'overwrote "i am"')
-        console.log('wee!!')
+        expect(value.is).to.equal('found')
         f()
       },
       function saveQuotesAndQuestionMarks(f) {
@@ -68,7 +68,7 @@ define(['database', 'chain', 'assert', 'pg-escape'], function(database, chain, a
         get('weirdCharacters', f)
       },
       function (characters, xxxx) {
-        assert.equal(characters, "'\"?")
+        expect(characters).to.equal("'\"?")
         console.log('yahooee.')
       }
     )
@@ -100,6 +100,7 @@ define(['database', 'chain', 'assert', 'pg-escape'], function(database, chain, a
     }
   }
 
+  test()
   return {get: get, set: set, test: test, api: api}
 })
 

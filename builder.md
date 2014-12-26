@@ -27,7 +27,8 @@ Needs some packages. `package.json`:
         "underscore": "*",
         "pg": "*",
         "knex": "*",
-        "pg-escape": "*"
+        "pg-escape": "*",
+        "chai": "*"
       },
       "engines": {
         "node": "*"
