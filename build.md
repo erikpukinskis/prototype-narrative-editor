@@ -12,7 +12,7 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
         source = folder.read('./' + name + '.md')
 
         if (!source) {
-          indent("reading "+name+" ... got source:"+source)
+          throw new Error("Tried to compile "+name+".md but couldn't find it.")
         }
 
         compile(source, function(compiled) {

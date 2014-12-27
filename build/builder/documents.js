@@ -100,7 +100,6 @@ define(['database', 'chain', 'chai', 'pg-escape'], function(database, chain, cha
     }
   }
 
-  test()
   return {get: get, set: set, test: test, api: api}
 })
 

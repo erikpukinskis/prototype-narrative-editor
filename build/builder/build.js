@@ -7,7 +7,7 @@ define(['folder', 'compile', 'underscore', 'indent', 'getdependencies'], functio
     source = folder.read('./' + name + '.md')
 
     if (!source) {
-      indent("reading "+name+" ... got source:"+source)
+      throw new Error("Tried to compile "+name+".md but couldn't find it.")
     }
 
     compile(source, function(compiled) {
