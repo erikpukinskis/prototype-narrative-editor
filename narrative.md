@@ -25,7 +25,7 @@ The Server
 
 `server narrative.js`:
 
-    define('narrative', ['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal'], function(server, documents, compile, load, folder) {
+    define('narrative', ['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal', 'repo'], function(server, documents, compile, load, folder) {
 
       var server = new Server()
 
@@ -406,7 +406,9 @@ The first is `package.json`, which describes the various things running the serv
         "knex": "*",
         "pg": "*",
         "pg-escape": "*",
-        "chai": "*"
+        "chai": "*",
+        "js-github": "*",
+        "js-git": "*"
       },
       "devDependencies": {
         "requirejs": "*"
