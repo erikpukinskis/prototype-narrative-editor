@@ -14,23 +14,43 @@ In `repo.js`:
         require('js-git/mixins/formats')(repo)
       }
 
-      Repo.prototype.list = function(callback) {
-        var repo = this.repo
-
+      function withTree(repo, callback) {
+        if (repo.tree) { return callback(repo.tree) }
         repo.readRef("refs/heads/master", function(error, headHash) {          
           repo.loadAs("commit", headHash, function(error, commit) {
             repo.loadAs("tree", commit.tree, function(error, tree) {
-              callback(_(tree).keys())
+              callback(repo.tree = tree)
             })
           })
         })
       }
 
+      Repo.prototype.list = function(callback) {
+        withTree(this.repo, function(tree) {
+          callback(_(tree).keys())
+        })
+      }
+
+      Repo.prototype.get = function(path, callback) {
+        var repo = this.repo
+        withTree(repo, function(tree) {
+          var contents = repo.loadAs("text", tree[path].hash, function(error, contents, foo) {
+            callback(contents)
+          })
+        })
+      }
+
       function test() {
-        var repo = new Repo('erikpukinskis/narrative', process.env.GITHUB_TOKEN)
+        var repo = new Repo('rmccue/test-repository', process.env.GITHUB_TOKEN)
+
         repo.list(function(paths) {
-          expect(paths).to.contain('README.md')
+          expect(paths).to.contain('README')
           console.log(('waheeee'))
+
+          repo.get('README', function(contents) {
+            expect(contents).to.equal('This is just a test repository to work with Git commands.')
+            console.log('whoooo')
+          })
         })
       }
 
