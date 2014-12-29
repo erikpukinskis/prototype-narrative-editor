@@ -1,6 +1,8 @@
 ! Up Next
 
- - [ ] Load from github
+ - [X] Get file list from github
+ - [X] Get file contents from github
+ - [X] Fallback to github instead of the filesystem
  - [ ] Commit to github
 
 ! Later

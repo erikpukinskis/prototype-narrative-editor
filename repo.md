@@ -60,10 +60,6 @@ In `repo.js`:
 
 Next features:
 
-    repo.getContent(paths[0])
-
-    server.use repo.middleware()
-
     server.post('/narratives/:name', function(request, response) {
       ...
       repo.onFileChange(name +'.md', markdown)

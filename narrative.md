@@ -25,9 +25,10 @@ The Server
 
 `server narrative.js`:
 
-    define('narrative', ['server', 'documents', 'compile', 'load', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal', 'repo'], function(server, documents, compile, load, folder) {
+    define('narrative', ['server', 'documents', 'compile', 'load', 'repo', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal'], function(server, documents, compile, load, Repo) {
 
       var server = new Server()
+      var repo = new Repo('erikpukinskis/narrative', process.env.GITHUB_TOKEN)
 
       function docToSource(doc) {
         return _(doc.lines).map(function(line) {
@@ -88,18 +89,17 @@ The Server
         })
       })
       
-      server.get('/narratives/:name', 
-        function(request, response) {
+      server.get('/narratives/:name', function(request, response) {
         var name = request.params.name
+
         documents.get(name, function(document) {
           if ((name != 'narrative') && document) {
-            response.json(docToNarrative(document, name))
-          } else if (source = folder.read('../../' + name + '.md')) {
-            console.log('Loaded from disk...')
-            response.json(sourceToNarrative(source, name))
-          } else {
-            response.json(docToNarrative(null, name))
+            return response.json(docToNarrative(document, name))
           }
+
+          repo.get(name + '.md', function(source) {
+            response.json(sourceToNarrative(source || '', name))
+          })
         })
       })
 
