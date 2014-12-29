@@ -19,3 +19,5 @@
  - Running narratives in a secure jail
  - Basic quota system
  - Push to Heroku
+
+ One interesting next step would be to try to split out a minimal core that could be distributed as a really simple server.js + package.json + Procfile that could go to github and get all the narratives it needs. Then that can go into a traditional git repo that we largely don't touch and then we work on everything else.
