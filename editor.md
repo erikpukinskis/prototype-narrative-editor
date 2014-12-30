@@ -86,14 +86,15 @@ This goes in `editor.js`:
       }      
 
       function renderLineWithCursor(line, cursor) {
+        var cursorHtml = div({'class': 'cursor'})
 
         if (cursor.column == 0) {
           var html = lineToHtml(line.string, line.kind)
-          return html.replace(/^(<[^>]*>|)/, '$1'+div('cursor'))
+          return html.replace(/^(<[^>]*>|)/, '$1'+cursorHtml)
         }
         var parts = splitLine(line.string, cursor.column)
         var string = parts.before + '<<CURSOR>>' + parts.after
-        return lineToHtml(string, line.kind).replace('&lt;&lt;CURSOR&gt;&gt;', div('cursor'))
+        return lineToHtml(string, line.kind).replace('&lt;&lt;CURSOR&gt;&gt;', cursorHtml)
       }
 
       function Editor(lines, saveCallback) {
@@ -175,9 +176,10 @@ This goes in `editor.js`:
         var counter = 28846
         function renderLine(line) {
           if (!line.id) { line.id = (counter++).toString(36) }
-          return div('line line-'+line.id+' '+line.kind, [
-            div('absolute', ''),
-            div('static', lineToHtml(line.string, line.kind))
+          var lineClass = 'line line-'+line.id+' '+line.kind
+          return div({'class': lineClass}, [
+            div({'class': 'absolute'}, ''),
+            div({'class': 'static'}, lineToHtml(line.string, line.kind))
           ])
         }
 
@@ -285,10 +287,10 @@ This goes in `editor.js`:
             save()
           },
 
-          init: function(selector) {
+          bind: function(selector) {
             lines.forEach(function(line) {
               line.id = null
-              $('.narrative').append(renderLine(line))
+              $(selector).append(renderLine(line))
             })
             activate(0)
           }

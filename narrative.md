@@ -232,7 +232,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         $.getJSON('/narratives/' + name, function(doc) {
           editor = new Editor(doc.lines, onDocumentChange)
-          editor.init()
+          editor.bind('.narrative')
         })
 
       })
@@ -245,6 +245,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
 
     body {
       -webkit-font-smoothing: antialiased;
+      margin: 0
     }
 
     .narrative {
