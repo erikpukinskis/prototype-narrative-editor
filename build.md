@@ -16,7 +16,6 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
         }
 
         compile(source, function(compiled) {
-          indent('-> compiled: '+ compiled)
           compiled.each.source(function(block) {
             folder.write(destination + '/' + block.filename, block.source)
           })

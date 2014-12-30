@@ -11,7 +11,6 @@ define(['folder', 'compile', 'underscore', 'indent', 'getdependencies'], functio
     }
 
     compile(source, function(compiled) {
-      indent('-> compiled: '+ compiled)
       compiled.each.source(function(block) {
         folder.write(destination + '/' + block.filename, block.source)
       })

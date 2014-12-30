@@ -82,7 +82,6 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
       extractFilenamesAndSource = function(blocks) {
         var filenameLastSeen = null
 
-        console.log('block count:', blocks.length)
         blocks.forEach(function(block) {
           // TODO: This needs to also identify center blocks now.
           var inAComment = block.kind == 'comment'
@@ -103,19 +102,18 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
             if (parts[1]) {
               block.command = parts[0]
             }
-            console.log('in block', filenameLastSeen, parts, parts.length, block.filename, block.command)
             filenameLastSeen = null
           }
         })
       }
 
       function summarize(source) {
-        return source.substr(0,40).split('\n').join(' ')        
+        return source.substr(0,50).split('\n').join(' ')
       }
 
       function compile(source, callback) {
         var blocks = getBlocks(source)
-        indent('Compiled ' + summarize(source) + '... to ' + blocks.length + ' blocks')
+        indent('   ---  Compiled ' + summarize(source) + '... to ' + blocks.length + ' blocks')
         extractFilenamesAndSource(blocks)
         callback(new Compiled(blocks)) 
       }
