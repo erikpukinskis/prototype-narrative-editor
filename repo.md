@@ -34,8 +34,9 @@ In `repo.js`:
       Repo.prototype.get = function(path, callback) {
         var repo = this.repo
         withTree(repo, function(tree) {
-          var contents = repo.loadAs("text", tree[path].hash, function(error, contents, foo) {
-            callback(contents)
+          hash = tree[path].hash
+          var contents = repo.loadAs("text", hash, function(error, contents, foo) {
+            callback(contents, hash)
           })
         })
       }

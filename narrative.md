@@ -93,12 +93,15 @@ The Server
         var name = request.params.name
 
         documents.get(name, function(document) {
-          if ((name != 'narrative') && document) {
+          if (document) {
             return response.json(docToNarrative(document, name))
           }
 
-          repo.get(name + '.md', function(source) {
-            response.json(sourceToNarrative(source || '', name))
+          repo.get(name + '.md', function(source, hash) {
+            var narrative = sourceToNarrative(source || '', name)
+            narrative.hash = hash
+            response.json(narrative)
+            documents.set(name, narrative)
           })
         })
       })
