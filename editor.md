@@ -3,7 +3,8 @@ Editor
 
 This goes in `editor.js`:
 
-    define(['underscore', 'scrolltoreveal'], function(_, scrollToReveal) {
+    define(['underscore', 'scrolltoreveal', 'dom'], function(_, scrollToReveal, dom) {
+      var div = dom.div
 
       function splitLine(string, column) {
         return {
@@ -93,12 +94,6 @@ This goes in `editor.js`:
         var parts = splitLine(line.string, cursor.column)
         var string = parts.before + '<<CURSOR>>' + parts.after
         return lineToHtml(string, line.kind).replace('&lt;&lt;CURSOR&gt;&gt;', div('cursor'))
-      }
-
-      function div(classNames, contents) {
-        contents = contents || ''
-        if (contents.join) { contents = contents.join('') }
-        return '<div class="' + classNames + '">' + contents + '</div>'
       }
 
       function Editor(lines, saveCallback) {

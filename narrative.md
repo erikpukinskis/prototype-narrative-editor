@@ -25,7 +25,7 @@ The Server
 
 `server narrative.js`:
 
-    define('narrative', ['server', 'documents', 'compile', 'load', 'repo', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal'], function(server, documents, compile, load, Repo) {
+    define('narrative', ['server', 'documents', 'compile', 'load', 'repo', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal', 'dom'], function(server, documents, compile, load, Repo) {
 
       var server = new Server()
       var repo = new Repo('erikpukinskis/narrative', process.env.GITHUB_TOKEN)
