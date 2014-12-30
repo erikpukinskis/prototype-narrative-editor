@@ -25,7 +25,7 @@ The Server
 
 `server narrative.js`:
 
-    define('narrative', ['server', 'documents', 'compile', 'load', 'repo', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal', 'dom'], function(server, documents, compile, load, Repo) {
+    define('narrative', ['server', 'documents', 'compile', 'load', 'repo', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal', 'dom', 'commiteditor'], function(server, documents, compile, load, Repo) {
 
       var server = new Server()
       var repo = new Repo('erikpukinskis/narrative', process.env.GITHUB_TOKEN)
@@ -108,7 +108,7 @@ The Server
 
       server.post('/narratives', function(request, response) {
         var doc = _(request.body).pick('lines', 'name')
-       
+
         documents.set(doc.name, doc, function() {
           compile(docToSource(doc), function(compiled) {
             load(doc.name, compiled)
@@ -151,7 +151,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
     <script>
 
-      require(['editor', 'underscore', 'jquery'], function(Editor){
+      require(['editor', 'commiteditor', 'underscore', 'jquery'], function(Editor, CommitEditor){
 
         var editor
 
@@ -217,7 +217,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         var name = getRouteParams().name
 
-        function onDocumentChange(lines) {
+        function save(lines) {
           doc = {name: name, lines: lines}
           $.ajax({
             method: 'POST',
@@ -227,13 +227,22 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             success: function() {
               console.log('heard back from the server! should be saved now.')
             }
-          })
+          })          
+        }
+
+        function onDocumentChange(lines) {
+          console.log('changee')
+          save(lines)
+          commit.dirty()
         }
 
         $.getJSON('/narratives/' + name, function(doc) {
           editor = new Editor(doc.lines, onDocumentChange)
           editor.bind('.narrative')
         })
+
+        var commit = new CommitEditor(name)
+        commit.bind('body')
 
       })
 
@@ -385,6 +394,40 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
       .narrative {
         font-size: 13px
       }
+    }
+
+
+    #commit {
+      position: fixed;
+      right: 3px;
+      z-index: 1;
+      bottom: -40px;
+      transition: bottom 400ms;
+    }
+
+    #commit.dirty {
+      bottom: 6px;
+    }
+
+    #commit input {
+      font-family: sans-serif;
+      padding: 6px 7px;
+      font-size:  14px;
+      border: 2px solid rgba(0, 255, 136, 1);
+    }
+
+    #commit input[type=text] {
+      border-radius: 0px 2px 2px 0px;
+      border-left-width: 0px;
+      min-width: 11em;
+      color: #666;
+    }
+
+    #commit input[type=submit] {
+      background: rgba(0, 255, 136, 1);
+      border: 2px solid rgba(255,255,255, 0);
+      color: white;
+      border-radius: 2px 0px 0px 2px;
     }
 
 That's it! To start it up, we just do:

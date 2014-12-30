@@ -25,7 +25,7 @@
             html += ' ' + attribute + '="' + attributes[attribute] + '"'
           }
 
-          html += '">' + contents
+          html += '>' + contents
 
           if (options.close !== false) {
             html = html + '</' + tag + '>'
@@ -35,5 +35,10 @@
         }
       }
 
-      return {div: tagRenderer('div'), input: tagRenderer('input', {close: false}) }
+      return {
+        div: tagRenderer('div'),
+        button: tagRenderer('button'),
+        form: tagRenderer('form'),
+        input: tagRenderer('input', {close: false})
+      }
     })
