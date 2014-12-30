@@ -3,7 +3,10 @@
  - [X] Get file list from github
  - [X] Get file contents from github
  - [X] Fallback to github instead of the filesystem
- - [ ] Commit to github
+ - [ ] When I pull a document from the repo, also store its hash
+ - [ ] When I save a document, change the hash
+ - [ ] When a document doesn't have a hash, show the new commit widget
+ - [ ] Commit when I click commit
 
 ! Later
 
