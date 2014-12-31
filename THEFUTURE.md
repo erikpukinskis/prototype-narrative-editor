@@ -1,9 +1,9 @@
 ! Up Next
 
  - [X] When I pull a document from the repo, also store its hash
- - [ ] When I save a document, change the hash
- - [ ] When a document doesn't have a hash, show the new commit widget
- - [ ] Commit when I click commit
+ - [X] When I save a document, change the hash
+ - [X] When a document doesn't have a hash, show the new commit widget
+ - [X] Commit when I click commit
 
 ! Later
 
