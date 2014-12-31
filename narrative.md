@@ -90,6 +90,7 @@ The Server
       })
       
       server.get('/narratives/:name', function(request, response) {
+        response.setTimeout(30000)
         var name = request.params.name
 
         documents.get(name, function(document) {

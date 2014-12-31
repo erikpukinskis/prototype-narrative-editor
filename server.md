@@ -7,25 +7,6 @@ This `server.js` is what you use to set up an Express/Node server:
       var expect = chai.expect
       var express = require("express")
 
-      function tryToParseUrl(url, handler) {
-        var keys = []
-
-        var regex = handler.pattern.replace(/:([a-z]+)/, function(xxxx, key) {
-          keys.push(key)
-          return "([a-z]+)"
-        })
-        regex = '^' + regex + '$'
-
-        var match = url.match(regex)
-        if (!match) { return null }
-
-        var values = match.slice(1,1+keys.length)
-        var keyValuePairs = _.zip(keys, values)
-        var params = _.object(keyValuePairs)
-
-        return params
-      }
-
       Server = function() {
         var _this = this
         var handlers = this.handlers = {GET: [], POST: []}
@@ -33,19 +14,6 @@ This `server.js` is what you use to set up an Express/Node server:
         this.app = express()
 
         this.app.use(bodyParser.json())
-
-        this.app.use(function(request, response, next) {
-          function match(handler) {
-            var params = tryToParseUrl(request.url, handler)
-            if (params) {
-              request.params = params
-              handler.func(request, response, next)
-              return true
-            }
-          }
-
-          _(handlers[request.method]).find(match) || next()
-        })
       }
 
       Server.prototype.start = function(port) { 
@@ -74,12 +42,12 @@ This `server.js` is what you use to set up an Express/Node server:
         })
       }
 
-      Server.prototype.get = function(pattern, func) {
-        this.handlers.GET.push({pattern:pattern, func:func})
+      Server.prototype.get = function() {
+        this.app.get.apply(this.app, arguments)
       }
 
-      Server.prototype.post = function(pattern, func) {
-        this.handlers.POST.push({pattern:pattern, func:func})
+      Server.prototype.post = function() {
+        this.app.post.apply(this.app, arguments)
       }
 
       Server.prototype.static = express.static;
@@ -87,17 +55,6 @@ This `server.js` is what you use to set up an Express/Node server:
       Server.prototype.use = function() {
         this.app.use.apply(this.app, arguments)
       }
-
-      function test() {
-        var handler = {
-          pattern: '/narratives/:name'
-        }
-        var params = tryToParseUrl('/narratives/legendofhelga', handler)
-        expect(params).to.have.property('name', 'legendofhelga')
-        console.log('yippee!')
-      }
-
-      test()
 
       return Server
     })

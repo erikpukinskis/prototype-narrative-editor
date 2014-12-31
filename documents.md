@@ -91,7 +91,7 @@ Documents
       // and the arguments would be become querystring or POST parameters.
       var api = function(request, response, doTheNextThing) {
         var name = nameFromRequest(request)
-        if (!name) { doTheNextThing() }
+        if (!name) { return doTheNextThing() }
 
         if (request.method == "POST") {
           console.log("Saving", name, "via the documents api")
