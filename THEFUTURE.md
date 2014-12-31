@@ -4,10 +4,8 @@
  - [X] When I save a document, change the hash
  - [X] When a document doesn't have a hash, show the new commit widget
  - [X] Commit when I click commit
-
+ - [ ] Hot test running
 ! Later
-
- - Hot test running
  - Hot reload of css
  - Hot reload of UI
  - Hot reload of client libs
