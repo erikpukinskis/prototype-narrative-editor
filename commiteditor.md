@@ -6,19 +6,37 @@
       var form = dom.form
       var input = dom.input
 
-      function Editor(selector) {
+      function Editor(name) {
+        this.name = name
       }
 
-      Editor.prototype.bind = function(selector) {
-        var html = form({id: 'commit'}, [
+      function renderHtml() {
+        return form({id: 'commit'}, [
           input({type: 'submit', value: 'Commit'}),
           input({type: 'text', placeholder: 'What are you changing?'})
         ])
-        var el = this.el = $(html)
-        el.submit(function() {
-          console.log(el.find('input[type=text]').val())          
-          return false
+      }
+
+      function commit(event) {
+        var el = this.el
+        var message = el.find('input[type=text]').val()
+
+        $.ajax({
+          method: 'POST',
+          contentType: "application/json",
+          url: '/commits',
+          data: JSON.stringify({name: this.name, message: message}),
+          success: function() {
+            el.removeClass('dirty')
+          }
         })
+
+        event.preventDefault()
+      }
+
+      Editor.prototype.bind = function(selector) {
+        var el = this.el = $(renderHtml())
+        el.on('submit', $.proxy(commit, this))
         $(selector).append(el)
       }
 

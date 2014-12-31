@@ -117,6 +117,19 @@ The Server
         })
       })
 
+      server.post('/commits', function(request, response) {
+        response.setTimeout(30000)
+        var name = request.body.name
+
+        documents.get(name, function(doc) {
+          var changes = {}
+          changes[name+'.md'] = docToSource(doc)
+          repo.commit(changes, request.body.message, function(hash) {
+            response.send({hash: hash})
+          })
+        })
+      })
+
       // documents.test()
 
       return server
@@ -186,7 +199,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             }[code];
 
             if (action) {
-              console.log(action)
               editor[action]()
               return false
             } else {
@@ -223,15 +235,11 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             method: 'POST',
             contentType: "application/json",
             url: '/narratives',
-            data: JSON.stringify(doc),
-            success: function() {
-              console.log('heard back from the server! should be saved now.')
-            }
+            data: JSON.stringify(doc)
           })          
         }
 
         function onDocumentChange(lines) {
-          console.log('changee')
           save(lines)
           commit.dirty()
         }
