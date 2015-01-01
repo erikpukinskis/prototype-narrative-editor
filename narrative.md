@@ -79,7 +79,9 @@ The Server
 
           server.get('/:name', editor)
 
-          server.get('/:name.js', function(request, response, next) {
+          // This is really tied to requirejs. Which maybe needs to be its own narrative 
+          // now.
+          function sendJavascriptForBrowser(request, response, next) {
             documents.get('assets/'+request.params.name+'.js', function(document) {
               if (document) {
                 response.send(document)
@@ -87,7 +89,8 @@ The Server
                 next()
               }
             })
-          })
+          }
+          server.get('/:name.js', sendJavascriptForBrowser)
           
           server.get('/narratives/:name', function(request, response) {
             var name = request.params.name
@@ -483,4 +486,3 @@ Running your own copy of Narrative
 ----------------------------------
 
 If you want to run Narrative on your computer or deploy your own copy on the web, check out the [deploy instructions](deploy.md).
-
