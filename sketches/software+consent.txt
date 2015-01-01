@@ -1,0 +1,446 @@
+
+Hi. This is an ASCII mock up of a piece of 
+software that helps people build software 
+consensually.
+
+When you see ~'~'~ and then a name and a colon, 
+it means you're seeing what that person is 
+seeing. This is what it looks like when Kynthia 
+sees a button:
+
+~'~'~ kynthia:
+
+[ Button ]
+
+
+* * * means we've moved on to the next screen.
+
+
+This is a button someone is clicking on:
+
+[ >Button< ]
+
+
+This is something someone could type something 
+into:
+
+ Edit me!
+-----------------------------------------
+
+
+This means they tapped it:
+
+ Edit| me!
+-----------------------------------------
+
+
+This is them typing stuff with a button to do 
+something:
+
+ Typing typing la la la
+-----------------------------------------
+ [ Do something ]
+
+
+And lastly, a drop-down menu looks like this:
+
+[ California v]
+
+
+################################################
+################################################
+################################################
+################################################
+
+
+Software+Consent
+
+~'~'~ erik:
+
+ Write a story
+-----------------------------------------
+
+* * *
+
+ Write |a story
+-----------------------------------------
+
+* * *
+
+ Make ASCII mock up of Software+Consent
+-----------------------------------------
+ [ >Ask for it< ]
+
+* * *
+
+ Name |this project
+-----------------------------------------
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+ Software+Consent
+-----------------------------------------
+ [ >Name this project< ]
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+~'~'~ victor:
+
+Erik created a new project called Software+
+Consent
+[ >Join< ]
+
+* * *
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+~'~'~ kynthia:
+
+Erik created a new project called Software+
+Consent
+[ >Join< ]
+
+* * *
+
+Software+Consent
+
+ Write |a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent
+
+ Cook some bacon
+-----------------------------------------
+ [ >Ask for it< ]
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+~'~'~ erik:
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+| * Kynthia added this                         |
+| [ Start ] [ >Ignore< ]                       |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+~'~'~ kynthia:
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+|                                              |
+| Erik ignored this                            |
+| [ >Seek consensus< ] [ Start my own project ]|
+|                                              |
+| [ Start ] [ Ignore ]                         |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐ 
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+|                                              |
+|  Bacon is tasty!                             |
+| -------------------------------------        |
+|  [ >Seek consensus< ]                        |
+|                                              |
+| [ Start ] [ Ignore ]                         |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+~'~'~ erik:
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+|                                              |
+| Kynthia says 'Bacon is tasty!'               |
+|                                              |
+|  Write |a response                           |
+| -------------------------------------        |
+|                                              |
+| [ Accept ] [ Ignore ] [ Mute]                |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+|                                              |
+| Kynthia says 'Bacon is tasty!'               |
+|                                              |
+|  I just don't want any. I'd do a             |
+| -------------------------------------        |
+|  Kwerk meeting if you added it tho!          |
+| -------------------------------------        |
+|  [ Accept ] [ >Ignore< ] [ Mute]             |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+~'~'~ kynthia:
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+|                                              |
+| Erik says 'I just don't want any. I'd do a   |
+| Kwerk meeting if you added it tho!' and      |
+| ignored this again                           |
+| [ Seek consensus ] [ >Start my own project< ]|
+|                                              |
+| [ Start ] [ Ignore ]                         |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+ Name |this project
+-----------------------------------------
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+| [ Start ] [ Ignore ]                         |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+ Software+Consent+Bacon
+-----------------------------------------
+ [ >Name this project< ]
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+| [ Start ] [ Ignore ]                         |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent+Bacon
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+| [ Start ] [ Ignore ]                         |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+~'~'~ victor:
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+Kynthia started a new project Software+Consent+
+Bacon. How would you like to split your time?
+
+Software+Consent       [ 50%  v]
+Software+Consent+Bacon [ 50%  v]
+[ >Split< ]
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent + Software+Consent+Bacon
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Cook some bacon                              |
+| [ Start ] [ Ignore ]                         |
+└----------------------------------------------┘
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+~'~'~ erik:
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+Kynthia started a new project Software+Consent+
+Bacon. How would you like to split your time?
+
+Software+Consent       [ 100% v]
+Software+Consent+Bacon [ 0%   v]
+[ >Split< ]
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ Start ] [ Ignore]                          |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+| [ >Start< ] [ Ignore]                        |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+┌----------------------------------------------┐
+| Make ASCII mock up of Software+Consent       |
+|                                              |
+| You started this                             |
+| [ >Finish< ] [ Ignore ]                      |
+└----------------------------------------------┘
+
+* * *
+
+Software+Consent
+
+ Write a story
+-----------------------------------------
+
+
+################################################
+################################################
+################################################
+################################################
+
+
+I think that would be v0.1.0. Maybe the next
+step after that would be to differentiate
+between the planning and doing roles.
