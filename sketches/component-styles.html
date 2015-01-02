@@ -20,15 +20,34 @@ pre, .test-output {
   margin-right: 30px; 
 }
 
+.table-of-contents {
+  margin: 0;
+  padding-left: 1.5em;
+  display: none;
+}
+
+.table-of-contents, .table-of-contents a {
+  color: #555;
+}
+
 </style>
 </head>
 <body>
 <form>
-  <p>Component Styles</p>
+  <h1>Component Styles</h1>
   
+  <ol class="table-of-contents">
+    <li><a href="#type">Type</a></li>
+    <li><a href="#buttons">Buttons</a></li>
+    <li><a href="#entering-text">Entering text</a></li>
+    <li><a href="#separation">Separation</a></li>
+  </ol>
+
   <p>This a minimal set of UI (user interface) controls for building applications that are about writing snippets of text and performing actions.</p>
 
-  <p>We start with the typeface. Dark gray Helvetica:</p>
+  <a name="type"><h1>Type</h1></a>
+
+  <p>We start with the typeface. Helvetica with slightly darkened headings:</p>
 <pre>
 style('body, input, button, p', {
   'font-family': 'Helvetica',
@@ -37,14 +56,25 @@ style('body, input, button, p', {
   '-webkit-font-smoothing': 'antialiased'
 })
 
+define('h1', {
+  -webkit-font-smoothing: auto,
+  font-weight: normal,
+  font-size: 1em,
+  color: #333
+})
+
 define('test', function() {
-  dom.p('Gives you text that looks like this.')
+  dom.h1('Gives you headings with space above them')
+  dom.p('And paragraphs like this')
 })
 </pre>
 
 <div class="test-output">
-  <p>Gives you text that looks like this.</p>
+  <h1>Gives you headings with space above them</h1>
+  <p>And paragraphs like this</p>
 </div>
+
+<a name="buttons"><h1>Buttons</h1></a>
 
 <p>A button is just a rectangle with a background color:</p>
 
@@ -95,6 +125,8 @@ define('test', function() {
         <button class="multiple-choice">Choices</div>
       </div>
 
+<a name="entering-text"><h1>Entering text</h1></a>
+
 <p>Text inputs have a gray label</p>
 
 <pre>
@@ -125,15 +157,17 @@ style('input[type=text]', {
 
 <pre>
 define('test', function() {
-  dom.p('Software+Consent')
+  dom.h1('Software+Consent')
   dom.input({type: 'text', placeholder: 'Write a story'})
 })
 </pre>
 
       <div class="test-output">
-        <p>Software+Consent</p>
+        <h1>Software+Consent</h1>
         <input type="text" placeholder="Write a story">
       </div>
+
+<a name="separation"><h1>Separation</h1></a>
 
 <p>In order to separate content out we have a 'thing' class:</p>
 
@@ -212,7 +246,7 @@ define('test', function() {
 <p>Lastly we need a few other styles to make all of the paragraphs and stuff be spaced out well:</p>
 
 <pre>
-style('p', {
+style('p, h1', {
   margin: 15px 0;
 })
 

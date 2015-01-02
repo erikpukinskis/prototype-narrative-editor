@@ -5,7 +5,7 @@ body, input, button, p {
   -webkit-font-smoothing: antialiased;
 }
 
-input, input[type=text], button, .thing, li, .multiple-choice, .row {
+input, input[type=text], button, .thing, .multiple-choice, .row {
   border: 0px;
   padding: 9px 15px;
   display: block;
@@ -49,8 +49,15 @@ button:hover, .multiple-choice:hover {
   background-position: right 9px center;
 }
 
-p {
+p, h1 {
   margin: 15px 0;
+}
+
+h1 {
+  -webkit-font-smoothing: auto;
+  font-weight: normal;
+  font-size: 1em;
+  padding-top: 15px;
 }
 
 body {
