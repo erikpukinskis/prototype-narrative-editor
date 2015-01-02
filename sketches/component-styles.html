@@ -4,15 +4,20 @@
 <style>
 .test-output {
   /* border: 2px solid rgb(117, 168, 249);*/
-  box-shadow: 0px -2px 3px 0px rgb(146, 182, 242);
+  box-shadow: 0px -2px 3px 0px rgb(192, 216, 255);
   margin-left: 15px;
   padding: 15px;
+  border-radius: 4px;
 }
 
 pre {
   font-size: 16px;
   color: rgb(52, 126, 210);
-  padding-left: 15px;
+}
+
+pre, .test-output {
+  margin-left: 30px;  
+  margin-right: 30px; 
 }
 
 h1 {
@@ -29,53 +34,25 @@ h1 {
   
   <p>This a minimal set of UI (user interface) controls for building applications that are about writing snippets of text and performing actions.</p>
 
-  <p>We start with a for the typeface: dark gray Helvetica: `style`</p>
+  <p>We start with the typeface. Dark gray Helvetica:</p>
 <pre>
-body, input, button, p {
-  font-family: Helvetica;
-  font-size: 18px;
-  color: #555;
-  -webkit-font-smoothing: antialiased;
-}
+style('body, input, button, p', {
+  'font-family': 'Helvetica',
+  'font-size': '18px',
+  'color': '#555',
+  '-webkit-font-smoothing': 'antialiased'
+})
+
+define('test', function() {
+  dom.p('Gives you text that looks like this.')
+})
 </pre>
 
-  <p>Then in general we want to have a space around everything and mostly no borders on things: `style`</p>
+<div class="test-output">
+  <p>Gives you text that looks like this.</p>
+</div>
 
-<pre>
-input, input[type=text], button, .thing, li, .multiple-choice, .row {
-  border: 0px;
-  padding: 9px 15px;
-  display: block;
-  margin-bottom: 15px;
-}
-
-input::-webkit-input-placeholder {
-  color: #aaa;
-}
-</pre>
-
-  <p>Text inputs have just an underline: `style`</p>
-
-<pre>
-input[type=text] {
-  border-bottom: 2px solid #bbb;
-  width: 20em;
-}
-</pre>
-
-  <p>That's enough to to show a text input with a label: `client test`</p>
-
-<pre>
-dom.p('Software + Consent')
-dom.input({type: 'text', placeholder: 'Write a story'})
-</pre>
-
-      <div class="test-output">
-        <p>Software+Consent</p>
-        <input type="text" placeholder="Write a story">
-      </div>
-
-<p>A really simple button: `style`</p>
+<p>A button is just a rectangle with a background color:</p>
 
 <pre>
 button, .multiple-choice {
@@ -91,7 +68,18 @@ button:hover, .multiple-choice:hover {
 }
 </pre>
 
-<p>Also applies to the multiple-choice boxes, which get a triangle added: `style`</p>
+<pre>
+define('test', function() {
+  dom.button('Do not push')
+})
+</pre>
+
+      <div class="test-output">
+        <button>Do not push</button>
+      </div>
+
+
+<p>Multiple-choice boxes add a triangle:</p>
 
 <pre>
 .multiple-choice {
@@ -103,97 +91,116 @@ button:hover, .multiple-choice:hover {
 }
 </pre>
 
-<p>They work like this: `client test`</p>
-
 <pre>
-dom.button('Do not push')
-dom.button({'class': 'multiple-choice'}, 'Choices')
+define('test', function() {
+  dom.button({'class': 'multiple-choice'}, 'Choices')
+})
 </pre>
 
       <div class="test-output">
-        <button>Do not push</button>
         <button class="multiple-choice">Choices</div>
       </div>
 
-<p>We use hr elements to space things out:</p>
-
-  <pre>
-hr {
-  width: 100%;
-  height: 15px;
-  display: block;
-  border: none;
-  margin: 0;
-}
-</pre>
-
-<p>And need a few other styles to make all of the paragraphs and stuff be spaced out well: `style`</p>
+<p>Text inputs have a gray label</p>
 
 <pre>
-p {
-  margin: 15px 0;
-}
-
-body {
-  margin: 15px;
-  max-width: 26em;
-}
-
-p button {
-  margin-bottom: 0;
-}
-
-form {
-  margin: 0;
-}
+style('input::-webkit-input-placeholder', {
+  'color': '#aaa'
+})
 </pre>
 
-<p>Lastly we have a couple classes to separate out independent chunks of content, a thing and a row: `style`</p>
+<p>no borders</p>
 
 <pre>
-.thing {
+style('input, input[type=text], button, .thing, li, .multiple-choice, .row', {
+  'border': '0px',
+  'padding': '9px 15px',
+  'display': 'block',
+  'margin-bottom': '15px'
+})
+</pre>
+
+<p>and an underline:</p>
+
+<pre>
+style('input[type=text]', {
+  'border-bottom': '2px solid #bbb',
+  'width': '20em'
+})
+</pre>
+
+<pre>
+define('test', function() {
+  dom.p('Software+Consent')
+  dom.input({type: 'text', placeholder: 'Write a story'})
+})
+</pre>
+
+      <div class="test-output">
+        <p>Software+Consent</p>
+        <input type="text" placeholder="Write a story">
+      </div>
+
+<p>In order to separate content out we have a 'thing' class:</p>
+
+<pre>
+style('.thing', {
   padding-bottom: 0px;
   box-shadow: 0px 2px 7px rgba(0,0,0,0.2);
-}
+})
 
-.thing .thing, .row {
-  background: #f9f9f9;
-  box-shadow: none;
-}
-</pre>
-
-<p>And we want buttons to be off to the right side when they're in a row: `style</p>
-
-<pre>
-.row .multiple-choice {
-  float: right;
-  margin-top: -9px;
-  margin-right: 0;
-}
-</pre>
-
-<p>Which let's us make a few nice boxes with stuff in them: `client test`</p>
-
-<pre>
-dom.p('Kynthia started a new project Software+Consent+Bacon. How would you like to split your time?')
-[
-  dom.div({'class': 'row'}, [
-    dom.button({'class': 'multiple-choice'}, '50%'),
-    'Software+Consent'
-  ]),
-  dom.hr(),
-  dom.div({'class': 'thing'}, [
-    dom.p('Cook some bacon'),
+define('test', function() {
+  [
+    dom.p('A flow of words, into which things are placed'),
     dom.div({'class': 'thing'}, [
-      dom.p(Erik ignored this'),
-      dom.button('Seek consensus')
+      dom.p('A boy with a button'),
+      dom.button('Button')
     ])
-  ])
-]
+  ]
+})
 </pre>
 
 <div class="test-output">
-  <p>Kynthia started a new project Software+Consent+Bacon. How would you like to split your time?</p>
+  <p>A flow of words, into which things are placed</p>
+  <div class="thing">
+    <p>A boy with a button</p>
+    <button>Bears</button>
+  </div>
+</div>
+
+<p>And a 'row' class that puts things a line with buttons off to the side:</p>
+
+<pre>
+style('.thing .thing, .row', {
+  background: #f9f9f9;
+  box-shadow: none;
+})
+
+style('.row .multiple-choice', {
+  float: right;
+  margin-top: -9px;
+  margin-right: 0;
+})
+
+define('test', function() {
+  [
+    dom.div({'class': 'row'}, [
+      dom.button({'class': 'multiple-choice'}, '50%'),
+      'Software+Consent'
+    ]),
+    dom.hr(),
+    dom.div({'class': 'thing'}, [
+      dom.p('Cook some bacon'),
+      dom.div({'class': 'thing'}, [
+        dom.p(Erik ignored this'),
+        dom.button('Seek consensus')
+      ])
+    ])
+  ]
+}
+</pre>
+
+<div class="test-output">
   <div class="row">
     <button class="multiple-choice">50%</button>
     Software+Consent
@@ -206,6 +213,57 @@ dom.p('Kynthia started a new project Software+Consent+Bacon. How would you like 
        <button>Seek consensus</button>
      </div>
   </div>
+</div>
+
+<p>Lastly we need a few other styles to make all of the paragraphs and stuff be spaced out well:</p>
+
+<pre>
+style('p', {
+  margin: 15px 0;
+})
+
+style('body', {
+  margin: 15px;
+  max-width: 26em;
+})
+
+style('p button', {
+  margin-bottom: 0;
+})
+
+style('form', {
+  margin: 0;
+})
+</pre>
+
+<p>And hr elements works as spacers:</p>
+
+<pre>
+style('hr', {
+  width: 100%;
+  height: 15px;
+  display: block;
+  border: none;
+  margin: 0;
+})
+
+define('test', function() {
+  [
+    dom.p('When we want a little'),
+    dom.hr(),
+    dom.div({'class': 'thing'}, 'Extra'),
+    dom.hr(),
+    dom.button('Breathing room')
+  ]
+})
+</pre>
+
+<div class="test-output">
+    <p>When we want a little</p>
+    <hr>
+    <div class="row">Extra</div>
+    <hr>
+    <button>Breathing room</button>
 </div>
 
 </form>
