@@ -1,0 +1,213 @@
+<html>
+<head>
+<link rel="stylesheet" href="component-styles.css" />
+<style>
+.test-output {
+  /* border: 2px solid rgb(117, 168, 249);*/
+  box-shadow: 0px -2px 3px 0px rgb(146, 182, 242);
+  margin-left: 15px;
+  padding: 15px;
+}
+
+pre {
+  font-size: 16px;
+  color: rgb(52, 126, 210);
+  padding-left: 15px;
+}
+
+h1 {
+  font-family: Georgia;
+  -webkit-font-smoothing: antialiased;
+  font-weight: normal;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<form>
+  <h1>Component Styles</h1>
+  
+  <p>This a minimal set of UI (user interface) controls for building applications that are about writing snippets of text and performing actions.</p>
+
+  <p>We start with a for the typeface: dark gray Helvetica: `style`</p>
+<pre>
+body, input, button, p {
+  font-family: Helvetica;
+  font-size: 18px;
+  color: #555;
+  -webkit-font-smoothing: antialiased;
+}
+</pre>
+
+  <p>Then in general we want to have a space around everything and mostly no borders on things: `style`</p>
+
+<pre>
+input, input[type=text], button, .thing, li, .multiple-choice, .row {
+  border: 0px;
+  padding: 9px 15px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+input::-webkit-input-placeholder {
+  color: #aaa;
+}
+</pre>
+
+  <p>Text inputs have just an underline: `style`</p>
+
+<pre>
+input[type=text] {
+  border-bottom: 2px solid #bbb;
+  width: 20em;
+}
+</pre>
+
+  <p>That's enough to to show a text input with a label: `client test`</p>
+
+<pre>
+dom.p('Software + Consent')
+dom.input({type: 'text', placeholder: 'Write a story'})
+</pre>
+
+      <div class="test-output">
+        <p>Software+Consent</p>
+        <input type="text" placeholder="Write a story">
+      </div>
+
+<p>A really simple button: `style`</p>
+
+<pre>
+button, .multiple-choice {
+  background: rgb(10, 209, 136);
+  color: white;
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+button:hover, .multiple-choice:hover {
+  background-color: rgb(0, 226, 143);
+}
+</pre>
+
+<p>Also applies to the multiple-choice boxes, which get a triangle added: `style`</p>
+
+<pre>
+.multiple-choice {
+  padding-right: 45px;
+  background-image: url('http://i.imgur.com/2NUM1zq.png');
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+  background-position: right 9px center;
+}
+</pre>
+
+<p>They work like this: `client test`</p>
+
+<pre>
+dom.button('Do not push')
+dom.button({'class': 'multiple-choice'}, 'Choices')
+</pre>
+
+      <div class="test-output">
+        <button>Do not push</button>
+        <button class="multiple-choice">Choices</div>
+      </div>
+
+<p>We use hr elements to space things out:</p>
+
+  <pre>
+hr {
+  width: 100%;
+  height: 15px;
+  display: block;
+  border: none;
+  margin: 0;
+}
+</pre>
+
+<p>And need a few other styles to make all of the paragraphs and stuff be spaced out well: `style`</p>
+
+<pre>
+p {
+  margin: 15px 0;
+}
+
+body {
+  margin: 15px;
+  max-width: 26em;
+}
+
+p button {
+  margin-bottom: 0;
+}
+
+form {
+  margin: 0;
+}
+</pre>
+
+<p>Lastly we have a couple classes to separate out independent chunks of content, a thing and a row: `style`</p>
+
+<pre>
+.thing {
+  padding-bottom: 0px;
+  box-shadow: 0px 2px 7px rgba(0,0,0,0.2);
+}
+
+.thing .thing, .row {
+  background: #f9f9f9;
+  box-shadow: none;
+}
+</pre>
+
+<p>And we want buttons to be off to the right side when they're in a row: `style</p>
+
+<pre>
+.row .multiple-choice {
+  float: right;
+  margin-top: -9px;
+  margin-right: 0;
+}
+</pre>
+
+<p>Which let's us make a few nice boxes with stuff in them: `client test`</p>
+
+<pre>
+dom.p('Kynthia started a new project Software+Consent+Bacon. How would you like to split your time?')
+[
+  dom.div({'class': 'row'}, [
+    dom.button({'class': 'multiple-choice'}, '50%'),
+    'Software+Consent'
+  ]),
+  dom.hr(),
+  dom.div({'class': 'thing'}, [
+    dom.p('Cook some bacon'),
+    dom.div({'class': 'thing'}, [
+      dom.p(Erik ignored this'),
+      dom.button('Seek consensus')
+    ])
+  ])
+]
+</pre>
+
+<div class="test-output">
+  <p>Kynthia started a new project Software+Consent+Bacon. How would you like to split your time?</p>
+  <div class="row">
+    <button class="multiple-choice">50%</button>
+    Software+Consent
+  </div>
+  <hr>
+  <div class="thing">
+     <p>Cook some bacon</p>
+     <div class="thing">
+       <p>Erik ignored this</p>
+       <button>Seek consensus</button>
+     </div>
+  </div>
+</div>
+
+</form>
+</body>
+</html>
