@@ -31,6 +31,7 @@ A wrapper for knex with an upsert extension. `database.js`
 
       function hookUpPostgres(callback) {
         pg.connect(url, function(err, freshClient) {
+          if (err) { throw err }
           if (!client) { // in case another thread comes back first
             client = freshClient
           }

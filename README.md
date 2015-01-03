@@ -14,7 +14,12 @@ Two of those narratives are special because they provide commands you can run on
 Running it on your own computer
 -------------------------------
 
-You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.org/) on your computer. Then open a terminal and run:
+You'll need to install [Git](http://git-scm.com/downloads), [Node.js](http://nodejs.org/), [NPM](https://www.npmjs.org/), and Postgres on your computer. You'll have to create a database:
+
+    psql
+    CREATE DATABASE data;
+
+Then open a terminal and run:
 
     git clone https://github.com/erikpukinskis/narrative.git
     cd narrative
@@ -35,7 +40,7 @@ In order to start the server you just do:
 
     cd build/narrative
     npm install
-    foreman start
+    PORT=5000 GITHUB_TOKEN=your-github-token POSTGRES_USER=your-username foreman start
 
 Now open up [http://localhost:5000/myserver](http://localhost:5000/myserver) in your web browser and you should see the editor. Try typing this in:
 
