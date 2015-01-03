@@ -49,23 +49,28 @@ pre, .test-output {
 
   <p>We start with the typeface. Helvetica with slightly darkened headings:</p>
 <pre>
-style('body, input, button, p', {
-  'font-family': 'Helvetica',
-  'font-size': '18px',
-  'color': '#555',
-  '-webkit-font-smoothing': 'antialiased'
+define(['style'], function(style) {
+  return [
+    style('body, input, button, p', {
+      'font-family': 'Helvetica',
+      'font-size': '18px',
+      'color': '#555',
+      '-webkit-font-smoothing': 'antialiased'
+    }),
+    style('h1', {
+      '-webkit-font-smoothing': auto,
+      'font-weight': 'normal,
+      'font-size': '1em',
+      'padding-top': '25px';
+    })
+  ]
 })
 
-define('h1', {
-  -webkit-font-smoothing: auto,
-  font-weight: normal,
-  font-size: 1em,
-  padding-top: 25px;
-})
-
-define('test', function() {
-  dom.h1('Gives you headings with space above them')
-  dom.p('And paragraphs like this')
+define('test', ['dom'], function(dom) {
+  return [
+    dom.h1('Gives you headings with space above them'),
+    dom.p('And paragraphs like this')
+  ])
 })
 </pre>
 

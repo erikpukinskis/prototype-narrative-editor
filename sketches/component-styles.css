@@ -38,7 +38,7 @@ input::-webkit-input-placeholder {
 
 input[type=text] {
   border-bottom: 2px solid #bbb;
-  max-width: 20em;
+  width: 20em;
 }
 
 hr {
@@ -89,7 +89,11 @@ form {
   margin-top: -3px;
 }
 
-.row .multiple-choice {
+.row {
+  line-height: 21px;
+}
+
+.row button {
   float: right;
   margin-top: -9px;
   margin-right: 0;
