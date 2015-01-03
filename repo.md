@@ -20,6 +20,7 @@ In `repo.js`:
         repo.readRef("refs/heads/master", function(error, headHash) {
           repo.headHash = headHash
           repo.loadAs("commit", headHash, function(error, commit) {
+            if (error) { throw error }
             repo.headCommit = commit
             repo.loadAs("tree", commit.tree, function(error, tree) {
               callback(repo.tree = tree)
