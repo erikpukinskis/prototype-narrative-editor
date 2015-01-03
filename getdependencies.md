@@ -8,7 +8,7 @@ Get Dependencies
         var dependencies = []
 
         function searchBlock(block) {
-          var pattern = /(define) *\(.*\[.*]/g
+          var pattern = /(define|requirejs) *\(.*\[.*]/g
           var match = block.source.match(pattern)
           _(match).each(searchLine)
         }

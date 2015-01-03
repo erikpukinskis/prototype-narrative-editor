@@ -1,7 +1,8 @@
 define(['pg', 'knex', 'chain'], function(pg, knex, chain) {
 
   var client
-  var url = process.env.DATABASE_URL || 'postgres://erik:@localhost/data'
+  var user = process.env.POSTGRES_USER || 'erik'
+  var url = process.env.DATABASE_URL || 'postgres://' + user + ':@localhost/data'
   var knex = require('knex')({client: 'pg'})
   var waitingForConnect = []
 
@@ -26,6 +27,7 @@ define(['pg', 'knex', 'chain'], function(pg, knex, chain) {
 
   function hookUpPostgres(callback) {
     pg.connect(url, function(err, freshClient) {
+      if (err) { throw err }
       if (!client) { // in case another thread comes back first
         client = freshClient
       }

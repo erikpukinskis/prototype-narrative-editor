@@ -6,7 +6,8 @@ A wrapper for knex with an upsert extension. `database.js`
     define(['pg', 'knex', 'chain'], function(pg, knex, chain) {
 
       var client
-      var url = process.env.DATABASE_URL || 'postgres://erik:@localhost/data'
+      var user = process.env.POSTGRES_USER || 'erik'
+      var url = process.env.DATABASE_URL || 'postgres://' + user + ':@localhost/data'
       var knex = require('knex')({client: 'pg'})
       var waitingForConnect = []
 
