@@ -43,7 +43,7 @@ pre, .test-output {
     <li><a href="#separation">Separation</a></li>
   </ol>
 
-  <p>This a minimal set of UI (user interface) controls for building applications that are about writing snippets of text and performing actions.</p>
+  <p>This a minimal set of UI (user interface) controls for typing and pushing buttons and stuff.</p>
 
   <a name="type"><h1>Type</h1></a>
 
@@ -60,7 +60,7 @@ define('h1', {
   -webkit-font-smoothing: auto,
   font-weight: normal,
   font-size: 1em,
-  color: #333
+  padding-top: 25px;
 })
 
 define('test', function() {
@@ -86,6 +86,13 @@ button, .multiple-choice {
   margin-right: 15px;
   margin-bottom: 15px;
 }
+
+style('input, input[type=text], button, .thing, li, .multiple-choice, .row', {
+  'border': '0px',
+  'padding': '9px 15px',
+  'display': 'block',
+  'margin-bottom': '15px'
+})
 
 button:hover, .multiple-choice:hover {
   background-color: rgb(0, 226, 143);
@@ -135,17 +142,6 @@ style('input::-webkit-input-placeholder', {
 })
 </pre>
 
-<p>no borders</p>
-
-<pre>
-style('input, input[type=text], button, .thing, li, .multiple-choice, .row', {
-  'border': '0px',
-  'padding': '9px 15px',
-  'display': 'block',
-  'margin-bottom': '15px'
-})
-</pre>
-
 <p>and an underline:</p>
 
 <pre>
@@ -178,13 +174,11 @@ style('.thing', {
 })
 
 define('test', function() {
-  [
-    dom.p('A flow of words, into which things are placed'),
-    dom.div({'class': 'thing'}, [
-      dom.p('A boy with a button'),
-      dom.button('Button')
-    ])
-  ]
+  dom.p('A flow of words, into which things are placed')
+  dom.div({'class': 'thing'}, [
+    dom.p('A boy with a button'),
+    dom.button('Button')
+  ])
 })
 </pre>
 
@@ -264,7 +258,7 @@ style('form', {
 })
 </pre>
 
-<p>And hr elements works as spacers:</p>
+<p>And hr elements work as spacers:</p>
 
 <pre>
 style('hr', {
