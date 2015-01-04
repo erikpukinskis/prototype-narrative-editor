@@ -5,6 +5,17 @@ body, input, button, p {
   -webkit-font-smoothing: antialiased;
 }
 
+p, h1 {
+  margin: 12px 0;
+}
+
+h1 {
+  -webkit-font-smoothing: auto;
+  font-weight: normal;
+  font-size: 1em;
+  padding-top: 15px;
+}
+
 input, input[type=text], button, .thing, .multiple-choice, .row {
   border: 0px;
   padding: 9px 15px;
@@ -49,21 +60,14 @@ hr {
   margin: 0;
 }
 
-p, h1 {
-  margin: 12px 0;
-}
-
-h1 {
-  -webkit-font-smoothing: auto;
-  font-weight: normal;
-  font-size: 1em;
-  padding-top: 15px;
-}
-
 body {
   margin: 15px;
-  max-width: 26em;
   line-height: 1.3em;
+}
+
+.page {
+  margin: 0 auto;
+  max-width: 26em;
 }
 
 p button {
