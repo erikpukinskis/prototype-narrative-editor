@@ -1,6 +1,25 @@
 Load
 ----
 
+How a test injects a paragraph in the DOM on the client:
+
+ - eval all code blocks
+ - see if test was defined. If so, grab the module and undefine it
+ - save it out for requirejs somehow
+ - send the module id down to the browser with a block id (means we need some concept of block ids)
+ - load it client side and inject it into the DOM
+
+How we can have a working server:
+
+When we make a change:
+ - which servers are live? load the freshest libs. reload them.
+ - which servers are baked? load them on a different port with the fresh libs and mark those live
+
+When we commit a change:
+ - mark the lib baked.
+ - which servers are baked? unload all the fresh libs. leave the committed ones. or go back to the db and get the most recently committed one. reload the servers.
+
+
 `load.js`:
 
 
