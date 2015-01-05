@@ -152,24 +152,28 @@ This goes in `editor.js`:
           whenIStopAskingYouTo(saveNow)
         }
 
-        function moveCursor(columnsToMove, linesToMove) {
-          return function() {
-            var previousId = lines[cursor.line].id
-            var line = cursor.line + linesToMove
-            line = limit(line, 0, lines.length - 1)
+        function move(columnsToMove, linesToMove) {
+          var previousId = lines[cursor.line].id
+          var line = cursor.line + linesToMove
+          line = limit(line, 0, lines.length - 1)
 
-            if (cursor.line != line) {
-              $('.line-'+previousId).removeClass('active')
-              cursor.line = line
-              activate(cursor.line)
-            }
-
-            var column = cursor.column + columnsToMove
-            column = limit(column, 0, getLine(cursor.line).length)
-            cursor.column = column
-
+          if (cursor.line != line) {
+            $('.line-'+previousId).removeClass('active')
+            cursor.line = line
             activate(cursor.line)
-            scrollToReveal('.line-'+lines[cursor.line].id)
+          }
+
+          var column = cursor.column + columnsToMove
+          column = limit(column, 0, getLine(cursor.line).length)
+          cursor.column = column
+
+          activate(cursor.line)
+          scrollToReveal('.line-'+lines[cursor.line].id)
+        }
+
+        function presetMove(columns, lines) { 
+          return function() {
+            move(columns, lines)
           }
         }
 
@@ -197,13 +201,15 @@ This goes in `editor.js`:
             return splitLine(getLine(cursor.line), cursor.column)
           },
 
-          right: moveCursor(1,0),
+          move: move,
 
-          left: moveCursor(-1,0),
+          right: presetMove(1,0),
 
-          down: moveCursor(0,1),
+          left: presetMove(-1,0),
 
-          up: moveCursor(0,-1),
+          down: presetMove(0,1),
+
+          up: presetMove(0,-1),
 
           backspace: function() {
             var parts = this.lineSplitAtCursor()
