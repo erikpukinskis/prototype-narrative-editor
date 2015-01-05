@@ -200,6 +200,10 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
                 var char = String.fromCharCode(event.keyCode)
                 editor.type(char)
               }
+
+              document.addEventListener('paste', function(event){
+                editor.type(event.clipboardData.getData('text'))
+              })
             }
 
             new KeyboardCatcher()
