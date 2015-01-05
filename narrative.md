@@ -204,6 +204,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
               document.addEventListener('paste', function(event){
                 var contents = event.clipboardData.getData('text')
+                console.log(contents.split('\n'))
                 editor.type(contents)
                 editor.move(contents.length, 0)
               })
