@@ -4,7 +4,9 @@ Todo
 Timebox dogfooding chores:
 
  - [X] Use document instead of focus-input
- - [ ] Paste (http://datatables.net/blog/2014-01-31)
+ - [X] Paste (http://datatables.net/blog/2014-01-31)
+ - [X] Move cursor to end of paste
+ - [ ] Handle pasted carriage returns well
  - [ ] Separate live and baked instances that get reloaded as save- and commit-time respectively
  - [ ] Cut (optional, https://github.com/timdown/rangy)
 
@@ -23,6 +25,8 @@ That'll be 0.6.0, hot running.
 Backlog
 -------
 
+ - Enter key from first line
+ - Backspacing onto first line
  - Server-side js test blocks
  - Client-side data structures get rebuilt as-you-type (change propagation framework?)
  - Load deps from db after restart

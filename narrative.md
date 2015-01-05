@@ -199,10 +199,13 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
               document.onkeypress = function(event) {
                 var char = String.fromCharCode(event.keyCode)
                 editor.type(char)
+                return false
               }
 
               document.addEventListener('paste', function(event){
-                editor.type(event.clipboardData.getData('text'))
+                var contents = event.clipboardData.getData('text')
+                editor.type(contents)
+                editor.move(contents.length, 0)
               })
             }
 
