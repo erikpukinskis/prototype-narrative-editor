@@ -158,7 +158,6 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         <script src="require.js"></script>
 
         <body>
-          <input id="focus-input">
           <div class="narrative"></div>
         </body>
 
@@ -168,21 +167,8 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
             var editor
 
-            // TEMPLATING
-
-            function div(options) {
-              classString = (options.classes || []).join(' ')
-              return $('<div class="' + classString + '">' + options.html + '</div>')
-            }
-
-
-
-            // FOCUS-INPUT
-
-            FocusInput = function() {
-              var el = $('#focus-input')
-
-              function copyText(e) {
+            KeyboardCatcher = function() {
+              function handleAction(e) {
                 var number = e.keyCode
                 var code = e.shiftKey ? 'shift-' : ''
                 code = code + number
@@ -200,24 +186,23 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
                 if (action) {
                   editor[action]()
-                  return false
-                } else {
-                  setTimeout(function() {
-                    var text = el.val()
-                    editor.type(text)
-                    el.val('')
-                  })
+                  return true
                 }
-
-                return true
               }
 
-              el.on('keydown', copyText)
-              el.on('paste', copyText)
-              el.focus()
+              document.onkeydown = function(event) {
+                if (handleAction(event)) {
+                  event.preventDefault()
+                }
+              }
+
+              document.onkeypress = function(event) {
+                var char = String.fromCharCode(event.keyCode)
+                editor.type(char)
+              }
             }
 
-            new FocusInput()
+            new KeyboardCatcher()
 
 
             // ROUTER
@@ -310,23 +295,6 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
           opacity: 0.1;
         }
 
-        #focus-input {
-          outline: 0;
-          box-sizing: border-box;
-          position: fixed;
-          background: rgba(0,0,0,0);
-          border: 10px solid rgba(0,0,0,0);
-          color: rgba(0,0,0,0);
-          width: 100%;
-          height: 100%;
-          top: 0;
-          left: 0;
-          z-index: 1;
-        }
-
-        #focus-input:focus {
-          border: 10px solid rgba(0, 255, 136, 0.1);
-        }
 
         @-webkit-keyframes blinker {  
           from { opacity: 1; }
@@ -344,7 +312,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
           vertical-align: -.2em;
         }
 
-        #focus-input:focus + .narrative .cursor {
+        .narrative .cursor {
           display: inline-block;
         }
 

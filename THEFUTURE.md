@@ -1,11 +1,9 @@
 Todo
 ----
 
- - [X] Commit when I click commit
-
 Timebox dogfooding chores:
 
- - [ ] Use document instead of focus-input
+ - [X] Use document instead of focus-input
  - [ ] Paste (http://datatables.net/blog/2014-01-31)
  - [ ] Separate live and baked instances that get reloaded as save- and commit-time respectively
  - [ ] Cut (optional, https://github.com/timdown/rangy)
