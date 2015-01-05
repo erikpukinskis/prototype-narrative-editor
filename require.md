@@ -1,6 +1,33 @@
 RequireJS
 ---------
 
+Might be worth including some middleware here:
+
+    define(function() {
+      function ifUrlMatches(pattern, middleware) {
+        return function(request, response, next) {
+          if requestMatchesPattern(request, pattern) {
+            middleware.apply(arguments)
+          } else {
+            next()
+          }
+        }
+      }
+
+      function nameFromRequestMatchesPattern(request, ) {
+        var pattern = /^([a-z\/.]+)\.js$/
+        var partsOfTheAddress = request.url.match(pattern)
+        if (!partsOfTheAddress) { return }
+        return partsOfTheAddress[1]        
+      }
+
+      return {
+        middleware: ifUrlMatches(/^([a-z\/.]+)\.js$/, function(request, response, next) {
+          
+        })
+      }
+    })
+
 `require.js` is an excellent javascript loader. It encourages you to separate code into modules that run in their own namespaces, which is a totally groovy practice.
 
     /*

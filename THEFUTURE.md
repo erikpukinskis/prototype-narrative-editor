@@ -12,11 +12,11 @@ Timebox dogfooding chores:
 
 That's 0.5.0, dogfooding. Then we can move on to feedback:
 
- - [ ] A test in an `introspect` block injects a paragraph in the DOM on the client
- - [ ] Styles are swapped out as-you-type
- - [ ] Client-side js gets re-loaded as-you-type
- - [ ] Server-side lib reloading works with `introspect`
- - [ ] Servers reloaded with `introspect`
+ - [ ] 'client js test' command block injects a paragraph in the DOM
+ - [ ] 'style' blocks are swapped out as-you-type
+ - [ ] 'client js' blocks gets re-loaded as-you-type
+ - [ ] 'lib' blocks reload server-side
+ - [ ] 'server' blocks reloaded
  - [ ] Remove ticked commands
 
 That'll be 0.6.0, hot running.
@@ -25,7 +25,7 @@ That'll be 0.6.0, hot running.
 Backlog
 -------
 
- - Server-side js test running with `introspect`
+ - Server-side js test blocks
  - Client-side data structures get rebuilt as-you-type (change propagation framework?)
  - Load deps from db after restart
  - Actually make the narratives read well
