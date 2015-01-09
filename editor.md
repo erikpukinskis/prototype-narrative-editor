@@ -241,9 +241,8 @@ This goes in `editor.js`:
             if (letters.length < 1) { return }
             var parts = this.lineSplitAtCursor()
             var string = parts.before.concat(letters, parts.after)
-
             setLine(cursor.line, string)
-            this.right()
+            this.move(letters.length, 0)
             activate(cursor.line)
             save()
           },

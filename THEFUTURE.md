@@ -6,7 +6,8 @@ Timebox dogfooding chores:
  - [X] Use document instead of focus-input
  - [X] Paste (http://datatables.net/blog/2014-01-31)
  - [X] Move cursor to end of paste
- - [ ] Handle pasted carriage returns well
+ - [X] Handle pasted carriage returns well
+ - [ ] Fix the already listing on 5100 issue
  - [ ] Separate live and baked instances that get reloaded as save- and commit-time respectively
  - [ ] Cut (optional, https://github.com/timdown/rangy)
 
