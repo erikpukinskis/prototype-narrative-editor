@@ -33,6 +33,7 @@ When we commit a change:
       function rememberDependencies(name, compiled) {
         getDependencies(compiled, function(dependencies) {
           dependencies.forEach(function(dep) {
+            if (dep == name) { return }
             if (!narrativesThatDependOn[dep]) { narrativesThatDependOn[dep] = {}}
             narrativesThatDependOn[dep][name] = true
           })
@@ -68,11 +69,11 @@ When we commit a change:
         }
 
         function startServer(server) {
-          console.log('\n+=================+\n')
+          console.log('\n##=================##')
 
           if (server && server.start) {
-            console.log('Starting', name)
             port = getPort(name)
+            console.log('Starting', name, 'on port', port)
             server.start(port)
             servers[name].push(server)
             ports[name] = port

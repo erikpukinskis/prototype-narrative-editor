@@ -18,6 +18,7 @@ This `server.js` is what you use to set up an Express/Node server:
 
       Server.prototype.start = function(port) { 
         this.sockets = sockets = []
+        this.port = port
 
         this.server = http.createServer(this.app)
         this.server.listen(port)
@@ -33,8 +34,9 @@ This `server.js` is what you use to set up an Express/Node server:
       }
 
       Server.prototype.stop = function (callback) {
+        var port = this.port
         this.server.close(function () {
-          console.log('Server closed!')
+          console.log('Server closed!', port, 'should be free.')
           if (callback) { callback() }
         })
         this.sockets.forEach(function(socket) {
