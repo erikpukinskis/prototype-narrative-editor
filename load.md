@@ -9,17 +9,6 @@ How a test injects a paragraph in the DOM on the client:
  - send the module id down to the browser with a block id (means we need some concept of block ids)
  - load it client side and inject it into the DOM
 
-How we can have a working server:
-
-When we make a change:
- - which servers are live? load the freshest libs. reload them.
- - which servers are baked? load them on a different port with the fresh libs and mark those live
-
-When we commit a change:
- - mark the lib baked.
- - which servers are baked? unload all the fresh libs. leave the committed ones. or go back to the db and get the most recently committed one. reload the servers.
-
-
 `load.js`:
 
 
@@ -125,3 +114,20 @@ When we commit a change:
         reloadDependents(name, compiled)
       }
     })
+
+
+In the future we might want to differentiate between live and baked servers. Although honestly I don't really know. Maybe you can just tag releases and you run off a release. At some point we want to have urls like:
+
+narrative-0-4-erikpukinskis.narratives.com/
+
+For now they just run on different ports which I guess is fine.
+
+When we make a change:
+ - which servers are live? load the freshest libs. reload them.
+ - which servers are baked? load them on a different port with the fresh libs and mark those live
+
+When we commit a change:
+ - mark the lib baked.
+ - which servers are baked? unload all the fresh libs. leave the committed ones. or go back to the db and get the most recently committed one. reload the servers.
+
+

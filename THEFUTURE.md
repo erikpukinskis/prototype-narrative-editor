@@ -1,18 +1,7 @@
 Todo
 ----
 
-Timebox dogfooding chores:
-
- - [X] Use document instead of focus-input
- - [X] Paste (http://datatables.net/blog/2014-01-31)
- - [X] Move cursor to end of paste
- - [X] Handle pasted carriage returns well
- - [ ] Fix the already listing on 5100 issue
- - [ ] Separate live and baked instances that get reloaded as save- and commit-time respectively
- - [ ] Cut (optional, https://github.com/timdown/rangy)
-
-That's 0.5.0, dogfooding. Then we can move on to feedback:
-
+ - [X] Dogfooding fixes
  - [ ] 'client js test' command block injects a paragraph in the DOM
  - [ ] 'style' blocks are swapped out as-you-type
  - [ ] 'client js' blocks gets re-loaded as-you-type
@@ -26,6 +15,8 @@ That'll be 0.6.0, hot running.
 Backlog
 -------
 
+ - Some more intelligent approach to multiple versions of servers running at once
+ - Cut (https://github.com/timdown/rangy)
  - Enter key from first line
  - Backspacing onto first line
  - Server-side js test blocks

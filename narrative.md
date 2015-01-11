@@ -436,7 +436,7 @@ The first is `package.json`, which describes the various things running the serv
 
         {
           "name": "narrative",
-          "version": "0.4.0",
+          "version": "0.5.0",
           "dependencies": {
             "express": "*",
             "underscore": "*",
