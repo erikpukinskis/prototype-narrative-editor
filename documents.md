@@ -3,7 +3,7 @@ Documents
 
 `documents.js`:
 
-    define(['database', 'chain', 'chai', 'pg-escape'], function(database, chain, chai, escape) {
+    define(['database', 'chain', 'chai', 'pg-escape', 'path'], function(database, chain, chai, escape, path) {
       var expect = chai.expect
 
       function set(key, value, callback) {
@@ -100,6 +100,7 @@ Documents
         } else {
           console.log("Getting", name, "from the documents api")
           get(name, function(document) {
+            response.contentType(path.basename(name))
             response.send(document)
           })
         }
