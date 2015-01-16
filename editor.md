@@ -1,8 +1,7 @@
-Editor
-------
+# Editor
 
 This goes in `editor.js`:
-
+`server js
     define(['underscore', 'scrolltoreveal', 'dom'], function(_, scrollToReveal, dom) {
       var div = dom.div
 
@@ -193,7 +192,7 @@ This goes in `editor.js`:
           el.addClass('active')
           var absolute = el.find('.absolute')
           absolute.html(renderLineWithCursor(line, cursor))
-          absolute.css('width', el.width()+'px')
+          absolute.css('max-width', el.width()+'px')
         }
 
         _(this).extend({
@@ -274,22 +273,27 @@ This goes in `editor.js`:
             save()
           },
 
-          indent: function() {
+          indent: function(direction) {
+            direction = direction || 1
+
+            var lineKinds = ['heading', 'prose', 'command', 'code']
+
             var line = lines[cursor.line]
-            line.kind = 'code'
-            var el = $('.line-'+line.id)
-            el.removeClass('prose')
-            el.addClass('code')
+            var originalKind = line.kind
+            var depth = lineKinds.indexOf(originalKind)
+            var nextKind = lineKinds[depth+direction]
+            console.log(direction, lineKinds, line, originalKind, depth, nextKind)
+            if (nextKind) {
+              line.kind = nextKind
+              var el = $('.line-'+line.id)
+              el.removeClass(originalKind)
+              el.addClass(nextKind)
+            }
             save()
           },
 
           unindent: function() {
-            var line = lines[cursor.line]
-            line.kind = 'prose'
-            var el = $('.line-'+line.id)
-            el.removeClass('code')
-            el.addClass('prose')
-            save()
+            this.indent(-1)
           },
 
           bind: function(selector) {
