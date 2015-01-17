@@ -2,11 +2,15 @@ Todo
 ----
 
  - [X] Dogfooding fixes
- - [ ] 'client js test' command block injects a paragraph in the DOM
+ - [ ] Editor loads from a library block
+  - [ ] Get compile to recognize library command blocks
+ - [ ] All libraries are in library blocks
+ - [ ] All servers are in server blocks
+ - [ ] All files are in file blocks
+ - [ ] 'client test' block injects a paragraph in the DOM
  - [ ] 'style' blocks are swapped out as-you-type
- - [ ] 'client js' blocks gets re-loaded as-you-type
- - [ ] 'lib' blocks reload server-side
- - [ ] 'server' blocks reloaded
+ - [ ] 'javascript lib' blocks gets re-loaded as-you-type on the client
+ - [ ] 'javascript lib' blocks reload server-side
  - [ ] Remove ticked commands
 
 That'll be 0.6.0, hot running.

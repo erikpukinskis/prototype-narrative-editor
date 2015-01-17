@@ -1,7 +1,6 @@
 # Editor
 
-This goes in `editor.js`:
-`server js
+`library editor.js
     define(['underscore', 'scrolltoreveal', 'dom'], function(_, scrollToReveal, dom) {
       var div = dom.div
 

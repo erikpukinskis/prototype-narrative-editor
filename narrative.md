@@ -30,9 +30,49 @@ The Server
           var server = new Server()
           var repo = new Repo('erikpukinskis/narrative', process.env.GITHUB_TOKEN)
 
+          var prefixes = {
+            heading: '# ',
+            prose:   '',
+            command: '`',
+            code:    '    '
+          }
+
+          function stringToLine(string) {
+            var originalString = string
+            var kindOfString = 'prose'
+            for (kind in prefixes) {
+              if (kind == 'prose') { continue }
+              var prefix = new RegExp('^' + prefixes[kind])
+              if (string.match(prefix)) {
+                string = string.replace(prefix,'')
+                var kindOfString = kind
+                break
+              }
+            }
+
+            var line = {
+              string: string,
+              kind: kindOfString
+            }
+            console.log('line', line, originalString)
+            return line
+          }
+
+          function sourceToNarrative(source, name) {
+            var lines = source.split('\n').map(function(string) {
+              return stringToLine(string)
+            })
+
+            return {
+              name: name,
+              lines: lines
+            }
+          }
+
           function docToSource(doc) {
             return _(doc.lines).map(function(line) {
-              var prefix = line.kind == 'code' ? '    ' : ''
+              var prefix = prefixes[line.kind]
+
               return prefix + line.string
             }).join('\n')
           }
@@ -49,22 +89,6 @@ The Server
             document.name = name
 
             return document
-          }
-
-          function sourceToNarrative(source, name) {
-            var lines = source.split('\n').map(function(string) {
-              if (string.match(/^    /)) {
-                string = string.replace(/$    /,'')
-                return {string: string, kind: 'code'}
-              } else {
-                return {string: string, kind: 'prose'}
-              }
-            })
-
-            return {
-              name: name,
-              lines: lines
-            }        
           }
 
           function editor(xxxx, response) {
@@ -266,7 +290,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
         }
 
         .narrative {
-          font-family: Georgia;
+          font-family: Helvetica;
           font-size: 20px;
           max-width: 950px;
           margin: 1.5em auto;
@@ -277,6 +301,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
           line-height: 1.6em;
           min-height: 1.6em;
           white-space: pre-wrap;
+          font-sie: 1em;
         }
 
         .line.prose, h1 {
@@ -284,19 +309,35 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
         }
 
         .line.prose {
-          margin-bottom: 1em;
+          margin: 12px;
         }
 
-        .line.code {
-          color: #00C8A0;
+        .line.heading {
+          color: #222;
+          padding-top: 15px;
+          margin: 12px;
+        }
+
+        .line.code, .line.command {
+          color: rgb(52, 126, 210);
           padding-left: 40px;
           font-family: Courier;
+        }
+
+        .line.command {
+          color: #00C8A0;
+          padding-bottom: 12px;
+        }
+
+        .line.command .absolute, .line.command .static {
+          background-color: #F5FFFC;
+          display: table-cell;
         }
 
         .line .static {
         }
 
-        .line .absolute {
+        .line .absolute, .line.command .absolute {
           display: none;
           position: absolute;
           z-index: 0;
