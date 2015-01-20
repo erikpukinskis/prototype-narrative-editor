@@ -325,16 +325,14 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
         }
 
         .line.command {
-          color: #00C8A0;
           padding-bottom: 12px;
         }
 
         .line.command .absolute, .line.command .static {
-          background-color: #F5FFFC;
+          color: white;
+          background: rgba(52,126,210, 0.7);
+          border-radius: 1px;
           display: table-cell;
-        }
-
-        .line .static {
         }
 
         .line .absolute, .line.command .absolute {
@@ -361,15 +359,32 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
           -webkit-animation: blinker 500ms cubic-bezier(1,-0.21,0,1.33) infinite alternate;  
           display: none;
           text-decoration: blink;
-          background: rgba(0,0,0,0.3);
           width: 2px;
-          margin-right: -2px;
+          margin-left: -1px;
+          margin-right: -1px;
           height: 1.2em;
           vertical-align: -.2em;
+          border-radius: 1px;
         }
 
         .narrative .cursor {
           display: inline-block;
+        }
+
+        .line.command .cursor {
+          background:  rgba(255,255,255, 0.9);
+        }
+
+        .line.code .cursor {
+          background: rgba(52,126,210, 0.7)
+        }
+
+        .line.heading .cursor {
+          background: rgba(0,0,0,0.7);          
+        }
+
+        .line.prose .cursor {
+          background: rgba(0,0,0,0.5);
         }
 
         .marker {
@@ -427,7 +442,6 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
             font-size: 13px
           }
         }
-
 
         #commit {
           position: fixed;
