@@ -1,6 +1,6 @@
 ! Commit Editor
 
-`commiteditor.js`:
+X `commiteditor.js`:
 
     define(['dom'], function(dom) {
       var form = dom.form

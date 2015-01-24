@@ -1,7 +1,7 @@
 Get Dependencies
 ----------------
 
-`getdependencies.js`:
+X `getdependencies.js`:
 
     define(['compile', 'underscore', 'indent'], function(compile, _, indent) {
       return function (compiled, callback) {

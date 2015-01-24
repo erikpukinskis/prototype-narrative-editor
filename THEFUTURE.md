@@ -1,20 +1,7 @@
 Todo
 ----
 
- - [X] Dogfooding fixes
- - [ ] Editor loads from a library block
-  - [ ] Get compile to recognize library command blocks
- - [ ] All libraries are in library blocks
- - [ ] All servers are in server blocks
- - [ ] All files are in file blocks
- - [ ] 'client test' block injects a paragraph in the DOM
- - [ ] 'style' blocks are swapped out as-you-type
- - [ ] 'javascript lib' blocks gets re-loaded as-you-type on the client
- - [ ] 'javascript lib' blocks reload server-side
- - [ ] Remove ticked commands
-
-That'll be 0.6.0, hot running.
-
+OK, so right now it doesn't seem like the hot loading is working well. And the bootstrapping is in a weird place. And I don't feel comfortable dogfooding, but I put a bunch of energy into that direction, and it doesn't feel like staying in the filesystem will work either. Boo.
 
 Backlog
 -------

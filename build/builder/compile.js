@@ -1,4 +1,31 @@
 define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
+  var prefixes = {
+    heading: '# ',
+    prose:   '',
+    command: '`',
+    code:    '    '
+  }
+
+  function stringToLine(string) {
+    var kindOfLine = 'prose'
+
+    for (kind in prefixes) {
+      if (kind == 'prose') { continue }
+      var prefix = new RegExp('^' + prefixes[kind])
+      if (string.match(prefix)) {
+        string = string.replace(prefix,'')
+        kindOfLine = kind
+        break
+      }
+    }
+
+    return {
+      string: string,
+      kind: kindOfLine
+    }
+  }
+
+
   function isCode(block) { return block.kind == 'code' }
   function hasFilename(block) { return !!block.filename }
   function isSource(block) { return isCode(block) && hasFilename(block) }
@@ -12,6 +39,10 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
 
   endsWith = function(string, pattern) {
     return !!(string||'').match(new RegExp(pattern + '$'))
+  }
+
+  isEmpty = function(string) {
+    return string.match(/$\s?^/)        
   }
 
   Compiled = function(blocks, run) {
@@ -46,12 +77,11 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
     for (i in lines = content.split("\n")) {
       var line = lines[i];
 
-      if (startsWith(line, '    ')) { 
-        kind = 'code';
-      } else if (line.match(/$\s?^/)) {
+      if (isEmpty(line)) {
         // keep kind as whatever it was
       } else {
-        kind = 'comment';
+        kind = stringToLine(line).kind
+        line = stringToLine(line).string
       }
 
       if (block.kind != kind) {
@@ -76,21 +106,25 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
 
   extractFilenamesAndSource = function(blocks) {
     var filenameLastSeen = null
+    var commandLastSeen = null
 
+    // console.log(JSON.stringify(blocks, null, 2))
     blocks.forEach(function(block) {
       // TODO: This needs to also identify center blocks now.
       var inAComment = block.kind == 'comment'
-      var inCode = !inAComment
+      var inCode = block.kind == 'code'
       var matches = block.lines.join('').match(/`([^`]+)`/)
       var hasBackticks = !!matches
 
-      if (inCode) {
+      if (block.kind == 'command') {
+        // console.log(block.lines, 'lines')
+        // console.log('lineee is ', block.lines[0])
+        commandLastSeen = block.lines[0]
+      } else if (inCode) {
         block.source = block.lines.join("\n").replace(/( *^| *\n)    /g, "$1")
       }
       if (inAComment && hasBackticks) {
         filenameLastSeen = matches[1]
-      } else if (inCode && !filenameLastSeen) {
-        block.unassigned = true
       } else if (inCode && filenameLastSeen) {
         var parts = filenameLastSeen.split(' ')
         block.filename = parts[parts.length-1]
@@ -98,6 +132,11 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
           block.command = parts[0]
         }
         filenameLastSeen = null
+      } else if (inCode && commandLastSeen) {
+        block.command = commandLastSeen
+        commandLastSeen = null
+      } else {
+        block.unassigned = true
       }
     })
   }
@@ -110,10 +149,17 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
     var blocks = getBlocks(source)
     indent('   ---  Compiled ' + summarize(source) + '... to ' + blocks.length + ' blocks')
     extractFilenamesAndSource(blocks)
+    console.log('         ', blocks.map(function(block) { 
+      var short = block.kind.substring(0,4) || ''
+      if (block.command) { short = short + ':' + block.command }
+      return short
+    }).join('|'))
     callback(new Compiled(blocks)) 
   }
 
   compile.summarize = summarize
+  compile.prefixes = prefixes
+  compile.stringToLine = stringToLine
 
   return compile
 })

@@ -30,34 +30,6 @@ The Server
           var server = new Server()
           var repo = new Repo('erikpukinskis/narrative', process.env.GITHUB_TOKEN)
 
-          var prefixes = {
-            heading: '# ',
-            prose:   '',
-            command: '`',
-            code:    '    '
-          }
-
-          function stringToLine(string) {
-            var originalString = string
-            var kindOfString = 'prose'
-            for (kind in prefixes) {
-              if (kind == 'prose') { continue }
-              var prefix = new RegExp('^' + prefixes[kind])
-              if (string.match(prefix)) {
-                string = string.replace(prefix,'')
-                var kindOfString = kind
-                break
-              }
-            }
-
-            var line = {
-              string: string,
-              kind: kindOfString
-            }
-            console.log('line', line, originalString)
-            return line
-          }
-
           function sourceToNarrative(source, name) {
             var lines = source.split('\n').map(function(string) {
               return stringToLine(string)
@@ -71,7 +43,7 @@ The Server
 
           function docToSource(doc) {
             return _(doc.lines).map(function(line) {
-              var prefix = prefixes[line.kind]
+              var prefix = compile.prefixes[line.kind]
 
               return prefix + line.string
             }).join('\n')
@@ -135,6 +107,7 @@ The Server
 
             documents.set(doc.name, doc, function() {
               compile(docToSource(doc), function(compiled) {
+                console.log(JSON.stringify(compiled, null, 2))
                 load(doc.name, compiled)
                 response.json({ok: true})
               })

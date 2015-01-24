@@ -1,7 +1,7 @@
 Underscore
 ----------
 
-`underscore.js` is functions that should've been in JavaScript:
+X `underscore.js` is functions that should've been in JavaScript:
 
     //     Underscore.js 1.6.0
     //     http://underscorejs.org

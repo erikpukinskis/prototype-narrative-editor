@@ -1,7 +1,7 @@
 Scroll To Reveal
 ----------------
 
-`scrolltoreveal.js`:
+X `scrolltoreveal.js`:
 
     define(function() {
       return function scrollToReveal(selector) {
