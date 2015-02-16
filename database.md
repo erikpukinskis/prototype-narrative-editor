@@ -2,7 +2,7 @@ Database
 --------
 
 A wrapper for knex with an upsert extension. `database.js`
-
+`library database.js
     define(['pg', 'knex', 'chain'], function(pg, knex, chain) {
 
       var client

@@ -2,7 +2,7 @@ Underscore
 ----------
 
 X `underscore.js` is functions that should've been in JavaScript:
-
+`library underscore.js
     //     Underscore.js 1.6.0
     //     http://underscorejs.org
     //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors

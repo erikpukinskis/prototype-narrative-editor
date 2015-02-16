@@ -27,7 +27,7 @@ define(['folder', 'compile', 'underscore', 'indent', 'getdependencies'], functio
 
     compile(source, function(compiled) {
       getDependencies(compiled, function(deps) {
-        // What's going on? This never returns.
+        // Whats going on? This never returns.
         deps.push(name)
         indent("DONE! deps are " + deps)
 

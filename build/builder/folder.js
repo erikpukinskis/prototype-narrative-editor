@@ -1,4 +1,6 @@
+console.log('above folder')
 define([], function() {
+  console.log('in folder')
   var fs = require('fs')
 
   return {

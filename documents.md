@@ -2,7 +2,7 @@ Documents
 ---------
 
 X `documents.js`:
-
+`library documents.js
     define(['database', 'chain', 'chai', 'pg-escape', 'path'], function(database, chain, chai, escape, path) {
       var expect = chai.expect
 

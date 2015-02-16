@@ -2,8 +2,10 @@ Folder
 ------
 
 Reads, writes, and moves files. In `folder.js`:
-
+`library folder.js
+    console.log('above folder')
     define([], function() {
+      console.log('in folder')
       var fs = require('fs')
 
       return {

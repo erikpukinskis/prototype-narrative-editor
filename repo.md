@@ -1,7 +1,7 @@
 ! Repo
 
 In `repo.js`:
-
+`library repo.js
     define('repo', ['chai', 'underscore'], function(chai, _) {
       var expect = chai.expect
       var modes = require('js-git/lib/modes')

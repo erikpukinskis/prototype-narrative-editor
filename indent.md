@@ -2,7 +2,7 @@ Indent
 ------
 
 Keeps track of how far in you're indented so when you print stuff out it's a little organized. Goes in `indent.js`
-
+`library indent.js
     define([], function() {
       function isInteger(n) { return parseInt(n) === n };
 

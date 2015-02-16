@@ -23,8 +23,7 @@ What better way is there to start than to describe some necessary conditions for
 The Server
 ----------
 
-`server narrative.js`:
-
+`server narrative.js
         define('narrative', ['server', 'documents', 'compile', 'load', 'repo', 'folder', 'underscore', 'getdependencies', 'build', 'require', 'database', 'chain', 'indent', 'jquery', 'editor', 'scrolltoreveal', 'dom', 'commiteditor'], function(server, documents, compile, load, Repo) {
 
           var server = new Server()
@@ -32,7 +31,7 @@ The Server
 
           function sourceToNarrative(source, name) {
             var lines = source.split('\n').map(function(string) {
-              return stringToLine(string)
+              return compile.stringToLine(string)
             })
 
             return {
@@ -75,7 +74,7 @@ The Server
 
           server.get('/:name', editor)
 
-          server.get('/:name.js', function(request, response, next) {
+          server.get('/xxxx:name.js', function(request, response, next) {
             documents.get('assets/'+request.params.name+'.js', function(document) {
               if (document) {
                 response.send(document)
@@ -133,7 +132,7 @@ The Server
         })
 
 Then we need a javascript file that starts the server. We'll put it in `start.js`:
-
+`file start.js
         var requirejs = require('requirejs')
 
         requirejs(['narrative'], function(server) {
@@ -144,7 +143,7 @@ Writing
 -------
 
 We mentioned `edit.html` above. That's the HTML we are passing down that actually sets up the editor:
-
+`file edit.html
         <!DOCTYPE html>
         <html>
         <head>
@@ -256,7 +255,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         </html>
 
 And we also need a CSS stylesheet to make things pretty, which goes in `styles.css`:
-
+`file styles.css
         body {
           -webkit-font-smoothing: antialiased;
           margin: 0
@@ -449,10 +448,6 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
           border-radius: 2px 0px 0px 2px;
         }
 
-That's it! To start it up, we just do:
-
-        library.take('narrative');
-
 The system
 ----------
 
@@ -461,7 +456,7 @@ Great. So in order for all of those things to actually take part in the real wor
 Luckily, it's 2014 and there's a service called [Heroku](http://heroku.com) that will do all of that for us. We just need to provide them with two more files that show them what to do. 
 
 The first is `package.json`, which describes the various things running the server depends on:
-
+`file package.json
         {
           "name": "narrative",
           "version": "0.5.0",
@@ -485,7 +480,7 @@ The first is `package.json`, which describes the various things running the serv
         }
 
 We also need to tell Heroku what it has to do to start the server. We do that in a `Procfile`:
-
+`file Procfile
         web: node start.js
 
 That just tells them that to start the web server they should run the command "node server.js".

@@ -28,8 +28,8 @@ Might be worth including some middleware here:
       }
     })
 
-`require.js` is an excellent javascript loader. It encourages you to separate code into modules that run in their own namespaces, which is a totally groovy practice.
-
+Requirejs is an excellent javascript loader. It encourages you to separate code into modules that run in their own namespaces, which is a totally groovy practice.
+`library require.js
     /*
      RequireJS 2.1.14 Copyright (c) 2010-2014, The Dojo Foundation All Rights Reserved.
      Available via the MIT or new BSD license.

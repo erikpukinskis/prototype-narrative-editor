@@ -1,4 +1,4 @@
-define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
+define(['documents', 'underscore'], function(documents, _) {
   var prefixes = {
     heading: '# ',
     prose:   '',
@@ -28,10 +28,13 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
 
   function isCode(block) { return block.kind == 'code' }
   function hasFilename(block) { return !!block.filename }
-  function isSource(block) { return isCode(block) && hasFilename(block) }
+  function isSource(block) { 
+    return isCode(block) && hasFilename(block) 
+  }
   function isServer(block) { return block.command == 'server' }
   function isStylesheet(block) { return endsWith(block.filename, '.css') }
   function isLibrary(block) { return block.command == 'library' }
+  function isCommand(block) { return block.kind == 'command' }
 
   startsWith = function(string, pattern) {
     return !!(string||'').match(new RegExp('^' + pattern))
@@ -61,6 +64,7 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
     this.each = {
       source: eachBlock(isSource),
       code: eachBlock(isCode),
+      command: eachBlock(isCommand),
       server: eachBlock(isServer),
       stylesheet: eachBlock(isStylesheet),
       library: eachBlock(isLibrary),
@@ -108,7 +112,6 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
     var filenameLastSeen = null
     var commandLastSeen = null
 
-    // console.log(JSON.stringify(blocks, null, 2))
     blocks.forEach(function(block) {
       // TODO: This needs to also identify center blocks now.
       var inAComment = block.kind == 'comment'
@@ -117,8 +120,6 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
       var hasBackticks = !!matches
 
       if (block.kind == 'command') {
-        // console.log(block.lines, 'lines')
-        // console.log('lineee is ', block.lines[0])
         commandLastSeen = block.lines[0]
       } else if (inCode) {
         block.source = block.lines.join("\n").replace(/( *^| *\n)    /g, "$1")
@@ -134,6 +135,12 @@ define(['folder', 'documents', 'underscore'], function(folder, documents, _) {
         filenameLastSeen = null
       } else if (inCode && commandLastSeen) {
         block.command = commandLastSeen
+        var parts = commandLastSeen.split(' ')
+        var shouldBecomeCode = _(['file', 'server', 'library']).contains(parts[0])
+        if (shouldBecomeCode) { 
+          block.kind = 'code'
+          block.filename = parts[1]
+        }
         commandLastSeen = null
       } else {
         block.unassigned = true

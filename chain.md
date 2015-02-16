@@ -2,7 +2,7 @@ Chain
 -----
 
 X `chain.js` runs a bunch of functions, one after another, waiting for each to respond to a callback
-
+`library chain.js
     define(['chai'], function(chai) {
       var expect = chai.expect
 

@@ -9,9 +9,8 @@ How a test injects a paragraph in the DOM on the client:
  - send the module id down to the browser with a block id (means we need some concept of block ids)
  - load it client side and inject it into the DOM
 
-`load.js`:
-
-
+In `load.js`:
+`library load.js
     define(['documents', 'getdependencies', 'underscore', 'requirejs'], function(documents, getDependencies, _, requirejs) {
       var servers = {}
       var ports = {}

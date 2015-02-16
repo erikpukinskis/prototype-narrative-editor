@@ -2,7 +2,7 @@ Jquery
 ------
 
 Industry standard DOM tools. `jquery.js`
-  
+`library jquery.js
     define(function() {
     if (typeof window === 'undefined') { return }
 

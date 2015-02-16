@@ -2,7 +2,7 @@ Scroll To Reveal
 ----------------
 
 X `scrolltoreveal.js`:
-
+`library scrolltoreveal.js
     define(function() {
       return function scrollToReveal(selector) {
         MINIMUM = 50

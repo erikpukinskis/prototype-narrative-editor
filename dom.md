@@ -1,7 +1,7 @@
 ! Dom
 
 X `dom.js`:
-
+`library dom.js
     define(function() {
       function tagRenderer(tag, options) {
         options = options || {}

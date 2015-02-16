@@ -2,7 +2,7 @@ Express
 -------
 
 This `server.js` is what you use to set up an Express/Node server:
-
+`library server.js
     define(['http', 'body-parser', 'chai', 'underscore'], function(http, bodyParser, chai, _) {
       var expect = chai.expect
       var express = require("express")

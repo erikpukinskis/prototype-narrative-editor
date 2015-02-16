@@ -1,10 +1,9 @@
 # Editor
 
-`library
+`library editor.js
 
     define('editor', ['underscore', 'scrolltoreveal', 'dom'], function(_, scrollToReveal, dom) {
       var div = dom.div
-      console.log('ham')
       function splitLine(string, column) {
         return {
           before: string.slice(0,column),

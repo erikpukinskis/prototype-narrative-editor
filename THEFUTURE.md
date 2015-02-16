@@ -1,7 +1,13 @@
 Todo
 ----
 
-OK, so right now it doesn't seem like the hot loading is working well. And the bootstrapping is in a weird place. And I don't feel comfortable dogfooding, but I put a bunch of energy into that direction, and it doesn't feel like staying in the filesystem will work either. Boo.
+New strategy:
+
+Do just what you have to do to get Bounty up. Start with the first one and go line by line, making it work in the browser however you have to. Maintain a version of the narrative with just the lines up to that point.
+
+Enforce the rule of application-level code is plausibly written and deployed by a non-programer.
+
+[ ] Get browser.on.phone to noop inside an iframe
 
 Backlog
 -------

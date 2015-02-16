@@ -2,7 +2,7 @@ Build
 -----
 
 Reads a narrative and writes files to deploy to heroku. In `build.js`:
-
+`library build.js
     define(['folder', 'compile', 'underscore', 'indent', 'getdependencies'], function(folder, compile, underscore, indent, getDependencies) {
       var _ = underscore
 
@@ -32,7 +32,7 @@ Reads a narrative and writes files to deploy to heroku. In `build.js`:
 
         compile(source, function(compiled) {
           getDependencies(compiled, function(deps) {
-            // What's going on? This never returns.
+            // Whats going on? This never returns.
             deps.push(name)
             indent("DONE! deps are " + deps)
 

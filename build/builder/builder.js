@@ -1,4 +1,5 @@
 requirejs = require('requirejs')
+
 requirejs(['build', 'compile', 'folder', 'indent', 'documents', 'database', 'chain', 'getdependencies'], function(build) {
   var name = process.argv[2]
   console.log('\n|||| |  |   |    |     |      |       |        |         |         '+name+'\n')
