@@ -4,6 +4,31 @@
 
     define('editor', ['underscore', 'scrolltoreveal', 'dom'], function(_, scrollToReveal, dom) {
       var div = dom.div
+
+      function splitArrayOnVariation(array, attribute, callback) {
+        var block = []
+        var previousValue = null
+        array.forEach(function(item, i) {
+          var value = item[attribute]
+          var startingNewBlock = value != previousValue
+          var thereArePreviousValues = !!previousValue
+          var onLastValue = i == array.length-1
+          var doneWithABlock = startingNewBlock
+
+          if (doneWithABlock && thereArePreviousValues) {
+            callback(previousValue, block)
+            block = []
+          }
+
+          block.push(item)
+          previousValue = value
+
+          if (onLastValue) {
+            callback(previousValue, block)
+          }
+        })
+      }
+
       function splitLine(string, column) {
         return {
           before: string.slice(0,column),
@@ -296,9 +321,15 @@
           },
 
           bind: function(selector) {
-            lines.forEach(function(line) {
-              line.id = null
-              $(selector).append(renderLine(line))
+            splitArrayOnVariation(lines, 'kind', function(kind, lines) {
+              lines.forEach(function(line, i) {
+                line.id = null
+                $(selector).append(renderLine(line))
+              })
+              if (kind == 'code') {
+                var source = lines.join('\n')
+                $(selector).append('<div class="test-run">This would be a test.</div>')
+              }
             })
             activate(0)
           }

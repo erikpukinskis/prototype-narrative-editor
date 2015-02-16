@@ -390,6 +390,15 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
           color: #00C8A0;
         }
 
+        .test-run {
+          margin-left: 40px;
+          margin-right: 70px;
+          margin-top: 12px;
+          box-shadow: 0px -2px 3px 0px rgb(192, 216, 255);
+          padding: 15px;
+          border-radius: 4px;
+        }
+
         a {
           color: #9B59B6;
         }
