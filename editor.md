@@ -5,6 +5,11 @@
     define('editor', ['underscore', 'scrolltoreveal', 'dom'], function(_, scrollToReveal, dom) {
       var div = dom.div
 
+      function newId() {
+        return (newId.counter++).toString(36)
+      }
+      newId.counter = 28846
+
       function splitArrayOnVariation(array, attribute, callback) {
         var block = []
         var previousValue = null
@@ -200,14 +205,25 @@
           }
         }
 
-        var counter = 28846
         function renderLine(line) {
-          if (!line.id) { line.id = (counter++).toString(36) }
+          if (!line.id) { line.id = newId() }
           var lineClass = 'line line-'+line.id+' '+line.kind
-          return div({'class': lineClass}, [
+          return div({'class': lineClass, 'data-id': line.id}, [
             div({'class': 'absolute'}, ''),
             div({'class': 'static'}, lineToHtml(line.string, line.kind))
           ])
+        }
+
+        function renderBlock(block) {
+          block.id = newId()
+
+          var postBlockHtml = div({'id': 'post-block-'+block.id})
+          var blockHtml = block.lines.map(function(line, i) {
+            line.id = null
+            return renderLine(line)
+          }).join('')
+
+          return blockHtml + postBlockHtml
         }
 
         function activate(number) {
@@ -224,6 +240,8 @@
             return splitLine(getLine(cursor.line), cursor.column)
           },
 
+          cursor: cursor,
+
           move: move,
 
           right: presetMove(1,0),
@@ -233,6 +251,15 @@
           down: presetMove(0,1),
 
           up: presetMove(0,-1),
+
+          moveToId: function(id) {
+            _(lines).find(function(line, i) {
+              if (line.id == id) {
+                move(-cursor.column, i - cursor.line)
+                return true
+              }
+            })
+          },
 
           backspace: function() {
             var parts = this.lineSplitAtCursor()
@@ -322,14 +349,11 @@
 
           bind: function(selector) {
             splitArrayOnVariation(lines, 'kind', function(kind, lines) {
-              lines.forEach(function(line, i) {
-                line.id = null
-                $(selector).append(renderLine(line))
-              })
-              if (kind == 'code') {
-                var source = lines.join('\n')
-                $(selector).append('<div class="test-run">This would be a test.</div>')
+              var block = {
+                kind: kind,
+                lines: lines
               }
+              $(selector).append(renderBlock(block))
             })
             activate(0)
           }

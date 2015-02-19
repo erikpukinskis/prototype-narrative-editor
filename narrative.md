@@ -198,6 +198,35 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
                 return false
               }
 
+              function distanceToCursor(event) {
+                var cursor = $('.active .cursor').offset()
+                return Math.sqrt(
+                  Math.pow(cursor.left - event.x, 2) 
+                + Math.pow(cursor.top - event.y, 2)
+                )
+              }
+
+              document.onclick = function(event) {
+                var id = $(event.toElement).parent('.line').attr('data-id')
+                editor.moveToId(id)
+
+                var best = 0
+                var bestDistance = 999999
+                var previousColumn
+                do {
+                  var distance = distanceToCursor(event)
+                  if (distance < bestDistance) {
+                    best = editor.cursor.column
+                    bestDistance = distance
+                  }
+
+                  previousColumn = editor.cursor.column
+                  editor.move(1,0)
+                } while(previousColumn != editor.cursor.column)
+
+                editor.move(best - editor.cursor.column, 0)
+              }
+
               document.addEventListener('paste', function(event){
                 var contents = event.clipboardData.getData('text')
                 var lines = contents.split('\n')
@@ -243,6 +272,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
             $.getJSON('/narratives/' + name, function(doc) {
               editor = new Editor(doc.lines, onDocumentChange)
               editor.bind('.narrative')
+              $('title').html(name + ' - Narrative')
             })
 
             var commit = new CommitEditor(name)
@@ -264,7 +294,7 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
         .narrative {
           font-family: Helvetica;
           font-size: 20px;
-          max-width: 950px;
+          max-width: 800px;
           margin: 1.5em auto;
           padding: 0 1em;
         }

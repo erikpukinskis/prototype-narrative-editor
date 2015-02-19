@@ -7,7 +7,8 @@ Do just what you have to do to get Bounty up. Start with the first one and go li
 
 Enforce the rule of application-level code is plausibly written and deployed by a non-programer.
 
-[ ] Get browser.on.phone to noop inside an iframe
+[ ] Get 'bobby follows berries' scenario to run
+[ ] Get bobby.tap to click the button
 
 Backlog
 -------
