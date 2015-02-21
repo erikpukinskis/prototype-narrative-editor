@@ -149,7 +149,9 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
         <head>
           <meta charset="utf-8">
           <title>Narrative</title>
-            <link rel="stylesheet" href="styles.css" />
+          <link rel="stylesheet" href="styles.css" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
         </head>
         <script src="require.js"></script>
 
@@ -201,12 +203,12 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
               function distanceToCursor(event) {
                 var cursor = $('.active .cursor').offset()
                 return Math.sqrt(
-                  Math.pow(cursor.left - event.x, 2) 
-                + Math.pow(cursor.top - event.y, 2)
+                  Math.pow(cursor.left - event.pageX, 2) 
+                + Math.pow(cursor.top - event.pageY, 2)
                 )
               }
 
-              document.onclick = function(event) {
+              function moveCursorToMouse(event) {
                 var id = $(event.toElement).parent('.line').attr('data-id')
                 editor.moveToId(id)
 
@@ -226,6 +228,21 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
                 editor.move(best - editor.cursor.column, 0)
               }
+
+              var documentClick
+              $(document).on('touchstart', function() {
+                  documentClick = true;
+              })
+              $(document).on('touchmove', function() {
+                  documentClick = false;
+              })
+
+              $(document).on('click touchend', function(event) {
+                if (event.type == "click") { documentClick = true }
+                if (documentClick){
+                    moveCursorToMouse(event)
+                }
+              })
 
               document.addEventListener('paste', function(event){
                 var contents = event.clipboardData.getData('text')
