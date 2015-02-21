@@ -89,13 +89,13 @@ The Server
 
             documents.get(name, function(document) {
               if (document) {
-                return response.json(docToNarrative(document, name))
+                return response.json({narrative: docToNarrative(document, name)})
               }
 
               repo.get(name + '.md', function(source, hash) {
                 var narrative = sourceToNarrative(source || '', name)
                 narrative.hash = hash
-                response.json(narrative)
+                response.json({narrative: narrative})
                 documents.set(name, narrative)
               })
             })
@@ -286,10 +286,14 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
               commit.dirty()
             }
 
-            $.getJSON('/narratives/' + name, function(doc) {
-              editor = new Editor(doc.lines, onDocumentChange)
+            $.getJSON('/narratives/' + name, function(response) {
+              editor = new Editor(response.narrative.lines, onDocumentChange)
               editor.bind('.narrative')
               $('title').html(name + ' - Narrative')
+            })
+
+            $.getJSON('/narratives/index', function(response) {
+              console.log(response.index)
             })
 
             var commit = new CommitEditor(name)
