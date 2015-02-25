@@ -72,6 +72,16 @@ The Server
 
           server.get('/', editor)
 
+          server.get('/index', function(request, response) {
+            console.log('scooooob!')
+            documents.where({key: /^narratives\//}, function(records) {
+              names = _(records).map(function(record) {
+                return record.key.split('/')[1]
+              })
+              response.json({names: names})
+            })
+          })
+
           server.get('/:name', editor)
 
           server.get('/xxxx:name.js', function(request, response, next) {
@@ -98,12 +108,6 @@ The Server
                 response.json({narrative: narrative})
                 documents.set(name, narrative)
               })
-            })
-          })
-
-          server.get('/narratives', function(request, response) {
-            documents.where({name: /^narratives\//}).map('id', function(id) {
-              console.log(id)
             })
           })
 
@@ -167,7 +171,7 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
 
         <script>
 
-          require(['editor', 'commiteditor', 'underscore', 'jquery'], function(Editor, CommitEditor){
+          require(['editor', 'commiteditor', 'dom', 'jquery'], function(Editor, CommitEditor, dom){
 
             var editor
 
@@ -298,8 +302,15 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
               $('title').html(name + ' - Narrative')
             })
 
-            $.getJSON('/narratives', function(response) {
-              console.log(response.narratives)
+            $.getJSON('/index', function(response) {
+              var links = response.names.map(function(name) {
+                return dom.a({href: '/'+name}, name)
+              })
+
+              var html = dom.div({class: 'narratives'}, links)
+
+              console.log('got', response.names)
+              $('body').prepend(html)
             })
 
             var commit = new CommitEditor(name)
@@ -513,6 +524,25 @@ And we also need a CSS stylesheet to make things pretty, which goes in `styles.c
           color: white;
           border-radius: 2px 0px 0px 2px;
         }
+
+        .narratives {
+          position: fixed;
+          top: 0;
+          margin: 20px 0 0 20px;
+        }
+
+        .narratives a {
+          display: block;
+          margin-bottom: 20px;
+          font-family: Helvetica;
+        }
+
+        @media (max-width: 1030px) {
+          .narratives {
+            position: static;
+          }
+        }
+
 
 The system
 ----------

@@ -39,6 +39,7 @@ X `dom.js`:
         div: tagRenderer('div'),
         button: tagRenderer('button'),
         form: tagRenderer('form'),
-        input: tagRenderer('input', {close: false})
+        input: tagRenderer('input', {close: false}),
+        a: tagRenderer('a')
       }
     })
