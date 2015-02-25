@@ -101,10 +101,16 @@ The Server
             })
           })
 
+          server.get('/narratives', function(request, response) {
+            documents.where({name: /^narratives\//}).map('id', function(id) {
+              console.log(id)
+            })
+          })
+
           server.post('/narratives', function(request, response) {
             var doc = _(request.body).pick('lines', 'name')
 
-            documents.set(doc.name, doc, function() {
+            documents.set('narratives/'+doc.name, doc, function() {
               compile(docToSource(doc), function(compiled) {
                 console.log(JSON.stringify(compiled, null, 2))
                 load(doc.name, compiled)
@@ -292,8 +298,8 @@ We mentioned `edit.html` above. That's the HTML we are passing down that actuall
               $('title').html(name + ' - Narrative')
             })
 
-            $.getJSON('/narratives/index', function(response) {
-              console.log(response.index)
+            $.getJSON('/narratives', function(response) {
+              console.log(response.narratives)
             })
 
             var commit = new CommitEditor(name)

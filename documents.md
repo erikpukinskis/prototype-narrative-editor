@@ -31,6 +31,32 @@ X `documents.js`:
         })
       }
 
+      function hashToSqlWhereClause(hash) {
+        for (key in hash) {
+          var forwardSlashPattern = /\\\//g
+          var regexpString = hash[key].source
+          var like = regexpString.replace(forwardSlashPattern, '/')
+
+          like = '%'+like+'%'
+          return escape('%I LIKE %L', key, like)
+        }
+      }
+
+      hashToSqlWhereClause.test = function() {
+        // makes a nice LIKE clause
+        var clause = hashToSqlWhereClause({name: /narr/})
+        expect(clause).to.equal("name LIKE '%narr%'")
+
+        // unescapes forward slashes
+        clause = hashToSqlWhereClause({name: /narr\//})
+        expect(clause).to.equal("name LIKE 'narr%'")
+
+        console.log("wowza!")
+      }
+
+      hashToSqlWhereClause.test()
+
+
       function test() {
         console.log('testing')
 
