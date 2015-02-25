@@ -4,8 +4,6 @@ Documents
 X `documents.js`:
 `library documents.js
     define(['database', 'chain', 'chai', 'pg-escape', 'path'], function(database, chain, chai, escape, path) {
-      require('prototypes')
-
       var expect = chai.expect
 
       function set(key, value, callback) {
@@ -42,24 +40,33 @@ X `documents.js`:
         for (key in hash) {
           var regexpString = hash[key].source
           var like = unescapeSlashes(regexpString)
-          if (like.startsWith('/')) {
-            console.log("SLASHEES!")
-          } else {
-            console.log('NO!', like)
-          }
           like = '%'+like+'%'
+
+          var beginningOfStringPattern = /^%\^/
+          var endOfStringPattern = /\$%$/
+
+          like = like.replace(beginningOfStringPattern, '')
+          like = like.replace(endOfStringPattern, '')
+
           return escape('%I LIKE %L', key, like)
         }
       }
 
       hashToSqlWhereClause.test = function() {
         // makes a nice LIKE clause
-        var clause = hashToSqlWhereClause({name: /narr/})
-        expect(clause).to.equal("name LIKE '%narr%'")
+        var clause = hashToSqlWhereClause({name: /bird/})
+        expect(clause).to.equal("name LIKE '%bird%'")
 
         // unescapes forward slashes
-        clause = hashToSqlWhereClause({name: /narr\//})
-        expect(clause).to.equal("name LIKE '%narr/%'")
+        clause = hashToSqlWhereClause({name: /path\//})
+        expect(clause).to.equal("name LIKE '%path/%'")
+
+        // sticks to the beginning or end as necessary
+        clause = hashToSqlWhereClause({name: /^start/})
+        expect(clause).to.equal("name LIKE 'start%'")
+
+        clause = hashToSqlWhereClause({name: /end$/})
+        expect(clause).to.equal("name LIKE '%end'")
 
         console.log("wowza!")
       }
