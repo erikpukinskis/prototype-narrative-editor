@@ -31,6 +31,14 @@ X `documents.js`:
         })
       }
 
+      function where(hash, callback) {
+        var select = 'SELECT * FROM documents WHERE ' + hashToSqlWhereClause(hash)
+        console.log(select)
+        database.query(select, function(data) {
+          callback(data.rows)
+        })
+      }
+
       function unescapeSlashes(string) {
           var forwardSlashPattern = /\\\//g
           return string.replace(forwardSlashPattern, '/')
@@ -115,9 +123,20 @@ X `documents.js`:
           function getThemBack(rows, f) {
             get('weirdCharacters', f)
           },
-          function (characters, xxxx) {
+          function (characters, f) {
             expect(characters).to.equal("'\"?")
             console.log('yahooee.')
+            f()
+          },
+          function getTwoThatMatch(f) {
+            set('i am a pig', 'too', function() {
+              where({key: /^i am/}, f)
+            })
+          },
+          function expectListOfOne(list, xxxx) {
+            expect(list.length).to.equal(2)
+            expect(_(list).pluck('key')).to.have.members(['i am', 'i am a pig'])
+            console.log('searcheeeeeeeed!')
           }
         )
       }
@@ -149,6 +168,6 @@ X `documents.js`:
         }
       }
 
-      return {get: get, set: set, test: test, api: api}
+      return {get: get, set: set, where: where, test: test, api: api}
     })
 

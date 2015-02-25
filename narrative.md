@@ -132,7 +132,7 @@ The Server
             })
           })
 
-          // documents.test()
+          documents.test()
 
           return server
         })
