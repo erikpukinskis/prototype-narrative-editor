@@ -536,6 +536,7 @@ The first is `package.json`, which describes the various things running the serv
             "chai": "*",
             "js-github": "*",
             "js-git": "*"
+            "prototypes": "*"
           },
           "devDependencies": {
             "requirejs": "*"

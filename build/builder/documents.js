@@ -1,4 +1,6 @@
 define(['database', 'chain', 'chai', 'pg-escape', 'path'], function(database, chain, chai, escape, path) {
+  require('prototypes')
+
   var expect = chai.expect
 
   function set(key, value, callback) {
@@ -26,12 +28,20 @@ define(['database', 'chain', 'chai', 'pg-escape', 'path'], function(database, ch
     })
   }
 
+  function unescapeSlashes(string) {
+      var forwardSlashPattern = /\\\//g
+      return string.replace(forwardSlashPattern, '/')
+  }
+
   function hashToSqlWhereClause(hash) {
     for (key in hash) {
-      var forwardSlashPattern = /\\\//g
       var regexpString = hash[key].source
-      var like = regexpString.replace(forwardSlashPattern, '/')
-
+      var like = unescapeSlashes(regexpString)
+      if (like.startsWith('/')) {
+        console.log("SLASHEES!")
+      } else {
+        console.log('NO!', like)
+      }
       like = '%'+like+'%'
       return escape('%I LIKE %L', key, like)
     }
@@ -44,7 +54,7 @@ define(['database', 'chain', 'chai', 'pg-escape', 'path'], function(database, ch
 
     // unescapes forward slashes
     clause = hashToSqlWhereClause({name: /narr\//})
-    expect(clause).to.equal("name LIKE 'narr%'")
+    expect(clause).to.equal("name LIKE '%narr/%'")
 
     console.log("wowza!")
   }

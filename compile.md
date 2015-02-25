@@ -4,6 +4,8 @@ Compiler
 Reads a narrative, breaks it into blocks, and figures out what kinds of blocks they are. In `compile.js`:
 `library compile.js
     define(['documents', 'underscore'], function(documents, _) {
+      require('prototypes')
+
       var prefixes = {
         heading: '# ',
         prose:   '',
@@ -37,17 +39,9 @@ Reads a narrative, breaks it into blocks, and figures out what kinds of blocks t
         return isCode(block) && hasFilename(block) 
       }
       function isServer(block) { return block.command == 'server' }
-      function isStylesheet(block) { return endsWith(block.filename, '.css') }
+      function isStylesheet(block) { return block.filename.endsWith('.css') }
       function isLibrary(block) { return block.command == 'library' }
       function isCommand(block) { return block.kind == 'command' }
-
-      startsWith = function(string, pattern) {
-        return !!(string||'').match(new RegExp('^' + pattern))
-      }
-
-      endsWith = function(string, pattern) {
-        return !!(string||'').match(new RegExp(pattern + '$'))
-      }
 
       isEmpty = function(string) {
         return string.match(/$\s?^/)        
