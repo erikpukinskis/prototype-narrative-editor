@@ -7,8 +7,8 @@ Do just what you have to do to get Bounty up. Start with the first one and go li
 
 Enforce the rule of application-level code is plausibly written and deployed by a non-programer.
 
-[ ] Get 'bobby follows berries' scenario to run
-[ ] Get bobby.tap to click the button
+[ ] Figure out where we even have this describe block
+[ ] Get describe to console.log
 
 Backlog
 -------
