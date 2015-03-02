@@ -37,9 +37,7 @@ requirejs(['chai', 'underscore'], function(chai, _) {
   }
 
   GroupedArray.prototype.splice = function() {
-    //Array.prototype.splice.apply(this.array, arguments)
-    //var newItems = arguments.slice(2)
-    //var values = newItems.map(this.groupingFunction)
+    Array.prototype.splice.apply(this.array, arguments)
   }
 
   function test() {
@@ -50,20 +48,24 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     expect(grouped.groups).to.have.length(3)
 
     expect(grouped.groups[0].value).to.equal(false) // not greater than two
-    expect(grouped.groups[0].items).to.have.members([1,2])
+    expect(grouped.groups[0].items).to.deep.equal([1,2])
 
     expect(grouped.groups[1].value).to.equal(true)  // YES greater than 2
-    expect(grouped.groups[1].items).to.have.members([3])
+    expect(grouped.groups[1].items).to.to.deep.equal([3])
 
     expect(grouped.groups[2].value).to.equal(false)  // also not greater than 2
-    expect(grouped.groups[2].items).to.have.members([0])
+    expect(grouped.groups[2].items).to.to.deep.equal([0])
+    console.log('booya')
+  }
 
-    // Adding 
-    // grouped.splice(1, 0, 27)
-    // expect(array).to.have.members([1,27,2,3])
-    // expect(grouped.groups[true].items).to.have.members([3,27])
-    console.log('dooooooooooooon!')
+  function testSplice() {
+    var array = [1,2]
+    var grouped = new GroupedArray(array)
+    grouped.splice(1,1)
+    expect(grouped.array).to.deep.equal([1])
+    console.log('seeeeegnorita')
   }
 
   test()
+  testSplice()
 })
