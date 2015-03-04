@@ -1,11 +1,27 @@
 var expect = require('chai').expect
 
-function thing() {
-  return 'our picnic of a peanut butter sandwich'
+function picnic() {
+  var topping = picnic.defaultTopping || 'empty'
+  return 'our picnic of a '+topping+' sandwich'
+}
+
+picnic.__injectionHandlers = {topping: function(name) {
+  picnic.defaultTopping = name
+}}
+
+function inject(thing, key, value) {
+  if (thing.__injectionHandlers && thing.__injectionHandlers[key]) {
+    thing.__injectionHandlers[key](value)
+  }
 }
 
 function test() {
-  expect(thing()).to.equal('our picnic of a peanut butter sandwich')
+  inject(picnic, 'topping', 'peanut butter')
+  expect(picnic()).to.equal('our picnic of a peanut butter sandwich')
+
+  inject(picnic, 'topping', 'honeyberry')
+  expect(picnic()).to.equal('our picnic of a honeyberry sandwich')
+  console.log(picnic()+'!!!!!!!!!')
 }
 
 test()
