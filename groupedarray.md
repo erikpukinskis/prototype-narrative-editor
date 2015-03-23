@@ -1,5 +1,4 @@
-requirejs = require('requirejs')
-
+var requirejs = require('requirejs')
 requirejs(['chai', 'underscore'], function(chai, _) {
   var expect = chai.expect
 
@@ -36,35 +35,139 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     return this
   }
 
+  function spliceParams(args) {
+    return {
+      start: args[0],
+      numberToRemove: args[1],
+      newItems: Array.prototype.slice.call(args, 2)
+    }
+  }
+
+  // This one looks through all the groups and finds the one 
+  // that is fully before the start item
+  function indexOfGroupBefore(groups, start) {
+    for (var i=0; i<groups.length; i++) {
+      var group = groups[i]
+      var positonOfLastItemInGroup = group.position + group.items.length - 1
+      console.log('positonOfLastItemInGroup:'+ positonOfLastItemInGroup, 'start:'+ start, 'group:'+ group)
+      if (positonOfLastItemInGroup < start) {
+        console.log('sending back', group)
+        return i
+      }
+    }
+
+    return null
+  }
+
+  function testGroupBefore() {
+    var groupOfOne = {position: 0, items: [1]}
+    var groups = [groupOfOne]
+    expect(indexOfGroupBefore(groups, 0)).to.equal(null)
+    expect(indexOfGroupBefore(groups, 1)).to.equal(0)
+    console.log('gruuuuped')
+  }
+  testGroupBefore()
+
   GroupedArray.prototype.splice = function() {
+    console.log("ok, we're starting with", this.array)
     Array.prototype.splice.apply(this.array, arguments)
+    console.log("now it's", this.array, ". glad that's done")
+    if (!this.groups) { return }
+
+    var splice = spliceParams(arguments)
+    console.log('splice arams of', arguments, 'are', splice)
+
+
+
+    // grab the one that is fully before the start item
+    var lastGroupIndex = indexOfGroupBefore(this.groups, splice.start)
+    // that's this:
+    // var lastGroup = this.groups[lastGroupIndex]
+    var group = this.groups[0]
+    console.log('itees', this.groups, lastGroupIndex)
+    group.items.splice(splice.start,1)
+
+    // walk through the new items
+    for(var i=0; i<splice.newItems.length; i++) {
+
+    }
+    //   var item = splice.newItems[i]
+    //   var value = this.groupingFunction(item)
+    //   // figured out what value this item has so we can
+    //   // know whether to stick that in the current group
+    //   // or start a new one
+
+    //   var nextGroup = this.groups[lastGroupIndex+1]
+
+    //   // undefined?
+    //   if (value != lastGroup.value) {
+    //     // lastGroup is obsolete. we need to move on. If we are not at the end of the group
+    //     if (nextGroup && value == nextGroup.value) {
+    //       newGroup = nextGroup
+    //     }
+    //     var newGroup = {value: value, items: [item]}
+    //     //// lastGroupIndex+1???
+    //     this.groups.splice(lastGroupIndex+1,0,newGroup)
+    //   }
+    // }
+  }
+
+  function isDigit(number) { return number < 10 }
+
+  function testSplice() {
+    var grouped = new GroupedArray([1,2]).groupBy(isDigit)
+    expect(grouped.array).to.deep.equal([1,2])
+    expect(grouped.groups[0].items).to.deep.equal([1,2])
+
+    // Delete an item
+    grouped.splice(1,1)
+    expect(grouped.array).to.deep.equal([1])
+    expect(grouped.groups[0].items).to.deep.equal([1])
+    console.log('seeeee')
+
+    // Delete the other noe
+    grouped = new GroupedArray([1,2]).groupBy(isDigit)
+    grouped.splice(0,1)
+    expect(grouped.groups[0].items).to.deep.equal([2])
+    console.log('seeeeegnorita!')
+
+    // Prepend two items
+    expect(grouped.groups).to.have.length(1)
+    expect(grouped.groups[0].items).to.deep.equal([1])
+
+    grouped.splice(0,0,0)
+    expect(grouped.array).to.deep.equal([0,1])
+    expect(grouped.groups).to.have.length(1)
+    expect(grouped.groups[0].items).to.deep.equal([0,1])
+    console.log('wuuut')
+
+    expect(grouped.groups).to.have.length(2)
+
+    expect(grouped.groups[0].value).to.equal(true)
+    expect(grouped.groups[0].items).to.deep.equal([10])
+
+    expect(grouped.groups[1].value).to.equal(false)
+    expect(grouped.groups[1].items).to.deep.equal([0,1])
+    console.log('right value!')
+
   }
 
   function test() {
-    var array = [1,2,3,0]
-    var grouped = new GroupedArray(array).groupBy(function(number) {
-      return number > 2
-    })
+    var array = [1,2,11,0]
+    var grouped = new GroupedArray(array).groupBy(isDigit)
     expect(grouped.groups).to.have.length(3)
 
-    expect(grouped.groups[0].value).to.equal(false) // not greater than two
+    expect(grouped.groups[0].value).to.equal(true) // digits
     expect(grouped.groups[0].items).to.deep.equal([1,2])
 
-    expect(grouped.groups[1].value).to.equal(true)  // YES greater than 2
-    expect(grouped.groups[1].items).to.to.deep.equal([3])
+    expect(grouped.groups[1].value).to.equal(false)  // not digits
+    expect(grouped.groups[1].items).to.to.deep.equal([11])
 
-    expect(grouped.groups[2].value).to.equal(false)  // also not greater than 2
+    expect(grouped.groups[2].value).to.equal(true)  // digits
     expect(grouped.groups[2].items).to.to.deep.equal([0])
     console.log('booya')
   }
 
-  function testSplice() {
-    var array = [1,2]
-    var grouped = new GroupedArray(array)
-    grouped.splice(1,1)
-    expect(grouped.array).to.deep.equal([1])
-    console.log('seeeeegnorita')
-  }
 
   test()
   testSplice()
