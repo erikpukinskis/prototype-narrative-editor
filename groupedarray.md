@@ -46,25 +46,35 @@ requirejs(['chai', 'underscore'], function(chai, _) {
   // This one looks through all the groups and finds the one 
   // that is fully before the start item
   function indexOfGroupBefore(groups, start) {
+    var groupStart = 0
     for (var i=0; i<groups.length; i++) {
       var group = groups[i]
-      var positonOfLastItemInGroup = group.position + group.items.length - 1
+      console.log('grp', group)
+      console.log('posi', groupStart, 'len', group.items.length)
+      var positonOfLastItemInGroup = groupStart + group.items.length - 1
       console.log('positonOfLastItemInGroup:'+ positonOfLastItemInGroup, 'start:'+ start, 'group:'+ group)
-      if (positonOfLastItemInGroup < start) {
+      if (start == groupStart) {
+        return i - 1
+      } else if (positonOfLastItemInGroup < start) {
         console.log('sending back', group)
         return i
+      } else {
+        groupStart = groupStart + group.items.length
       }
     }
 
-    return null
+    return -1
   }
 
   function testGroupBefore() {
     var groupOfOne = {position: 0, items: [1]}
     var groups = [groupOfOne]
-    expect(indexOfGroupBefore(groups, 0)).to.equal(null)
+    // -1 if we're right at the start of the first group
+    expect(indexOfGroupBefore(groups, 0)).to.equal(-1)
+    // a group we're past
     expect(indexOfGroupBefore(groups, 1)).to.equal(0)
-    console.log('gruuuuped')
+    // -1 if there are no groups
+    expect(indexOfGroupBefore([], 0)).to.equal(-1)
   }
   testGroupBefore()
 
@@ -84,7 +94,7 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     // that's this:
     // var lastGroup = this.groups[lastGroupIndex]
     var group = this.groups[0]
-    console.log('itees', this.groups, lastGroupIndex)
+    console.log('lastGroupIndex', lastGroupIndex)
     group.items.splice(splice.start,1)
 
     // walk through the new items
@@ -125,30 +135,38 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     expect(grouped.groups[0].items).to.deep.equal([1])
     console.log('seeeee')
 
-    // Delete the other noe
+    // Delete the other one
     grouped = new GroupedArray([1,2]).groupBy(isDigit)
     grouped.splice(0,1)
     expect(grouped.groups[0].items).to.deep.equal([2])
     console.log('seeeeegnorita!')
 
-    // Prepend two items
-    expect(grouped.groups).to.have.length(1)
-    expect(grouped.groups[0].items).to.deep.equal([1])
-
-    grouped.splice(0,0,0)
-    expect(grouped.array).to.deep.equal([0,1])
-    expect(grouped.groups).to.have.length(1)
-    expect(grouped.groups[0].items).to.deep.equal([0,1])
-    console.log('wuuut')
-
-    expect(grouped.groups).to.have.length(2)
-
-    expect(grouped.groups[0].value).to.equal(true)
+    // Delete one that's not in the first group
+    grouped = new GroupedArray([10,1,2]).groupBy(isDigit)
+    grouped.splice(1,1)
     expect(grouped.groups[0].items).to.deep.equal([10])
+    console.log('be')
+    expect(grouped.groups[1].items).to.deep.equal([2])
+    console.log('blestik')
 
-    expect(grouped.groups[1].value).to.equal(false)
-    expect(grouped.groups[1].items).to.deep.equal([0,1])
-    console.log('right value!')
+    // // Prepend two items
+    // expect(grouped.groups).to.have.length(1)
+    // expect(grouped.groups[0].items).to.deep.equal([1])
+
+    // grouped.splice(0,0,0)
+    // expect(grouped.array).to.deep.equal([0,1])
+    // expect(grouped.groups).to.have.length(1)
+    // expect(grouped.groups[0].items).to.deep.equal([0,1])
+    // console.log('wuuut')
+
+    // expect(grouped.groups).to.have.length(2)
+
+    // expect(grouped.groups[0].value).to.equal(true)
+    // expect(grouped.groups[0].items).to.deep.equal([10])
+
+    // expect(grouped.groups[1].value).to.equal(false)
+    // expect(grouped.groups[1].items).to.deep.equal([0,1])
+    // console.log('right value!')
 
   }
 
