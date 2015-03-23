@@ -96,7 +96,7 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     var group = this.groups[lastGroupIndex+1]
     console.log('lastGroupIndex', lastGroupIndex)
     console.log('splicing', group)
-    group.items.splice(splice.start - group.start,1)
+    group.items.splice(splice.start - group.start, splice.numberToRemove)
 
     // walk through the new items
     // for(var i=0; i<splice.newItems.length; i++) {
@@ -146,9 +146,13 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     grouped = new GroupedArray([10,1,2]).groupBy(isDigit)
     grouped.splice(1,1)
     expect(grouped.groups[0].items).to.deep.equal([10])
-    console.log('be')
     expect(grouped.groups[1].items).to.deep.equal([2])
     console.log('blestik')
+
+    // Delete two
+    grouped = new GroupedArray([0,1,2]).groupBy(isDigit)
+    grouped.splice(0,2)
+    expect(grouped.groups[0].items).to.deep.equal([2])
 
     // // Prepend two items
     // expect(grouped.groups).to.have.length(1)
