@@ -93,11 +93,14 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     var lastGroupIndex = indexOfGroupBefore(this.groups, splice.start)
     // that's this:
     // var lastGroup = this.groups[lastGroupIndex]
-    var group = this.groups[lastGroupIndex+1]
+    var i = lastGroupIndex+1
+    var group = this.groups[i]
     console.log('lastGroupIndex', lastGroupIndex)
     console.log('splicing', group)
     group.items.splice(splice.start - group.start, splice.numberToRemove)
-
+    if (group.items.length < 1) {
+      this.groups.splice(i,1)
+    }
     // walk through the new items
     // for(var i=0; i<splice.newItems.length; i++) {
 
@@ -134,25 +137,29 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     grouped.splice(1,1)
     expect(grouped.array).to.deep.equal([1])
     expect(grouped.groups[0].items).to.deep.equal([1])
-    console.log('seeeee')
 
     // Delete the other one
     grouped = new GroupedArray([1,2]).groupBy(isDigit)
     grouped.splice(0,1)
     expect(grouped.groups[0].items).to.deep.equal([2])
-    console.log('seeeeegnorita!')
 
     // Delete one that's not in the first group
     grouped = new GroupedArray([10,1,2]).groupBy(isDigit)
     grouped.splice(1,1)
     expect(grouped.groups[0].items).to.deep.equal([10])
     expect(grouped.groups[1].items).to.deep.equal([2])
-    console.log('blestik')
 
     // Delete two
     grouped = new GroupedArray([0,1,2]).groupBy(isDigit)
     grouped.splice(0,2)
     expect(grouped.groups[0].items).to.deep.equal([2])
+    console.log('seeeeegnorita!')
+
+    // Delete a whole group
+    grouped = new GroupedArray([0]).groupBy(isDigit)
+    grouped.splice(0,1)
+    expect(grouped.groups).to.have.length(0)
+    console.log('blestik')
 
     // // Prepend two items
     // expect(grouped.groups).to.have.length(1)
