@@ -49,6 +49,7 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     var groupStart = 0
     for (var i=0; i<groups.length; i++) {
       var group = groups[i]
+      if (group) { group.start = groupStart }
       console.log('grp', group)
       console.log('posi', groupStart, 'len', group.items.length)
       var positonOfLastItemInGroup = groupStart + group.items.length - 1
@@ -67,12 +68,14 @@ requirejs(['chai', 'underscore'], function(chai, _) {
   }
 
   function testGroupBefore() {
-    var groupOfOne = {position: 0, items: [1]}
+    var groupOfOne = {items: [1]}
     var groups = [groupOfOne]
     // -1 if we're right at the start of the first group
     expect(indexOfGroupBefore(groups, 0)).to.equal(-1)
     // a group we're past
     expect(indexOfGroupBefore(groups, 1)).to.equal(0)
+    // attaches the index
+    expect(groupOfOne.start).to.equal(0)
     // -1 if there are no groups
     expect(indexOfGroupBefore([], 0)).to.equal(-1)
   }
@@ -93,8 +96,9 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     var lastGroupIndex = indexOfGroupBefore(this.groups, splice.start)
     // that's this:
     // var lastGroup = this.groups[lastGroupIndex]
-    var group = this.groups[0]
+    var group = this.groups[lastGroupIndex+1]
     console.log('lastGroupIndex', lastGroupIndex)
+    console.log('splicing', group)
     group.items.splice(splice.start,1)
 
     // walk through the new items
