@@ -10,9 +10,13 @@
 
 
 
+
 // Chapter 1
 
 // Component Host
+
+// (because this is the thing that actually does the thing we want to happen. provides software for people to use.)
+
 // Makes a component accessible to a web browser
 
 // First, what's a component? A component is a bundle pieces of code that work together to do something on a computer. Let's describe a really simple component—a web page that says "Hello, world!":
@@ -27,7 +31,7 @@ var helloWorldComponent = {
 
 // We can give the component host our new Hello, world component and it will make it accessable in the web! Let's test that out:
 
-with(
+requirejs(
   ["component-host", "chai"],
   function(Host, chai) {
 
@@ -53,21 +57,24 @@ with(
 
 // So let's define how the code for that works.
 
-define("component-host", function() {
+define("component-host", 
+  ["secure-database", "couch-show", "component"], 
+  function(Database, Show, Component) {
   function ComponentHost() {
 
-    // We need a database to store stuff in. And we 
-    this.init("database", SecureDatabase)
+    var database = new Database()
+    database.shows.add("html-page", htmlPage)
 
-    this.route("put", ":name", saveComponent)
-
-    var shows = new SetOfShows()
-    shows.add("html-page", htmlPage)
+    this.route(
+      "put",
+      ":name",
+      Component.middleware.save(db)
+    )
 
     this.route(
       "get", 
       ":name",
-      shows.middleware("html-page")
+      database.shows.middleware.get("html-page")
     )
   }
 
@@ -76,7 +83,7 @@ define("component-host", function() {
   return ComponentHost
 })
 
-// component runner - Puts with, describe, and extend in scope
+
 
 // app.show
 
@@ -92,6 +99,8 @@ define("component-host", function() {
 // Chapter 2
 
 // Docker Booter
+
+// (because it shows how to take complete control)
 
 // Provisions a computer and boots a component
 
@@ -157,15 +166,18 @@ define.component(
 
 // Chapter 3
 
-// Secure Database
+// Secure Database (because it defines how we share)
 
-// couch.app
+// db.shows.add - ensures a show is in the database
 
-// couch.set - writes a document to couchdb
+// db.shows.middleware.get - generates (from a path) middleware that sends a show to the browser
 
-// couch.start
+// db.set - writes a document to couchdb
 
-// auth.app
+// db.start
+
+// auth
+
 
 
 
@@ -173,9 +185,62 @@ define.component(
 
 // Chapter 4
 
-// Narrative Editor
+// Component
+
+// middleware.save is a generator function that generates middleware that remembers which database it is supposed to save components to:
+
+Component.middleware.save = function(database) {
+
+  return function(request, response) {
+    var path = "components/"
+      + request.user.id
+      + "/"+request.params.name
+      + "?v="+version
+
+    database.set(path, request.body)
+  }
+}
+
+
+
+
+
+
+// Chapter 4
+
+// Narrative
+
+// Puts requirejs and extend in scope and runs a JavaScript narrative
+
+narrative.run(theFunctionToRun) {
+  define("requirejs", function() {})
+
+  var wrap = function(theFunctionToRun) {
+    var requirejs = require("requirejs")
+    requirejs(["requirejs", "extend", "chai"], function(requirejs, extend, chai) {
+      var expect = chai.expect
+      chai = undefined
+      theFunctionToRun()
+    })
+  }
+
+  if (typeof theFunctionToRun == "string") {
+    var wrapString = wrap.toString()
+    var withEmbeddedFunction = wrapString
+      .replace(
+        "theFunctionToRun()",
+        "("+theFunctionToRun+")()"
+      )
+    theFunctionToRun = eval(withEmbeddedFunction)
+  }
+
+  requirejs.call(theFunctionToRun)
+}
 
 // edit_narrative.app
+
+
+
 
 
 
@@ -186,7 +251,7 @@ define.component(
 
 // The server should write out an HTML page through HTTP:
 
-with (
+requirejs (
   ["server", "chai", "unirest"], 
   function(Server, chai, unirest) {
     var expect = chai.expect
@@ -227,12 +292,12 @@ define("server", function() {
   return Server
 })
 
+Í
 
-
-
+  
 
 // Chapter 6
-
+      
 // Example Apps
 
 // blog.app
