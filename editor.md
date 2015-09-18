@@ -409,4 +409,8 @@ There's a light gray cursor with a tappable tab on top of it that is at the begi
 
 Each level of the architecture adds DOM structures and can style those structures, but only the structures at that level and above are visible. So at the top level (the UI) it's just the characters and the pipe. One layer down the cursor might have its line,column coordinates, lines have numbers, etc.
 
+Commit message should be pre-populated with the previous commit message to encourage people to leave tags and such that give structure across commits. Then automatically generate a table of contents for the history from that, and in fact an entire Novel about the history of the codebase from commit messages.
 
+Oh shit. Maybe the commit messages are shown in sequence with the rest of the history, in book form!!
+
+Periodically you get randomly booted one (or a few) levels up in the UI hierarchy, that way you don't get overly focused in one area of the system. Like a Windows user not knowing that they can search for apps.
