@@ -1,4 +1,5 @@
 var requirejs = require('requirejs')
+
 requirejs(['chai', 'underscore'], function(chai, _) {
   var expect = chai.expect
 
@@ -88,19 +89,37 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     console.log('splice arams of', arguments, 'are', splice)
 
 
+    var numberLeftTorRemove = splice.numberToRemove
 
     // grab the one that is fully before the start item
     var lastGroupIndex = indexOfGroupBefore(this.groups, splice.start)
-    // that's this:
-    // var lastGroup = this.groups[lastGroupIndex]
-    var i = lastGroupIndex+1
-    var group = this.groups[i]
-    console.log('lastGroupIndex', lastGroupIndex)
-    console.log('splicing', group)
-    group.items.splice(splice.start - group.start, splice.numberToRemove)
-    if (group.items.length < 1) {
-      this.groups.splice(i,1)
+
+    var groupsToRemove = []
+    this.groups.splice(lastGroupIndex,groupsToRemove)
+
+    for(var i=lastGroupIndex+1; i<this.groups.length; i++) {
+      var i = lastGroupIndex+1
+      var group = this.groups[i]
+      console.log('lastGroupIndex', lastGroupIndex)
+      var numberToRemove = Math.min(group.items.length, numberLeftTorRemove)
+
+      console.log('\n> splicing', group, "removing", numberToRemove, "starting at", splice.start)
+      group.items.splice(splice.start - group.start, numberToRemove)
+      numberLeftTorRemove -= numberToRemove
+
+      // clean up empty groups
+      if (group.items.length < 1) {
+        groupsToRemove.push(i)
+      }
     }
+
+    console.log("now let's kill groups", groupsToRemove)
+    if (groupsToRemove.length) {
+      console.log('sup. splicing', groupsToRemove.length, 'out of', this.groups, 'starting from', groupsToRemove[0])
+      this.groups.splice(groupsToRemove[0], groupsToRemove.length)
+      console.log("groups is", this.groups)
+    }
+
     // walk through the new items
     // for(var i=0; i<splice.newItems.length; i++) {
 
@@ -148,17 +167,30 @@ requirejs(['chai', 'underscore'], function(chai, _) {
     grouped.splice(1,1)
     expect(grouped.groups[0].items).to.deep.equal([10])
     expect(grouped.groups[1].items).to.deep.equal([2])
-
+    console.log(typeof grouped.groups[0].items)
     // Delete two
     grouped = new GroupedArray([0,1,2]).groupBy(isDigit)
     grouped.splice(0,2)
     expect(grouped.groups[0].items).to.deep.equal([2])
-    console.log('seeeeegnorita!')
+    console.log(typeof grouped.groups[0].items, grouped.groups[0].items)
 
+    console.log('\n\n\n\n*------------------\n\n\n\n\n')
     // Delete a whole group
     grouped = new GroupedArray([0]).groupBy(isDigit)
     grouped.splice(0,1)
     expect(grouped.groups).to.have.length(0)
+
+    // Delete across two groups
+    grouped = new GroupedArray([1,2,10,11]).groupBy(isDigit)
+    console.log('groupeddd is',grouped)
+    console.log(typeof grouped.groups[0].items, grouped.groups[0].items)
+    throw new Error('fart')
+    grouped.splice(1,2)
+    console.log('seeeeegnorita!')
+    console.log(typeof grouped.groups[0].items, grouped.groups[0].items)
+    throw new Error('fart')
+    expect(grouped.groups[0].items).to.deep.equal([1])
+    expect(grouped.groups[1].items).to.deep.equal([11])
     console.log('blestik')
 
     // // Prepend two items
